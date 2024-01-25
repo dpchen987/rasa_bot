@@ -1,0 +1,277 @@
+version: "3.1"
+
+stories:
+
+# 出默认话术
+- story: utter_default
+  steps:
+    - or:
+      - intent: affirm
+      - intent: deny
+      - intent: nlu_fallback
+    - action: utter_default
+    - action: action_session_start
+
+# 再见
+- story: byebye
+  steps:
+    - intent: byebye
+    - action: utter_end
+    - action: action_session_start
+
+
+# 登记核心流程
+- story: register-kernel
+  steps:
+    - intent: inform
+    - action: action_set_inform_key
+    - slot_was_set:
+        - slot_phone_latest_key: 1
+    - action: action_set_slot_core_intent
+    - action: action_register
+    - action: action_session_start
+
+# 触发结束流程。有电话，引导结束；没有电话，要电话引导登记。特别的，不需要登记的，引导结束。
+# 不需要登记
+- story: utter_ask_end_1
+  steps:
+    - intent: is_ok
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_ask_comments_key: 0
+    - slot_was_set:
+        - slot_confirm_key: 0
+    - action: utter_thanks_for_understand
+    - action: utter_guide_to_end
+#    - action: action_set_slot_guide_to_end     # 这里不需要标记，正常这之后用户不可能说hurry意图
+    - action: utter_ask_good_comments
+    - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
+    - action: action_session_start
+
+# 物流轨迹正常，但是用户可能不会接受，所以需要登记(没有电话要电话)
+- story: utter_ask_end_need_register
+  steps:
+    - intent: is_ok
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_ask_comments_key: 0
+    - slot_was_set:
+        - slot_confirm_key: 1
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+        - slot_phone_key: 0
+    - action: utter_thanks_for_understand
+    - action: utter_ask_phone_appease
+    - action: action_session_start
+
+# 物流轨迹正常，但是用户可能不会接受，所以需要登记(有电话)
+- story: utter_ask_end_need_register
+  steps:
+    - intent: is_ok
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_ask_comments_key: 0
+    - slot_was_set:
+        - slot_confirm_key: 1
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+        - slot_phone_key: 1
+    - action: utter_thanks_for_understand
+    - action: utter_guide_to_end_has_workorder
+    - action: utter_ask_good_comments
+    - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记，之后如果用户说“尽快吧”，则认为是没有别的问题了
+    - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
+    - action: action_session_start
+
+# 用户在要好评之后说“好的/ok”，推荐谢谢/再见话术
+- story: utter_ask_end_need_register
+  steps:
+    - intent: is_ok
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_ask_comments_key: 1
+    - slot_was_set:
+        - slot_confirm_key: 0                 # 这里两个词槽都必须有，需要穷举所有组合，因为非key词槽并没有被恢复到初始化状态
+    - action: utter_thanks_for_understand
+    - action: utter_end
+    - action: action_session_start
+
+# 用户在要好评之后说“好的/ok”，推荐谢谢/再见话术
+- story: utter_ask_end_need_register
+  steps:
+    - intent: is_ok
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_ask_comments_key: 1
+    - slot_was_set:
+        - slot_confirm_key: 1                 # 这里两个词槽都必须有，需要穷举所有组合，因为非key词槽并没有被恢复到初始化状态
+    - action: utter_thanks_for_understand
+    - action: utter_end
+    - action: action_session_start
+
+# 不需要登记
+- story: is_ok_thanks
+  steps:
+    - intent: is_ok_thanks
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_confirm_key: 0
+    - slot_was_set:
+        - slot_ask_comments_key: 0                # 这里两个词槽都必须有，需要穷举所有组合，因为非key词槽并没有被恢复到初始化状态
+    - action: utter_thanks
+    - action: utter_guide_to_end
+#    - action: action_set_slot_guide_to_end     # 这里不需要
+    - action: utter_ask_good_comments
+    - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
+    - action: action_session_start
+
+# 不需要登记
+- story: is_ok_thanks
+  steps:
+    - intent: is_ok_thanks
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_confirm_key: 0
+    - slot_was_set:
+        - slot_ask_comments_key: 1                # 这里两个词槽都必须有，需要穷举所有组合，因为非key词槽并没有被恢复到初始化状态
+    - action: utter_thanks
+    - action: utter_guide_to_end
+#    - action: action_set_slot_guide_to_end     # 这里不需要
+    - action: utter_ask_good_comments
+#    - action: action_set_slot_ask_comments      # slot_ask_comments 已经是1，不需要再set
+    - action: action_session_start
+
+# 需要登记(有电话)
+- story: is_ok_thanks
+  steps:
+    - intent: is_ok_thanks
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_confirm_key: 1
+    - slot_was_set:
+        - slot_ask_comments_key: 0                # 这里两个词槽都必须有，需要穷举所有组合，因为非key词槽并没有被恢复到初始化状态
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+        - slot_phone_key: 1
+    - action: utter_thanks
+    - action: utter_guide_to_end_has_workorder
+    - action: utter_ask_good_comments
+    - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
+    - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
+    - action: action_session_start
+
+# 需要登记(有电话)
+- story: is_ok_thanks
+  steps:
+    - intent: is_ok_thanks
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_confirm_key: 1
+    - slot_was_set:
+        - slot_ask_comments_key: 1                # 这里两个词槽都必须有，需要穷举所有组合，因为非key词槽并没有被恢复到初始化状态
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+        - slot_phone_key: 1
+    - action: utter_thanks
+    - action: utter_guide_to_end_has_workorder
+    - action: utter_ask_good_comments
+    - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
+#    - action: action_set_slot_ask_comments         # slot_ask_comments 已经是1，不需要再set
+    - action: action_session_start
+
+# 需要登记(没有电话要电话)
+- story: is_ok_thanks
+  steps:
+    - intent: is_ok_thanks
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_confirm_key: 1
+    - slot_was_set:
+        - slot_ask_comments_key: 0                # 这里两个词槽都必须有，需要穷举所有组合，因为非key词槽并没有被恢复到初始化状态
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+        - slot_phone_key: 0
+    - action: utter_thanks
+    - action: utter_ask_phone_appease
+    - action: action_session_start
+
+# 需要登记(没有电话要电话)
+- story: is_ok_thanks
+  steps:
+    - intent: is_ok_thanks
+    - action: action_confirm_get
+    - slot_was_set:
+        - slot_confirm_key: 1
+    - slot_was_set:
+        - slot_ask_comments_key: 1                # 这里两个词槽都必须有，需要穷举所有组合，因为非key词槽并没有被恢复到初始化状态
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+        - slot_phone_key: 0
+    - action: utter_thanks
+    - action: utter_ask_phone_appease
+    - action: action_session_start
+
+# 要好评
+- story: no_other_questions
+  steps:
+    - intent: no_other_questions
+    - action: utter_get
+    - action: utter_ask_good_comments   # 需要登记，因此使用带安抚的要好评话术
+    - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
+    - action: action_session_start
+
+- story: is_ok_urge
+  steps:
+    - intent: is_ok_urge
+    - action: utter_get
+    - action: utter_ask_good_comments
+    - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
+    - action: action_session_start
+
+- story: affirm_to_contact
+  steps:
+    - intent: affirm_to_contact
+    - action: utter_get
+    - action: utter_ask_good_comments
+    - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
+    - action: action_session_start
+
+# 要好评（hurry意图）
+- story: hurry
+  steps:
+    - intent: hurry
+    - action: action_get_slot_hurry_key       # 判断上文是否有引导结束话术
+    - slot_was_set:
+        - slot_hurry_key: 1
+    - action: utter_get
+    - action: utter_ask_good_comments
+    - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
+    - action: action_session_start
+
+## 无理要求，解释只是个客服
+#- story: exorbitant_demand
+#  steps:
+#    - intent: exorbitant_demand
+#    - action: utter_apologize_reply
+#    - action: utter_exorbitant_demand
+#    - action: action_session_start
+
+# 表明收件人身份(在经过登记等流程之后，只此种情况只需要回复默认话术即可)
+- story: is_receiver + no_check_weight
+  steps:
+    - intent: is_receiver
+    - action: action_get_slot_is_receiver_key
+    - or:
+      - slot_was_set:
+          - slot_is_receiver_key: no_intent                 # 表明此前未走查重量流程
+    - action: utter_default                                 # 默认此情况不回复
+    - action: action_session_start
+
+- story: is_receiver + check_weight
+  steps:
+    - intent: is_receiver
+    - action: action_get_slot_is_receiver_key
+    - slot_was_set:
+        - slot_is_receiver_key: check_weight            # 表明此前走的是查重量流程
+    - action: utter_check_weight_2                      # 需要回复客户客服“只能查看物流信息，无权查看重量信息”的话术
+    - action: action_session_start

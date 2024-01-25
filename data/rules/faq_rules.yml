@@ -1,0 +1,10 @@
+version: "3.1"
+
+rules:
+
+# 单轮问答
+- rule: respond to FAQs
+  steps:
+  - intent: faq
+  - action: utter_faq
+  - action: action_faq

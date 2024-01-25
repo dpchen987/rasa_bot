@@ -1,0 +1,132 @@
+version: "3.1"
+
+stories:
+# 要求送货上门
+- story: home delivery start
+  steps:
+    - intent: home_delivery
+    - action: action_intent_count
+    - slot_was_set:
+        - slot_home_delivery_count_key: 1
+    - action: collect_express_id_form
+    - active_loop: collect_express_id_form
+    - active_loop: null
+    - action: action_check_workorder
+    - checkpoint: get_history_workorder
+
+- story: ask home delivery start
+  steps:
+    - intent: ask_home_delivery
+    - action: utter_ask_home_delivery
+    - action: collect_express_id_form
+    - active_loop: collect_express_id_form
+    - active_loop: null
+    - action: action_check_workorder
+    - checkpoint: get_history_workorder
+
+# 有历史工单，直接结束
+- story: has history workorder
+  steps:
+    - checkpoint: get_history_workorder
+    - slot_was_set:
+      - slot_history_workorder_key: hasWorkorder
+    - action: utter_apologize_reply
+    - action: utter_has_been_processing       #已有催件工单安抚话术6
+    - action: action_session_start
+
+# 没有工单有手机，直接结束
+- story: no history workorder + has phone
+  steps:
+    - checkpoint: get_history_workorder
+    - slot_was_set:
+      - slot_history_workorder_key: noWorkorder
+    - action: utter_home_delivery_2
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+      - slot_phone_key: 1
+    - action: action_session_start
+
+# 没有历史工单，第一轮问电话
+- story: no history workorder + ask phone
+  steps:
+    - checkpoint: get_history_workorder
+    - slot_was_set:
+      - slot_history_workorder_key: noWorkorder
+    - action: utter_home_delivery_2
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+      - slot_phone_key: 0
+    - action: utter_ask_phone_appease
+    - action: action_session_start
+
+# 二次询问送货上门
+- story: home delivery start twice
+  steps:
+    - intent: home_delivery
+    - action: action_intent_count
+    - slot_was_set:
+        - slot_home_delivery_count_key: 2
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+      - slot_phone_key: 0
+    - action: utter_apologize_reply
+    - action: utter_ask_phone_appease
+    - action: action_session_start
+
+# 二次询问送货上门
+- story: home delivery start twice
+  steps:
+    - intent: home_delivery
+    - action: action_intent_count
+    - slot_was_set:
+        - slot_home_delivery_count_key: 2
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+        - slot_phone_key: 1
+    - action: utter_home_delivery_appease_2
+    - action: utter_guide_to_end
+    - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
+    - action: action_session_start
+
+# 三次询问送货上门
+- story: home delivery start three no phone
+  steps:
+    - intent: home_delivery
+    - action: action_intent_count
+    - slot_was_set:
+        - slot_home_delivery_count_key: 3
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+      - slot_phone_key: 0
+    - action: utter_apologize_reply
+    - action: utter_ask_phone_appease
+    - action: action_session_start
+
+# 三次询问送货上门
+- story: home delivery start three has phone
+  steps:
+    - intent: home_delivery
+    - action: action_intent_count
+    - slot_was_set:
+        - slot_home_delivery_count_key: 3
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+        - slot_phone_key: 1
+    - action: utter_home_delivery_appease_3
+    - action: utter_guide_to_end
+    - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
+    - action: action_session_start
+
+
+# 四次及以上询问送货上门
+- story: home delivery start 4 and greater than 4
+  steps:
+    - intent: home_delivery
+    - action: action_intent_count
+    # 此处的数字“100”并不是表示意图计数100次，而是表示大于“计数槽位最大值”的意思，假如“计数槽位最大值”为5，则大于等于6的数字都可以表示大于“计数槽位最大值”的意思，我们为了统一，指定了一个较大的数字100
+    - slot_was_set:
+        - slot_home_delivery_count_key: 100
+    - action: utter_home_delivery_appease_3
+    - action: utter_guide_to_end
+    - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
+    - action: action_session_start

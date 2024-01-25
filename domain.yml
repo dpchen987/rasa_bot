@@ -1,0 +1,1339 @@
+﻿version: "3.1"
+
+intents:
+  - faq
+  - inform
+  - affirm
+  - is_ok
+  - deny
+  - no_other_questions
+  - byebye
+  - change_address
+  - write_wrong_address
+  - if_can_change_address
+  - address_is_wrong
+  - check_arrive_datetime
+  - check_sign_info
+  - check_express_status
+  - has_sent_or_not
+  - pretend_sent
+  - if_has_lost
+  - reject_reason
+  - return_or_not
+  - change_address_or_not
+  - no_logistics_info
+  - urge
+  - too_slow
+  - urge_to_process
+  - urge_to_send
+  - sup_urge
+  - ask_send_on_time
+  - add_money
+  - logistics_not_updated
+  - send_wrong_address
+  - has_not_received_yet
+  - urge_to_get_express
+  - urge_to_send_goods
+  - hurry
+  - has_not_received
+  - specify_method_not_him_want_address
+  - specify_method_himself
+  - request_sent_to_delivery_cabinet
+  - specify_method_not_courier_station
+  - pretend_signed
+  - request_to_contact_via_phone
+  - request_to_register
+  - unable_to_contact_net_station
+  - has_contacted
+  - cannot_contact_seller
+  - ask_to_contact
+  - unable_to_contact
+  - unable_to_contact_courier
+  - consult_exception_reason
+  - cancel_to_send
+  - complaint
+  - complaint_logistics
+  - complaint_courier
+  - complaint_net_station
+  - complaint_did_not_sent_to_doorstep
+  - complaint_service
+  - complaint_courier_station
+  - complaint_customer_service
+  - ask_code
+  - ask_damages
+  - return
+  - consult_expressman_phone
+  - consult_station_info
+  - consult_send_station_info
+  - consult_post_info
+  - consult_invoice
+  - consult_send_item
+  - affirm_to_contact
+  - home_delivery
+  - package_damage
+  - package_lack
+  - package_lost
+  - ask_home_delivery
+  # 流程意图
+  - provided_phone
+  - do_not_provide_phone
+  - ask_dont_call
+  - ask_send_message
+  - confirm_whose_phone
+  - greet
+  - angry
+  - no_use
+  - grumble_logistics_net_courier
+  - swearing
+  - not_accept_apology
+  - threaten_complaint
+  - is_ok_urge
+  - when_to_contact
+  - wait_for_a_moment
+  - ask_reply_way
+  - online
+  - check_client_name_phone_address
+  - cancel_complain
+  - has_no_express_id
+  - apologize
+  - ask_express_id
+  - other_express
+  - is_ok_thanks
+  - is_sender
+  - query_register_or_not
+  - is_receiver
+  - tip_off
+  - check_weight
+  - did_not_contact_customer
+  - service_code
+  - not_arrive_threaten_complaint
+  - not_process_threaten_complaint
+  - join_in
+
+entities:
+  - express_id:
+      influence_conversation: false
+  - order_id:
+      influence_conversation: false
+  - PERSON:
+      influence_conversation: false
+  - phone:
+      influence_conversation: false
+  - user_type:
+      influence_conversation: false
+  - entity_item:
+      influence_conversation: false
+  # 极兔
+  - entity_jt_express_name:
+      influence_conversation: false
+  - entity_jt_express_id:
+      influence_conversation: false
+  # 顺丰
+  - entity_sf_express_name:
+      influence_conversation: false
+  - entity_sf_express_id:
+      influence_conversation: false
+  # 中通
+  - entity_zt_express_name:
+      influence_conversation: false
+  - entity_zt_express_id:
+      influence_conversation: false
+  # 申通
+  - entity_st_express_name:
+      influence_conversation: false
+  - entity_st_express_id:
+      influence_conversation: false
+  # 韵达
+  - entity_yd_express_name:
+      influence_conversation: false
+  - entity_yd_express_id:
+      influence_conversation: false
+  # 邮政(包括EMS)
+  - entity_yz_express_name:
+      influence_conversation: false
+  - entity_yz_express_id:
+      influence_conversation: false
+  # 百世
+  - entity_bs_express_name:
+      influence_conversation: false
+  - entity_bs_express_id:
+      influence_conversation: false
+  # 德邦
+  - entity_db_express_name:
+      influence_conversation: false
+  - entity_db_express_id:
+      influence_conversation: false
+  # 京东
+  - entity_jd_express_name:
+      influence_conversation: false
+  - entity_jd_express_id:
+      influence_conversation: false
+
+slots:
+  slot_express_id:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: express_id
+      - type: custom
+
+  slot_order_id:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: order_id
+
+  slot_name:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: PERSON
+
+  slot_phone:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: phone
+
+  slot_phone_key:
+    type: categorical
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_user_type:
+    type: text
+    initial_value: 收件人
+    influence_conversation: false
+    mappings:
+      - type: from_intent
+        value: 发件人
+        intent: is_sender
+      - type: from_entity
+        entity: user_type
+        intent: [is_sender, is_receiver, return, change_address, write_wrong_address, if_can_change_address]
+
+  slot_user_type_key:
+    type: categorical
+    initial_value: 收件人
+    values:
+      - 收件人
+      - 发件人
+      - 第三方
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_history_workorder_key:
+    type: categorical
+    initial_value: noWorkorder
+    values:
+      - noWorkorder
+      - hasWorkorder
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  #咨询相关槽位，物品，物品类型，寄件地址，:
+  slot_item:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: entity_item
+        intent: [consult_send_item]
+
+  slot_first_sentence_used:
+    type: float
+    initial_value: 0
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+# 流程入口意图计数
+  slot_return_count:
+    type: categorical
+    initial_value: 0
+    influence_conversation: false
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  slot_return_count_key:
+    type: categorical
+    initial_value: 0
+    influence_conversation: true
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  slot_signed_but_not_received_count:
+    type: categorical
+    initial_value: 0
+    influence_conversation: false
+    values:
+      - 0
+      - 1
+      - 2
+    mappings:
+      - type: custom
+
+  slot_signed_but_not_received_count_key:
+    type: categorical
+    initial_value: 0
+    influence_conversation: true
+    values:
+      - 0
+      - 1
+      - 2
+    mappings:
+      - type: custom
+
+  slot_home_delivery_count:
+    type: categorical
+    initial_value: 0
+    influence_conversation: false
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+    mappings:
+      - type: custom
+
+  slot_home_delivery_count_key:
+    type: categorical
+    initial_value: 0
+    influence_conversation: true
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+    mappings:
+      - type: custom
+
+  slot_urge_count:
+    type: categorical
+    initial_value: 0
+    influence_conversation: false
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    mappings:
+      - type: custom
+
+  slot_urge_count_key:
+    type: categorical
+    initial_value: 0
+    influence_conversation: true
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    mappings:
+      - type: custom
+
+  slot_complaint_count:
+      type: categorical
+      initial_value: 0
+      influence_conversation: false
+      values:
+        - 0
+        - 1
+      mappings:
+        - type: custom
+
+  slot_complaint_count_key:
+    type: categorical
+    initial_value: 0
+    influence_conversation: true
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  slot_consult_invoice_count:
+    type: categorical
+    initial_value: 0
+    influence_conversation: false
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  slot_consult_invoice_count_key:
+    type: categorical
+    initial_value: 0
+    influence_conversation: true
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  slot_angry_count:
+    type: categorical
+    initial_value: 0
+    influence_conversation: false
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+    mappings:
+      - type: custom
+
+  slot_angry_count_key:
+    type: categorical
+    initial_value: 0
+    influence_conversation: true
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+    mappings:
+      - type: custom
+
+  slot_swearing_count:
+    type: categorical
+    initial_value: 0
+    influence_conversation: false
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+    mappings:
+      - type: custom
+
+  slot_swearing_count_key:
+    type: categorical
+    initial_value: 0
+    influence_conversation: true
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+    mappings:
+      - type: custom
+
+  slot_change_address_count:
+    type: categorical
+    initial_value: 0
+    influence_conversation: false
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  slot_change_address_count_key:
+    type: categorical
+    initial_value: 0
+    influence_conversation: true
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  slot_sign_status_key:
+    type: categorical
+    initial_value: onTheWay
+    values:
+      - onTheWay
+      - hasSigned
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_phone_latest_key:
+    type: categorical
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_express_id_latest_key:
+    type: categorical
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_order_id_latest_key:
+    type: categorical
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_complaint_key:   # 投诉意图是否有上文，默认没有
+    type: categorical
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  # 词槽变量，用于记录核心多轮意图，据此个性化地出已登记话术
+  slot_core_intent:
+    type: text
+    initial_value: no_intent
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  slot_core_intent_key:
+    initial_value: no_intent
+    type: categorical
+    values:
+      - return
+      - change_address
+      - inform
+      - check_express_status
+      - urge
+      - check_arrive_datetime
+      - signed_but_bot_received
+      - home_delivery
+      - urge_to_get_express
+      - register
+      - angry
+      - complaint
+      - consult
+      - check_weight
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_is_receiver_key:
+    initial_value: no_intent
+    type: categorical
+    values:
+      - return
+      - change_address
+      - check_weight
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_hurry_key:
+    type: categorical
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_check_weight_key:
+    type: categorical
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  # 词槽变量，标记是否已经播报过物流轨迹
+  slot_has_logistics_track:
+    type: categorical
+    initial_value: no
+    values:
+      - yes
+      - no
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+# 词槽变量，用于区分在用户的肯定意图下，是否需要登记。默认需要登记。
+  slot_confirm:
+    type: categorical
+    initial_value: 1
+    values:
+      - 0
+      - 1
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  slot_confirm_key:
+    type: categorical
+    initial_value: 1
+    values:
+      - 0
+      - 1
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_express_id_form_max_count:
+    type: categorical
+    initial_value: 2
+    values:
+      - 0
+      - 1
+      - 2
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  slot_when_to_contact_count:
+    type: categorical
+    initial_value: 0
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  slot_when_to_contact_count_key:
+    type: categorical
+    initial_value: 0
+    values:
+      - 0
+      - 1
+      - 2
+      - 3
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  slot_guide_to_end:
+    type: categorical
+    influence_conversation: false
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  slot_ask_comments:
+    type: categorical
+    influence_conversation: false
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  slot_ask_comments_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  # 极兔
+  slot_jt_express_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  # 顺丰
+  slot_sf_express_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  # 中通
+  slot_zt_express_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  # 申通
+  slot_st_express_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  # 韵达
+  slot_yd_express_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  # 邮政(包括EMS)
+  slot_yz_express_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  # 百世
+  slot_bs_express_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  # 德邦
+  slot_db_express_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  # 京东
+  slot_jd_express_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 0
+    values:
+      - 0
+      - 1
+    mappings:
+      - type: custom
+
+  slot_unable_contact_key:
+    type: categorical
+    influence_conversation: true
+    initial_value: 1
+    values:
+      - 1
+      - 2
+    mappings:
+      - type: custom
+
+forms:
+  collect_express_id_form:
+    required_slots:
+      - slot_express_id
+
+
+actions:
+  - action_validate_slot_mappings
+  - action_check_arrive_datetime
+  - action_check_sign_info
+  - action_return_or_not
+  - action_check_receive_address
+  - action_check_express_status
+  - action_intercept_register
+  - action_urge
+  - action_consult_send_item
+  - action_consult_receive_station_info
+  - action_consult_send_station_info
+  - action_consult_post_info
+  - action_consult_expressman_phone
+  - action_form_count_rollback
+  - action_consult_station_address
+  - action_set_slot_user_type_key
+  - action_session_start
+  - action_return_first_sentence
+  - action_intent_count
+  - action_check_workorder
+  - action_set_slot_phone_key
+  - action_check_sign_status
+  - action_register
+  - action_change_address_or_not
+  - action_faq
+  - action_set_inform_key
+  - action_return
+  - action_change_address
+  - action_confirm_set
+  - action_confirm_get
+  - action_contact
+  - action_faq_condition
+  - action_complaint
+  - action_set_slot_other_express_key
+  - action_slot_user_type_key
+  - action_set_slot_core_intent
+  - action_get_slot_core_intent_key
+  - action_get_slot_hurry_key
+  - action_set_slot_guide_to_end
+  - action_get_slot_is_receiver_key
+  - action_set_slot_ask_comments
+
+
+responses:
+
+  # 默认话术
+  utter_default:
+    - text: ""
+#    - text: 您好 小圆正在查询中 请耐心等待哦!
+#    - text: 您好 因咨询量过大请耐心等待 客服小姐姐已经在竭力查询了哦!
+#    - text: 稍等
+#    - text: 请稍等
+#    - text: 这边马上帮您查看一下 请稍等
+#    - text: 非常抱歉给您带来不好的服务体验 小圆表示深深的歉意我让专员给您核实下是什么情况，尽快给您回电告知您结果哦，您看可以吗？
+#    - text: 非常抱歉 确实给您添麻烦了
+#    - text: 亲 对于因为物流给您带来的麻烦我们感到万分抱歉 我会尽快为您解决问题。
+#    - text: 非常抱歉给您添麻烦了
+#    - text: 亲亲很抱歉 的确是我们的工作没有做好给您带来不好的体验 小圆在此再说声抱歉哦
+#    - text: 抱歉亲
+#    - text: 抱歉
+#    - text: 好哒亲 我正在给您登记处理哦！请不要走开稍等哦
+#    - text: 亲亲 请稍等片刻 小圆为您登记中
+#    - text: 收到 亲亲正在给您登记处理哦您稍等
+#    - text: 稍等哈 小圆在给您登记哦！
+#    - text: 好的亲 正在登记请稍等
+#    - text: 小圆正在登记您的问题请稍等哦
+#    - text: 请稍等 正在登记哦
+#    - text: 稍等 给您登记
+#    - text: 请稍等 我这边正在帮您登记
+#    - text: 请不要离开 这边正在帮您登记~~~
+#    - text: 亲亲 这边正在帮您登记,请稍等片刻哦!
+#    - text: 请稍等 正在为您登记哦！
+#    - text: 请您稍等 正在为您登记
+#    - text: 放心 既然找到小圆 一定给您处理好的呢
+#    - text: 亲我一定尽全力帮助您解决问题 请您放心
+#    - text: 亲 请您放心我们会很重视您的问题 并尽快给您处理好的感谢您的理解
+#    - text: 知道您比较着急 小圆刚已让后台专员帮您加急优先处理了亲
+#    - text: 亲亲 您的问题我已备注为“重要+紧急” 网点优先先给你处理 请放心专员会给你个满意的答复哦
+#    - text: 我 这边追问站点人员核实一下是怎么回事 核实好之后给您一个准确的答复
+#    - text: 这边给您对接专员核实网点具体原因 尽快联系您给您一个结果
+#    - text: 亲 小圆先核实下 请相信我们一定会给您一个满意的答复。
+
+  # 打招呼
+#  utter_greet:
+#    - text: 亲亲，您好
+
+  # 好的
+  utter_get:
+    - text: 好的，亲亲
+
+  utter_help:
+    - text: 请问有什么可以帮您，亲？
+    - text: 亲，请问有什么可以帮到您吖~~
+    - text: 我是圆通人工客服，请问有什么可以帮您？
+
+ # 谢谢
+  utter_thanks:
+    - text: 亲， 不客气哦，是小圆应该做的
+    - text: 不客气，亲亲！很高兴为您服务呢
+    - text: 不客气呢，亲！为您服务是我的荣幸哦
+
+  # 道歉
+  utter_apologize_reply:
+    - text: 亲亲，非常抱歉给您添麻烦了，实在抱歉！
+    - text: 非常抱歉亲，给您带来不好的体验了
+    - text: 非常抱歉！给您添麻烦了，耽误您宝贵时间了
+    - text: 亲亲，首先小圆这边先给您道歉，是我们的工作没有做好，给您添麻烦了
+    - text: 非常抱歉，给您带来不好的服务体验，小圆表示深深的歉意
+
+  # 要电话通用话术
+  utter_ask_phone_base:
+    - text: 亲亲，麻烦您辛苦提供一下您的手机号码
+    - text: 辛苦您给一下您的联系方式呢亲
+
+  utter_ask_phone_appease:
+    - text: 亲亲，我们这边帮您处理，需要您提供一下姓名，联系方式，哦
+
+  # 结束语
+  utter_end:
+    - text: 那小圆先退下咯，非常高兴为您服务的，您有问题随时进线咨询哈，亲亲再见！
+    - text: 好的亲，如有别的问题，可随时联系我们，祝您生活愉快。
+
+  # 要好评
+  utter_ask_good_comments:
+    - text: 麻烦您辛苦点个好评哦，您的满意是我最大的动力，小圆工作生活不易，真心感谢您~~好人一生平安 (づ￣3￣)づ╭❤～
+    - text: 感谢您的来访，如果没有其它问题，本次会话结束后，辛苦您给小圆一个“满意”可以吗，非常感谢您的支持，祝您生活愉快
+    - text: 那小圆先去处理快件问题喽，有问题随时找我呦，结束会话后有一个针对小圆本人的服务评价，能麻烦您动动小手，点个【满意】哦，好人一生平安
+
+  # 表单话术
+  utter_ask_slot_express_id:
+    - text: 亲亲您好，麻烦您提供一下10、12或YT+13位数的圆通运单号码，我帮您查看一下。
+    - text: 您好，给您带来不便非常抱歉，麻烦您提供一下YT+13位数的圆通运单号码，我帮您查看一下
+
+  utter_ask_slot_item:
+    - text: 您好，请问您这边要寄什么物品呢？
+    - text: 亲，要寄什么物品呢？
+    - text: 您好 您需要邮寄什么物品
+
+  # 投诉流程
+  utter_complaint_reply_2:
+    - text: 亲亲，小圆已帮您的投诉登记好了哦，会尽快处理的
+    - text: 感谢您耐心等待，小圆这边已帮您投诉了，已经为您加急催促专员给您处理，还请您保持手机畅，通给您造成不便非常抱歉
+    - text: 亲，小圆帮你已经上报系统投诉了，请放心，迟点会有专人联系您处理的
+  utter_complaint_reply_5:
+    - text: 麻烦您提供下电话，小圆为您登记投诉哦
+    - text: 麻烦您提供下电话，小圆为您登记投诉哦，后续相关人员会及时与您联系处理的
+    - text: 亲亲，辛苦提供一下您的电话号码，这边帮您投诉
+  utter_complaint_reply_6:
+    - text: 请问您具体是要投诉哪方面呢？我立即给您登记反馈
+    - text: 请问您投诉的原因是？小圆这边为您登记投诉哦
+    - text: 请问您需要投诉什么呢？小圆这边帮您登记哦亲
+    - text: 亲亲小圆这边可以帮您登记投诉的，麻烦您反馈下投诉内容和电话，小圆给您登记
+  utter_complaint_reply_8:
+    - text: 亲亲，这边帮您先登记投诉并帮您处理包裹的问题，您看可以吗？
+
+  # 流程意图
+  utter_provided_phone:
+    - text: 亲，由于隐私保护，无法看到您的完整信息，我们可能无法及时处理及回复您处理结果，麻烦您提供一下联系方式呢
+    - text: 亲，为了客户资料安全，您的信息完全保密！客服看不到您的信息。麻烦您提供下联系方式呢
+    - text: 由于客户的信息是保密的，小圆是没有权限查询客户信息的哦，麻烦您提供电话，方便小圆为您登记处理哦。
+
+  utter_do_not_provide_phone:
+    - text: 亲亲，为了尽快处理您的问题，麻烦您提供下电话，客服给您备注加急工单，反馈专员优先给您处理。
+    - text: 小圆需要您的电话才好帮您发起工单反馈亲亲 。 亲亲可以麻烦您发下您的电话吗亲
+
+  utter_ask_dont_call:
+    - text: 亲 已经登记备注了
+    - text: 亲，已为您备注短信联系
+    - text: 好的，我这边把您的要求备注一下登记给网点呢
+
+  utter_confirm_whose_phone:
+    - text: 是的亲，需要您留一下可以联系您的手机号码，方便后面网点联系您进行核实处理。麻烦您提供一下呢
+    - text: 是的亲亲，为了第一时间能够联系您，告知您快件处理结果。麻烦您提供一下呢
+
+  utter_reply_way:
+    - text: 亲，正常是电话回复的。
+    - text: 您电话保持通畅哦 有专员回电您哦
+
+  utter_has_no_express_id:
+    - text: 亲，没有运单号的话小圆这边不能帮您查询快递状态哦，小圆也没有权限帮您查询快递单号。您可以登陆圆通官网（https://www.yto.net.cn/）或者微信小程序查询您近期的快递单号。给您带来不便，非常抱歉！
+
+  # faq 意图回复话术
+  utter_wait_for_a_moment:
+    - text: 好的亲，你那边好了随时联系小圆
+    - text: 好的
+
+  utter_online:
+    - text: 在的哦，亲亲
+    - text: 在的，亲亲
+
+  utter_check_client_name_phone_address:
+    - text: 亲亲 非常抱歉，客户信息属于个人隐私，小圆是没有权限查看的哦 ，请您谅解！
+    - text: 亲亲 非常抱歉，地址、电话等属于面单隐私，需联系发件公司查询
+    - text: 非常抱歉，地址、电话等属于面单隐私，这边客服是看不到的，需联系发件公司查询
+
+  utter_cancel_complain:
+#    - text: 亲，客服无法帮您直接撤销投诉哦，我们帮您登记反馈，后续会有专员给您回访，您告知一下问题已经解决，满意就可以了。谢谢配合哦
+    - text: 很抱歉您的投诉我们已经在受理了，客服人员没有权限做撤销处理，如果已经处理好的情况下，如有圆通回复短信，您只需要回复满意即可，谢谢您的支持与理解
+    - text: 亲您好， 客服人员无法做撤销处理，如果已经处理好的情况下，会有专员或是圆通回访短信回访的，您到时候告知一下问题已经解决或回复满意即可哦，相当于撤诉哦    谢谢您的支持与理解
+
+  utter_apologize:
+    - text: 亲，没关系的，你的心情小圆可以理解，请问您还有其他问题吗？
+    - text: 没关系的，亲亲
+    - text: 没事的，亲亲
+    - text: 亲，没关系的
+
+  utter_ask_express_id:
+    - text: 亲，小圆这边没有权限帮您查快递单号哦。您可以登陆圆通官网（https://www.yto.net.cn/）或者微信小程序查询您近期的快递单号。给您带来不便，非常抱歉！
+
+#  utter_other_express:
+#    - text: 亲，这边是圆通客服。其他快递公司，建议通过微信小程序联系官方客服。部分快递公司咨询电话如下：\n中国邮政：11183\n中通：95311\n申通：95543\n韵达：95546
+
+  # 这就去处理话术
+#  utter_register_to_process_now:
+#    - text: 亲亲，您看还有需要补充的吗？如果没有其他问题，小圆这边就先退下给您立刻对接处理了哦~
+#    - text: 那这边先不打扰亲亲了，亲亲放心，小圆一定竭尽全力为您处理问题，给您一个满意的答复
+#    - text: 亲，请问还有其他问题需要备注反馈吗？如果没有小圆帮您催促处理包裹问题去了
+
+  # 登记话术
+  utter_register_reply_6:
+#    - text: 亲，抱歉哦.我这是总部的接待客服 ，在异地，无法触摸到您的包裹，我需要核实一下反馈网点处理回复您可以吗？
+    - text: 小圆让专员给您核实下是什么情况，尽快给您回电告知您结果哦，您看可以吗？
+
+  utter_register_reply_7:
+    - text: 亲亲的确太耽误您了，您消消气，我已经给您加急催促那边赶紧处理
+    - text: 抱歉亲亲，小妹立即给您对接核实一下什么情况哈
+
+  utter_register_is_signing:
+    - text: 请您稍等，正在为您登记
+    - text: 请稍等，正在登记哦
+    - text: 好哒亲，我正在给您登记处理哦！请不要走开稍等哦
+
+  utter_register_has_signed_base:
+    - text: 这边小圆已经为您登记处理了，处理好后会有专员与您电话联系，在此期间保持电话畅通哦
+    - text: 已经登记成功了，稍后网点会处理的，请您耐心等待下哦
+
+  utter_register_has_signed_appease:
+    - text: 亲亲，我马上给您加急处理，给您带来不便，深表歉意。
+    - text: 亲，已经为您加急催件，会尽快处理好的，请您放心哦!
+    - text: 亲亲，放心交给我，我给您下了紧急工单 已把包裹升级为重要、加急件，要求尽快为您处理
+
+  utter_thanks_for_understand:
+    - text: 亲亲 非常感谢您的理解
+
+  # 引导结束话术
+  utter_guide_to_end:
+    - text: 亲，请问您还有其他问题需要咨询吗？
+    - text: 亲亲，请问您还有其他问题需要咨询吗？
+    - text: 亲亲，您看这边还有其他问题吗？
+
+  utter_guide_to_end_has_workorder:
+    - text: 那这边先不打扰亲亲了，亲亲放心，小圆一定竭尽全力为您处理问题，给您一个满意的答复
+    - text: 亲亲，您看还有需要补充的吗？如果没有其他问题，小圆这边就先退下给您立刻对接处理了哦~
+#    - text: 亲亲还有什么其它问题需要咨询吗，小圆可以帮您一起反馈。
+    - text: 亲 您看下还有需要补充的吗 小圆备注好一起登记
+#    - text: 亲，请问还有其他问题需要备注反馈吗？如果没有小圆帮您催促处理包裹问题去了
+
+  # 正在处理中
+  utter_has_been_processing:
+    - text: 看到之前有反馈记录，您的问题我们非常重视，目前已经在处理中了。
+    - text: 亲亲 看到您的反馈记录，您的问题我们非常重视，目前已经在处理中了
+    - text: 亲亲，非常抱歉给您添麻烦了。小圆看到之前有反馈记录，您的问题我们非常重视目前已经在处理中了，我给您再加急催促下那边尽快联系您处理哦~
+    - text: 这个件显示已经有反馈记录后台专员正在帮您处理中，辛苦再耐心等待处理结果哦
+
+  utter_urge_to_process_again:
+    - text: 亲亲，您的问题，我已备注为“重要+紧急”，网点优先先给你处理，请放心专员会给你个满意的答复哦
+    - text: 亲，我非常理解您的心情，我立即联系处理，并帮您加急，非常感谢您的谅解。
+    - text: 亲，我马上以总部名义转告相关责任部门，您是我们的重要客户，您的问题和您的包裹和要求必须优先处理，亲亲请注意接听电话或者查看短信哦，我们会主动联系您进行处理呢。
+
+  # 更址流程
+  utter_change_address_reply_1:
+    - text: 您好，查看到您的快递显示已经签收，无法进行更址呢
+
+  utter_change_address_reply_5:
+    - text: 亲，这边可以帮您反馈修改地址，但是不能保证一定能修改成功哦。还是建议您联系发件人或者发件网点进行修改稳妥一些。
+    - text: 这边可以帮您登记您的更址诉求，但不能确保能修改成功。因为更址是需要发件人同意，才能够让发件网点上报拦截更址的。
+    - text: 亲亲，这边帮您登记反馈但不确定能否成功更改。更址是需要反馈发件人同意才能拦截更改，所以为了更快解决您的问题，建议您这边与商家反馈，让商家反馈发件公司拦截更改。
+    - text: 亲亲如果您要更改地址的话，建议您联系商家或发件网点进行修改，稳妥一些，小圆这边没有权限直接修改。但是可以帮您反馈修改地址，所以不能保证一定能修改成功哦，您需要的话提供下电话和新地址信息
+    - text: 亲，更址，建议您联系商家或发件网点进行修改，稳妥一些，客服人员没有权限直接修改。这边可以帮您反馈修改地址，但是不能保证一定能修改成功哦
+  utter_change_address_reply_6:
+    - text: 非常抱歉，为了保护客户隐私及快件安全，这边是无法修改的。如果您需要修改的话，需要您联系发件人由发件人联系发件网点进行修改哦。
+    - text: 亲亲非常抱歉，为了保障快件的安全，小圆没有权限更改哦，更址需要您联系下发件人由发件人联系发件网点更改地址哦。给您带来不便请您谅解！
+    - text: 不好意思亲，更址这边需要对接到发货人（商家）哦，由发货人(商家)发起更址工单，小圆是在线客服，没有权限修改客户的任何信息哦亲亲
+  utter_change_address_reply_7:
+    - text: 亲，这边可以帮您反馈修改地址，但是不能保证一定能修改成功哦。
+    - text: 这边可以帮您登记您的更址诉求，但不能确保能修改成功。因为更址是需要发件人同意，才能够让发件网点上报拦截更址的。
+    - text: 亲亲，这边帮您登记反馈但不确定能否成功更改。更址是需要反馈发件人同意才能拦截更改
+  utter_write_wrong_or_send_wrong_11:
+    - text: 亲，这边跟您确认一下，是物流给您发错地方了，还是您收件地址写错了呢？
+    - text: 亲，这边跟您确认一下，您是写错地址了吗？还是物流给您发错地方了？
+    - text: 亲，这边跟您确认一下，您是写错地址了，还是我们给您送错地方了？
+    - text: 亲，您是写错地址了吗？还是物流给您发错地方了？
+    - text: 您是写错地址了吗，亲？还是物流给您发错地方了哦？
+  utter_change_address_reply_8:
+    - text: 请联系这个网点更址哦
+    - text: 建议亲亲联系发件网点处理
+
+  # 退回流程，version 2.0
+  utter_return_reply_1:
+    - text: 您好，查看到您的快递显示已经签收，无法进行退回呢
+
+  utter_return_reply_5:
+    - text: 亲，为了确保快件和客户信息安全，退回的话需发件人联系发件网点上报拦截退回，客服只能帮您登记反馈，没有权限直接拒收的哦
+    - text: 拒收拦截，建议您先联系卖家确认后再做拒收操作，以免后续退款产生不必要的误会。如您确认拒收拦截退回需要及时联系网点说明情况。
+    - text: 亲，退回快件只能通过发件公司处理的哦。如果您是发件人，建议您联系发件公司拦截一下。如果您是收件人，建议您让发件人联系发件公司处理下哦
+  utter_return_reply_6:
+    - text: 亲，这边可以帮您反馈拒收退回，但是不能保证一定能拒收成功哦，还是建议您联系发件人或者派件员进行拒收确认，稳妥一些
+    - text: 亲，这边可以帮您反馈退回拦截，但是不能保证一定能拦截成功哦，还是建议您联系发件人或者发件网点进行拦截，稳妥一些
+    - text: 亲亲，这边可以帮您反馈拒收退回，但是不能保证一定能拒收成功哦，还是建议您联系发件人或者派件员进行拒收确认，稳妥一些哦
+    - text: 亲这边可以帮您备注，拒收，但是不能保证一定能拒收成功哦，还是建议您联系发件人拦截退回，或者，建议联系派件员当面拒收，更为稳妥些哦
+    - text: 亲，这边可以帮您反馈退回拦截，但是不能保证一定能拦截成功哦，还是建议您联系发件网点进行拦截稳妥一些
+    - text: 亲，为了确保快件和客户信息安全，退回的话需发件人联系发件网点上报拦截退回，客服只能帮您登记反馈，没有权限直接拒收的哦
+  utter_return_reply_7:
+    - text: 亲，这边可以帮您反馈拒收退回，但是不能保证一定能拒收成功哦
+    - text: 亲，这边可以帮您反馈退回拦截，但是不能保证一定能拦截成功哦
+    - text: 亲这边可以帮您备注，拒收，但是不能保证一定能拒收成功哦
+#  utter_return_reply_8:
+#    - text: 您好此件已经在处理中了哦，您要是不放心我给您再催下那边赶紧给您处理
+#    - text: 拒收拦截，建议您先联系卖家确认后再做拒收操作，以免后续退款产生不必要的误会。如您确认拒收拦截退回需要及时联系网点说明情况。
+#  utter_return_reply_9:
+#    - text: 已经上报
+#    - text: 亲，这边可以帮您反馈拒收退回，但是不能保证一定能拒收成功哦
+#  utter_return_reply_10:
+#    - text: 已经上报
+#    - text: 亲，为了确保快件和客户信息安全，退回的话需发件人联系发件网点上报拦截退回，客服只能帮您登记反馈，没有权限直接拒收的哦
+  utter_return_reply_11:
+    - text: 请联系这个网点拦截下哦
+    - text: 建议亲亲联系发件网点处理
+
+  # 催中转流程
+  utter_urge_appease_reply_2:
+    - text: 亲，请您放心我们会很重视您的问题，并尽快给您处理好的
+    - text: 这边一定尽快给您一个满意的回复，请您放心哦
+#    - text: 亲这边马上为您做一个加急工单反馈过去， 让工作人员跟您联系把件为您送达
+    - text: 非常抱歉给您带来不便，对于您反映的问题，我们马上升级处理，第一时间回复您结果。
+  utter_urge_appease_reply_3:
+    - text: 亲，出现这样的问题，小圆也很抱歉，您消消气，问题已经在处理了
+    - text: 我非常理解您的心情，如果换作是我的快件，我也会着急的，我们一定会竭尽全力为您解决喔
+    - text: 看到您反馈的问题，其实您的心情我非常理解，如果我自己遇到同样的问题，肯定也会和您一样的心情的，我们在线客服就是服务您的，也是希望那边能尽快联系您处理好的，但是这边处理是有时间的，我真心建议您稍晚等待一下，谢谢亲
+  utter_urge_appease_reply_4:
+    - text: 给您添麻烦了，这个确实是我们服务不周，后期一定加强完善，以便更好的给您服务
+    - text: 亲亲，，浪费了您的时间实在不好意思，现在就去为您处理问题，一定会给您一个满意的答复
+    - text: 您好，的确太耽误您了，您消消气，我已经给您加急催促那边赶紧处理，您再稍微等待下，谢谢
+  utter_urge_appease_reply_5:
+    - text: 您放心，关于您的问题我们一定给您处理到位，会帮您加急处理的
+    - text: 亲，请您放心交给我，您的问题一定解决到您满意为止的
+    - text: 这个事情如果我是您的话也会很生气的，还请亲再给我们一个机会，我们尽快给您解决好
+    - text: 这边立刻上报上级部门处理
+    - text: 亲亲，我马上给您加急处理，给您带来不便，深表歉意
+    - text: 工单已经登记受理哦，有专员回电您处理的，您放心。十分抱歉哦，给您添麻烦了
+    - text: 亲亲，非常理解您的心情，为您加急催促，让您尽快收到哦
+    - text: 知道您比较着急，小妹刚已让后台专员帮您加急处理，优先处理了派件到位
+
+  # 咨询发票
+  utter_consult_invoice_1:
+    - text: 亲，如果您咨询的是运费、保价、代收手续费相关发票，需要您联系一下发件网点，如果您咨询的是到付发票，您联系一下派件公司。
+    - text: 亲，您好！客户寄递快件的时候，现付快件由发件公司提供发票给发件人，到付快件由派件公司提供发票给收件人。
+    - text: 现付发票由发件公司提供、到付发票由派送公司提供、代收货款（cod）发票由发件人提供（原因代收货款的货款中不包含运费）
+    - text: 现付运费：发票由发件公司提供、到付运费：发票由派件公司提供、代收货款发票：发件人提供
+    - text: 亲，可以的哦，现付运费：发票由发件公司提供、到付运费：发票由派件公司提供、代收货款发票：发件人提供
+  utter_consult_invoice_2:
+    - text: 小圆这边是开不了的
+    - text: 亲亲，这里开不了哦
+#    - text: 亲亲，小圆没有权限给您开具发票呢
+
+  # 咨询物品能不能寄
+  utter_consult_can_post:
+    - text: 可以的 亲亲
+    - text: 可以
+
+  utter_consult_can_not_post:
+    - text: 亲亲，寄不了哦
+    - text: 不可以寄的
+#    - text: 不可以寄的，亲亲
+#    - text: 亲亲，寄不了哦
+#    - text: 不可以的，亲亲
+
+  utter_consult_station_if_can_post:
+    - text: 亲亲，具体以网点为准，建议亲亲联系网点核实
+    - text: 具体情况以网点为准，建议亲亲联系网点核实
+    - text: 亲亲，具体情况以网点为准，建议亲亲联系网点核实
+
+
+  utter_consult_prohibite_goods:
+    - text: 很抱歉，按照规定，这个属于禁运品，无法寄递，给您带来不便，还请您能够谅解 ！
+    - text: 亲，您要寄的商品属于违禁品，是不能邮寄的，很抱歉我司无法收件。
+    - text: 很抱歉，根据国家规定，您需寄递的物品属于禁运品，无法寄递，给您带来不便，还请您能够谅解 ！
+
+  utter_consult_cigarette_good:
+    - text: 您好。香烟是限寄物品哦,邮寄卷烟,雪茄烟每件以二条（400支）为限（二者合寄时亦限二条）。邮寄烟叶,烟丝每件以5公斤为限（二者合寄不得超过10公斤）。 属于限寄物品，对寄件数量有严格要求。若您寄件数量较多，建议您咨询下寄件网点哦
+
+  # 咨询网点信息和驿站信息
+  utter_consult_check:
+    - text: 您好，小圆正在查询中，请耐心等待哦!
+    - text: 亲亲，麻烦您稍等下哦，这边帮您查询一下
+
+  utter_return_consult_station_info:
+    - text: 联系这个网点拦截
+
+  # 签收未收到回复
+  utter_signed_but_not_received_2:
+    - text: 非常抱歉，业务员给您误录签收了，我立即联系网点处理，尽快给您回复！！
+    - text: 非常抱歉，可能是站点给您误录代签收了，我立即给您加急处理，尽快给您回复
+    - text: 非常抱歉，业务员可能给您误录签收了，我立即联系网点处理，尽快给您回复
+
+  # 重复触发
+  utter_signed_but_not_received_appease_2:
+    - text: 非常抱歉给你添麻烦了，我会尽快为您解决问题，还请你谅解
+    - text: 对不起，给您带来不便，请您见谅！
+    - text: 亲亲请放心 我一定全力帮您催促此件 尽快给您送达到您的地址
+  utter_signed_but_not_received_appease_3:
+    - text: 针对这种消极怠工的快递员，总部核实后一定会严肃处理 实在对不住亲亲
+    - text: 亲，出现这样的问题，小圆也很抱歉，您消消气，问题已经在处理了
+
+  # 送货上门回复
+  utter_ask_home_delivery:
+    - text: 亲，可以送货上门的，这边帮您反馈一下网点。
+
+  utter_home_delivery_2:
+    - text: 非常抱歉给您带来不便，我们马上对接网点安排给您送货上门，确实很抱歉给您添麻烦了。
+    - text: 抱歉，因派件量较大，业务员会优先派送至相对便捷的代收点，如您需要送货上门，这边马上安排处理
+    - text: 亲亲，小圆这边给您登记上报，要求网点给您送货上门哦
+    - text: 我们这边联系网点给您送货上门
+    - text: 很抱歉给您带来不便，这边帮您催促尽快送货上门
+    - text: 亲亲，放心交给我，我给您下了紧急工单 已把包裹升级为重要、加急件，要求尽快为您送货上门
+
+  # 重复触发
+  utter_home_delivery_appease_2:
+    - text: 亲亲请放心，我一定全力帮您催促此件，尽快给您送达到您的地址
+    - text: 亲亲，放心交给我，我给您下了紧急工单。已把包裹升级为重要、加急件，要求尽快为您送货上门
+    - text: 亲亲，小圆已把包裹升级为重要、加急件，要求尽快为您送货上门
+  utter_home_delivery_appease_3:
+    - text: 亲亲实在抱歉，对不起，都是快递员的错，没有按照指定地点投放，这边替快递员向您道歉哦
+    - text: 小圆马上反馈给涉及环节的责任人领导，加强培训与管理，并做出相应处罚
+    - text: 针对这种消极怠工的快递员，总部核实后一定会严肃处理，实在对不住亲亲
+
+  # 催取件
+  utter_get_express_appease:
+    - text: 非常抱歉 ，这边反馈对接一下责任网点问一下什么情况，然后给您回复
+    - text: 我这边追问网点人员核实一下是怎么回事，核实好之后给您一个准确的答复
+    - text: 亲 这边给您反馈网点核实下哦
+
+#  utter_urge_to_process:
+#    - text: 这边立刻上报上级部门处理
+#    - text: 亲亲，我马上给您加急处理，给您带来不便，深表歉意
+#    - text: 工单已经登记受理哦，有专员回电您处理的，您放心。十分抱歉哦，给您添麻烦了
+
+  # 生气-安抚流程
+  utter_angry_appease_apologize:
+    - text: 亲亲，首先小圆这边先给您道歉，是我们的工作没有做好，给您添麻烦了
+    - text: 非常抱歉，确实给您添麻烦了
+    - text: 亲亲，确实是耽误您的时间，向您致歉
+  utter_angry_appease_processing:
+    - text: 亲亲，我马上给您加急处理，给您带来不便，深表歉意。
+    - text: 知道您比较着急 小圆刚已让后台专员帮您加急，优先处理了亲
+    - text: 亲 这边已给您下了紧急工单，备注相关网点尽快对接处理此件哦 请您放心！
+  utter_angry_appease_understand:
+    - text: 亲，我非常理解您的心情，我立即联系处理，并帮您加急，非常感谢您的谅解。
+    - text: 亲亲，放心交给我，我已经帮您加急让网点优先处理了。核实之后会电话主动回复您的。
+  utter_angry_appease_dont_angry:
+    - text: 您好，的确太耽误您了，您消消气，我已经给您加急催促那边赶紧处理，您再稍微等待下，谢谢
+    - text: 亲亲您的问题，已备注为“重要+紧急”网点优先先给您处理，稍后注意接听网点的来电就可以了 ，请您放心专员会给您个满意的答复的
+    - text: 知道您比较着急，我们会尽量缩短时间，还请您保持电话畅通，方便我们第一时间能联系到您
+    - text: 抱歉亲亲，小圆再次跟您道歉，确实是我们的问题给您添麻烦了，您放心，您的快件问题小圆这边已经为您反馈专员加急处理，立即给您催促核实回电亲亲
+    - text: 亲亲，放心交给我，我给您下了紧急工单 已把包裹升级为重要、加急件，要求尽快为您处理
+  utter_angry_appease_threaten_complaint:
+    - text: 亲，我也非常理解您的心情，如果换做是我的快件，我也会着急的，请放心我们会第一优先级处理您的工单，尽快解决您的问题
+    - text: 亲，请您消消气，查询显示正在处理中，小圆这边已经给您加急催促，一定给您一个合理的回复。很抱歉给您带来不便。
+    - text: 亲，确实非常抱歉给您带来不便了，小圆已经将您的问题反馈并加急处理，我们会有专门的工作人员第一优先级核实处理，实在抱歉
+    - text: 亲亲，知道您比较着急，我们会尽量缩短时间，第一优先级处理您的问题
+    - text: 亲亲，我们已经接到您的加急反馈，正抓紧时间处理中，请再给我们一点时间
+
+  # 骂人
+  utter_angry_appease_swearing_1:
+    - text: 亲亲，首先小圆这边先给您道歉，是我们的工作没有做好，给您添麻烦了
+    - text: 亲亲 ，对不起，因为我们的原因给您添麻烦了，小圆给您道歉
+    - text: 非常抱歉！给您添麻烦了，耽误您宝贵时间了
+  utter_angry_appease_swearing_2:
+    - text: 抱歉亲亲，小圆再次跟您道歉，确实是我们的问题给您添麻烦了，您放心，您的快件问题小圆这边已经为您反馈专员加急处理，立即给您催促核实回电亲亲
+    - text: 亲，对于因为物流给您带来的麻烦我们感到万分抱歉，我会尽快为您解决问题。
+  utter_angry_appease_swearing:
+    - text: 亲亲，您好，请您文明用语，进行进线咨询哦，系统将会检测出不文明用语，会自动关闭咨询窗口哦，非常抱歉给你添麻烦了，实在抱歉！
+
+  # 何时回复意图流程的回复
+  utter_when_to_contact_reply:
+    - text: 正常情况下，一个工作日内会有专员给您回电的
+    - text: 正常情况下 一个工作日内会有专员回电告知结果 我们也会尽量缩短时间的第一时间内回复您的
+    - text: 正常情况下，一个工作日内哦亲亲
+
+  utter_query_register_or_not:
+    - text: 亲，您的问题和诉求我已经上报专员了，您放心我为您安排优先加急处理，尽快回电解决好
+    - text: 亲，已经帮您登记好了，会尽快帮您处理好的，建议您再耐心等待一下！
+    - text: 我已经帮您记录反馈了，稍后我们的工作人员会与您取得联系，请您保持电话畅通，
+
+#  utter_exorbitant_demand:
+##    - text: 亲，抱歉哦.我这是总部的接待客服 ，在异地，无法触摸到您的包裹，我需要核实一下反馈网点处理回复您可以吗
+#    - text: 非常抱歉，亲亲 这边是客服人员，不是处理人员哦！具体的时间小圆是无法给予的 专员核实处理好会第一时间给您回复的
+#    - text: 小圆是无法触摸到您的包裹的哦，准确时间还是需要网点告知您哦
+
+  utter_check_weight:
+    - text: 亲亲包裹重量属于隐私哦，小圆没有权限给你查询的哦，建议您联系发件人或发件网点哦
+
+  utter_check_weight_2:
+    - text: 您好，非常抱歉，客服人员目前只能查询物流信息，物流重量以及其他面单信息客服无权限查看，您若是收件人可以联系发件人咨询物品重量，若您是发件人，您可以联系发件公司咨询，谢谢！
+
+  utter_unable_to_contact_courier:
+    - text: 亲，非常抱歉，由于快递业务员可能正在送件的路上，没有及时接听到您的电话，小圆这就帮您下工单，通知业务员尽快为您送到哦！
+    - text: 亲，由于快递小哥需要送的快递较多，所以没有及时给您送过去，小圆联系网点催促下派送。
+
+  utter_unable_to_contact_net_station:
+    - text: 亲，非常抱歉，网点可能正在处理快件问题，没有及时接听到您的电话，小圆这就帮您下工单，通知网点尽快联系您哦
+
+  utter_service_code:
+    - text: 服务码表示您的快件已经在受理的了 后续相关专员核实清楚 会与您联系的哦 请您耐心等待哦！
+    - text: 亲亲，您好，这是服务码哦，表示您的快件已经在受理的了，后续相关专员核实清楚，会与您联系的哦，请您耐心等待哦！
+
+  utter_join_in:
+    - text: 首先感谢您对圆通速递的信任！关于加盟问题，小圆建议您咨询下加盟热线，电话为：021-69777777-6873，她们会提供最专业、全面的的回答！
+
+  utter_jitu_reply:
+    - text: 亲，这边是圆通客服哦。极兔的件，建议您联系极兔快递（官网地址：https://www.jtexpress.cn），客服热线：956025
+
+  utter_sf_reply:
+    - text: 亲，这边是圆通客服哦。顺丰的件，建议您联系顺丰快递（官网地址：https://www.sf-express.com），客服热线：95338
+
+  utter_zt_reply:
+    - text: 亲，这边是圆通客服哦。中通的件，建议您联系中通快递（官网地址：https://www.zto.com），客服热线：95311
+
+  utter_st_reply:
+    - text: 亲，这边是圆通客服哦。申通的件，建议您联系申通快递（官网地址：https://www.sto.cn），客服热线：95543
+
+  utter_yd_reply:
+    - text: 亲，这边是圆通客服哦。韵达的件，建议您联系韵达快递（官网地址：http://www.yundaex.com），客服热线：95546
+
+  utter_jd_reply:
+    - text: 亲，这边是圆通客服哦。京东的件，建议您联系京东快递（官网地址：https://www.jdl.com/），客服热线：950616
+
+  utter_yz_reply:
+    - text: 亲，这边是圆通客服哦。邮政的件，建议您联系中国邮政（官网地址：https://www.ems.com.cn），客服热线：11183
+
+  utter_db_reply:
+    - text: 亲，这边是圆通客服哦。德邦的件，建议您联系德邦快递（官网地址：https://www.deppon.com），客服热线：95353
+
+  utter_bs_reply:
+    - text: 亲，这边是圆通客服哦。百世的件，建议您联系百世快递（官网地址：https://www.800best.com），客服热线：400-8856-561
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+

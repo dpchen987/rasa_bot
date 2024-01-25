@@ -1,0 +1,219 @@
+version: "3.1"
+
+# 流程意图小流程
+stories:
+
+- story: wait_for_a_moment
+  steps:
+    - intent: wait_for_a_moment
+    - action: utter_wait_for_a_moment
+    - action: action_session_start
+
+#- story: online
+#  steps:
+#    - intent: online
+#    - action: action_session_start
+
+- story: check_client_name_phone_address
+  steps:
+    - intent: check_client_name_phone_address
+    - action: utter_check_client_name_phone_address
+    - action: action_session_start
+
+- story: cancel_complain
+  steps:
+    - intent: cancel_complain
+    - action: utter_cancel_complain
+    - action: action_session_start
+
+- story: apologize
+  steps:
+    - intent: apologize
+    - action: utter_apologize
+    - action: action_session_start
+
+- story: ask_express_id
+  steps:
+    - intent: ask_express_id
+    - action: utter_ask_express_id
+    - action: action_session_start
+
+- story: query_register_or_not
+  steps:
+    - intent: query_register_or_not
+    - action: utter_query_register_or_not
+    - action: action_session_start
+
+- story: tip_off
+  steps:
+    - intent: tip_off
+    - action: utter_angry_appease_apologize
+    - action: utter_angry_appease_threaten_complaint
+    - action: action_session_start
+
+- story: check_weight
+  steps:
+    - intent: check_weight
+    - action: action_set_slot_core_intent   # 对查重量意图进行标记
+    - action: utter_check_weight
+    - action: action_session_start
+
+# 没有给用户回电
+- story: did_not_contact_customer
+  steps:
+    - intent: did_not_contact_customer
+    - action: utter_apologize_reply
+    - action: utter_urge_to_process_again
+    - action: action_session_start
+
+# 联系不上快递员
+- story: unable_to_contact_courier
+  steps:
+    - intent: unable_to_contact_courier
+    - action: utter_apologize_reply
+    - action: utter_unable_to_contact_courier
+    - action: utter_urge_to_process_again
+    - action: action_session_start
+
+# 联系不上网点
+- story: unable_to_contact_net_station
+  steps:
+    - intent: unable_to_contact_net_station
+    - action: utter_apologize_reply
+    - action: utter_unable_to_contact_net_station
+    - action: utter_urge_to_process_again
+    - action: action_session_start
+
+# 服务码
+- story: service_code
+  steps:
+    - intent: service_code
+    - action: utter_service_code
+    - action: action_session_start
+
+# 打招呼
+- story: greet
+  steps:
+    - or:
+      - intent: greet
+      - intent: online
+    - action: utter_online
+    - action: utter_help
+    - action: action_session_start
+
+# 加盟
+- story: join_in
+  steps:
+    - intent: join_in
+    - action: utter_join_in
+    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+    - action: action_session_start
+
+# 其他快递公司
+- story: inform and intent is ji tu
+  steps:
+    - or:
+      - intent: inform
+      - intent: other_express
+    - action: action_set_inform_key
+    - slot_was_set:
+        - slot_jt_express_key: 1
+    - action: utter_jitu_reply
+    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+    - action: action_session_start
+
+- story: inform and intent is shun feng
+  steps:
+    - or:
+      - intent: inform
+      - intent: other_express
+    - action: action_set_inform_key
+    - slot_was_set:
+        - slot_sf_express_key: 1
+    - action: utter_sf_reply
+    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+    - action: action_session_start
+
+- story: inform and intent is zhong tong
+  steps:
+    - or:
+      - intent: inform
+      - intent: other_express
+    - action: action_set_inform_key
+    - slot_was_set:
+        - slot_zt_express_key: 1
+    - action: utter_zt_reply
+    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+    - action: action_session_start
+
+- story: inform and intent is shen tong
+  steps:
+    - or:
+      - intent: inform
+      - intent: other_express
+    - action: action_set_inform_key
+    - slot_was_set:
+        - slot_st_express_key: 1
+    - action: utter_st_reply
+    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+    - action: action_session_start
+
+- story: inform and intent is yun da
+  steps:
+    - or:
+      - intent: inform
+      - intent: other_express
+    - action: action_set_inform_key
+    - slot_was_set:
+        - slot_yd_express_key: 1
+    - action: utter_yd_reply
+    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+    - action: action_session_start
+
+- story: inform and intent is jing dong
+  steps:
+    - or:
+      - intent: inform
+      - intent: other_express
+    - action: action_set_inform_key
+    - slot_was_set:
+        - slot_jd_express_key: 1
+    - action: utter_jd_reply
+    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+    - action: action_session_start
+
+- story: inform and intent is you zheng
+  steps:
+    - or:
+      - intent: inform
+      - intent: other_express
+    - action: action_set_inform_key
+    - slot_was_set:
+        - slot_yz_express_key: 1
+    - action: utter_yz_reply
+    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+    - action: action_session_start
+
+- story: inform and intent is de bang
+  steps:
+    - or:
+      - intent: inform
+      - intent: other_express
+    - action: action_set_inform_key
+    - slot_was_set:
+        - slot_db_express_key: 1
+    - action: utter_db_reply
+    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+    - action: action_session_start
+
+- story: inform and intent is bai shi
+  steps:
+    - or:
+      - intent: inform
+      - intent: other_express
+    - action: action_set_inform_key
+    - slot_was_set:
+        - slot_bs_express_key: 1
+    - action: utter_bs_reply
+    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+    - action: action_session_start
