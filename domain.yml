@@ -780,6 +780,24 @@ slots:
     mappings:
       - type: custom
 
+  slot_big_category:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  slot_small_category:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  slot_work_type:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
 forms:
   collect_express_id_form:
     required_slots:

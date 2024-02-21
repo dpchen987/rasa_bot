@@ -18,7 +18,7 @@ from rasa.core.channels.channel import (
 logger = structlog.getLogger(__name__)
 
 
-# 目前使用的rasa使用的IO，目的是对外界输入进行预处理
+# 目前rasa使用的IO，目的是对外界输入进行预处理
 class WdgjIO(InputChannel):
     def name(self) -> Text:
         """Name of your custom channel."""
@@ -114,7 +114,6 @@ class WdgjIO(InputChannel):
                             metadata=metadata,
                         )
                     )
-
             return response.json(collector.messages)
 
         return custom_webhook

@@ -1,6 +1,7 @@
 import sys
 import logging
 from typing import Any, Text, Dict, List
+from pprint import pprint
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import (
     ActionExecuted,
@@ -40,7 +41,10 @@ class ActionSessionStart(Action):
       self, dispatcher, tracker: Tracker, domain: Dict[Text, Any]
     ):
         _events = [SessionStarted()]
-
+        logging.info("tracker.slots")
+        pprint(tracker.slots)
+        logging.info("tracker.events")
+        pprint(tracker.events)
         if domain['session_config']['carry_over_slots_to_new_session']:
             _events.extend(self._slot_set_events_from_tracker(tracker))
 

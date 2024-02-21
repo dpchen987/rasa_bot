@@ -10,6 +10,15 @@ rules:
     - action: utter_faq
     - action: action_faq_condition
 
+# 在运单号表单激活状态下，对分段的运单号数字做拼接
+- rule: form condition concat goback
+  condition:
+    - active_loop: collect_express_id_form
+  steps:
+    - intent: inform
+    - action: utter_faq
+    - action: action_faq_condition
+
 # 在运单号表单激活状态下，对表单填槽进行计数
 - rule: express id slot filling count
   condition:
@@ -17,7 +26,6 @@ rules:
   steps:
     - or:
       - intent: consult_send_item
-      - intent: inform
       - intent: affirm
       - intent: is_ok
       - intent: deny

@@ -14,7 +14,12 @@ class ActionGoBack(Action):
     def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
+        # 
+        from pprint import pprint
+        pprint("tracker.slots")
+        pprint(tracker.slots)
+        pprint("tracker.events")
+        pprint(tracker.events)
         # 首句标志槽位，用于标记外界输入是不是首句
         first_sentence_used = int(tracker.get_slot('slot_first_sentence_used'))
         if first_sentence_used == 0:
@@ -79,9 +84,15 @@ class ActionFaqCondition(Action):
     def run(self, dispatcher: CollectingDispatcher,
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
+        from pprint import pprint
+        pprint("tracker.slots")
+        pprint(tracker.latest_message)
+        pprint("tracker.events")
+        pprint(tracker.events)
         # 从跟踪器tracker中获取最近机器人的回复事件
         current_state = tracker.current_state()
+        pprint("current_state")
+        pprint(current_state)
         events = current_state['events']
         event_list = []
         for index in range(len(events) - 3, 0, -1):
@@ -116,7 +127,8 @@ class ActionFaqCondition(Action):
 
         if len(utter_action_list) + len(utter_text_list) <= 0:
             return []
-
+        print(utter_action_list)
+        print(utter_text_list)
         # 将机器人的回复按照顺序传递给调度台dispatcher
         utter_action_list = list(reversed(utter_action_list))
         utter_text_list = list(reversed(utter_text_list))
