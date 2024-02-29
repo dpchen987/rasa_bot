@@ -22,7 +22,7 @@ logger = structlog.getLogger(__name__)
 class WdgjIO(InputChannel):
     def name(self) -> Text:
         """Name of your custom channel."""
-        return "wdgj"
+        return "callassist"
 
 
     def blueprint(
@@ -49,11 +49,26 @@ class WdgjIO(InputChannel):
             logger.info(" ", query=f"{text}")
             logger.info(" ", metadata=json.dumps(copy.deepcopy(metadata), ensure_ascii=False, indent=4))
 
+
             #先对text进行首尾去除空格处理
             text = text.strip()
 
+            # servicer: 开头的是客服的语料
+            if text.startswith('servicer'):
+                if not metadata: metadata = {}
+                metadata['servicer'] = text.replace('servicer', '').strip(":：")
+                text = '客服人员的通话文本'
+                await on_new_message(
+                    UserMessage(
+                        text,
+                        collector,
+                        sender_id,
+                        input_channel=input_channel,
+                        metadata=metadata,
+                    )
+                )
             # 对"....."之类的无语意图不做处理
-            if len(set(text) - {'。', '…', '.', '？', '?'}) == 0:
+            elif len(set(text) - {'。', '…', '.', '？', '?'}) == 0:
                 await on_new_message(
                     UserMessage(
                         text,
@@ -72,18 +87,6 @@ class WdgjIO(InputChannel):
                 # 需要保留符号："-"(防止去除后字符串变为13或19位纯数字，从而误识别为运单号或订单号)
                 comp = re.compile('[^A-Z^a-z^0-9^\u4e00-\u9fa5,，.。?？!！~～\[\]-]')
                 text = comp.sub('', text).strip()
-
-                # 替换表情符号
-                emoji = {"👌": "[ok]", "😓": "[无语]", "🙏": "[拜托]", "😮‍💨": "[叹气]", "🥲": "[想哭]", "😅": "[尴尬]",
-                         "📦": "[包裹]",
-                         "🙂": "[无语]", "👋": "[击掌]", "🤣": "[笑哭]", "🉑️": "[可以]", "🈚️": "[无]", "🌪️": "[龙卷风]",
-                         "🌧️": "[有雨]",
-                         "😊": "[可爱]", "😇": "[天使]", "👿": "[恶魔]", "😘": "[亲亲]", "😡": "[发怒]", "🤬": "[生气]",
-                         "👍🏻": "[点赞]",
-                         "😭": "[大哭]", "😂": "[笑哭]", "😣": "[难受]"}
-                for t in text:
-                    if emoji.get(t) is not None:
-                        text = text.replace(t, emoji.get(t))
 
                 # # 去掉句尾的标点符号
                 # if len(text) > 0 and text[-1] in {',', '，', '.', '。', '?', '？', '!', '！', '~', '～'}:

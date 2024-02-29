@@ -8,3 +8,9 @@ rules:
   - intent: faq
   - action: utter_faq
   - action: action_faq
+
+# 客服通话文本处理
+- rule: respond to servicer
+  steps:
+  - intent: input_servicer
+  - action: action_input_servicer

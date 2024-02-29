@@ -4,7 +4,7 @@ from typing import Text, Any, Dict
 import re
 import random
 
-from rasa_sdk import Tracker, ValidationAction
+from rasa_sdk import Tracker, ValidationAction, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.types import DomainDict
 
@@ -40,7 +40,7 @@ class ValidatePredefinedSlots(ValidationAction):
         domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot express_id."""
-
+        print('Validate slot express_id')
         # 将运单号中的字母转化为大写以适配后端接口规则
         slot_express_id = str(slot_value).upper()
 
@@ -76,12 +76,63 @@ class ValidatePredefinedSlots(ValidationAction):
             return {"slot_express_id": exp_id}
 
         # validation failed
-        utter_messages = ["亲，这个运单号不正确哦",
-                          "亲，这边看到您提供的单号不对哦",
-                          "您提供的单号不对哦 亲",
-                          "亲，您提供的运单号不对哦"]
+        utter_messages = ["您好，这个运单号不正确",
+                          "您好，这边看到您提供的单号不对",
+                          "您提供的运单号不对"]
         dispatcher.utter_message(text=random.sample(utter_messages, 1)[0])
         return {"slot_express_id": None}
+
+    # 验证运单号拼接槽位
+    # def validate_slot_express_id_piece(
+    #     self,
+    #     slot_value: Any,
+    #     dispatcher: CollectingDispatcher,
+    #     tracker: Tracker,
+    #     domain: DomainDict,
+    # ) -> Dict[Text, Any]:
+    #     """Validate slot express_id."""
+
+    #     # 将运单号中的字母转化为大写以适配后端接口规则
+    #     slot_express_id_piece = str(slot_value).upper()
+
+    #     # 用户首句发送的是单号，需要回复一句问候语
+    #     if self.is_first_in(tracker) and len(slot_express_id_piece) == len(tracker.latest_message['text']):
+    #         # resp_tools = global_config.RespTools()
+    #         # dispatcher.utter_message(text=resp_tools.generate_resp_randomly(resp_tools.greet))
+    #         # dispatcher.utter_message(response='utter_greet')
+    #         dispatcher.utter_message(response='utter_help')
+
+    #     # 单号验证
+    #     if slot_express_id_piece.isdigit():
+    #         pre = ['YT', 'YTD', 'YTG', 'G']  # G开头的共12位，其他共15位
+    #         for p in pre:
+    #             slot_express_id_piece = p+slot_express_id_piece
+    #             payload = json.dumps({"waybillNo": slot_express_id_piece})
+    #             headers = {'Content-Type': 'application/json'}
+    #             response = requests.request("POST", self.check_url, headers=headers, data=payload)
+    #             # validation succeeded
+    #             if json.loads(response.text)['data']:
+    #                 return {"slot_express_id_piece": slot_express_id_piece}
+    #     else:
+    #         payload = json.dumps({"waybillNo": slot_express_id_piece})
+    #         headers = {'Content-Type': 'application/json'}
+    #         response = requests.request("POST", self.check_url, headers=headers, data=payload)
+    #         # validation succeeded
+    #         if json.loads(response.text)['data']:
+    #             return {"slot_express_id_piece": slot_express_id_piece}
+
+    #     # 从跟踪器的metadata中获取运单号实体
+    #     exp_id = tracker.latest_message.get("metadata").get("express_id")
+    #     if exp_id:
+    #         return {"slot_express_id_piece": exp_id}
+
+    #     # validation failed
+    #     utter_messages = ["您好，这个运单号不正确哦",
+    #                       "您好，这边看到您提供的单号不对哦",
+    #                       "您提供的单号不对哦 您好",
+    #                       "您好，您提供的运单号不对哦"]
+    #     dispatcher.utter_message(text=random.sample(utter_messages, 1)[0])
+    #     return {"slot_express_id_piece": None}
 
     # 验证手机号槽位
     def validate_slot_phone(
@@ -108,12 +159,54 @@ class ValidatePredefinedSlots(ValidationAction):
         if p:
             return {"slot_phone": p}
         # validation failed
-        utter_messages = ["亲，您提供的电话号码不正确，麻烦重新提供一下呢",
-                          '亲，您提供的电话号码不对，麻烦重新提供一下呢',
-                          '亲，这边看到您提供的电话号码不对哦。麻烦重新提供一下呢',
-                          "您提供的电话号码有误亲，麻烦重新提供一下呢"]
+        utter_messages = ["您好，您提供的电话号码不正确，麻烦重新提供一下呢",
+                          '这边看到您提供的电话号码不对，麻烦重新提供一下呢',
+                          "您提供的电话号码有误，麻烦重新提供一下"]
         dispatcher.utter_message(text=random.sample(utter_messages, 1)[0])
         return {"slot_phone": None}
+
+
+
+class ValidateCollectExpressIdForm(FormValidationAction):
+    def name(self) -> Text:
+        return "validate_collect_express_id_form"
+
+    # @staticmethod
+    # def cuisine_db() -> List[Text]:
+    #     """Database of supported cuisines"""
+
+    #     return ["caribbean", "chinese", "french"]
+
+    # def validate_slot_express_id(
+    #     self,
+    #     slot_value: Any,
+    #     dispatcher: CollectingDispatcher,
+    #     tracker: Tracker,
+    #     domain: DomainDict,
+    # ) -> Dict[Text, Any]:
+    #     """Validate cuisine value."""
+    #     print("validate_slot_express_id")
+    #     express_id_piece = tracker.get_slot("slot_express_id_piece")
+    #     if express_id_piece and len(express_id_piece) > 10:
+    #         # validation succeeded, set the value of the "cuisine" slot to value
+    #         return {"slot_express_id": express_id_piece}
+    #     # else:
+    #     #     # validation failed, set this slot to None so that the
+    #     #     # user will be asked for the slot again
+    #     #     return {"cuisine": None}
+
+    # async def extract_slot_express_id(
+    #     self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    # ) -> Dict[Text, Any]:
+    #     # text_of_last_user_message = tracker.latest_message.get("text")
+    #     # sit_outside = "outdoor" in text_of_last_user_message
+    #     print("extract_slot_express_id")
+    #     # return {"outdoor_seating": sit_outside}
+    #     express_id_piece = tracker.get_slot("slot_express_id_piece")
+    #     if express_id_piece and len(express_id_piece) > 10:
+    #         # validation succeeded, set the value of the "cuisine" slot to value
+    #         return {"slot_express_id": express_id_piece}
+
 
 
 if __name__ == '__main__':
