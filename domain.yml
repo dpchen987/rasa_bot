@@ -126,51 +126,51 @@ entities:
       influence_conversation: false
   - entity_item:
       influence_conversation: false
-  # 极兔
-  - entity_jt_express_name:
-      influence_conversation: false
-  - entity_jt_express_id:
-      influence_conversation: false
-  # 顺丰
-  - entity_sf_express_name:
-      influence_conversation: false
-  - entity_sf_express_id:
-      influence_conversation: false
-  # 中通
-  - entity_zt_express_name:
-      influence_conversation: false
-  - entity_zt_express_id:
-      influence_conversation: false
-  # 申通
-  - entity_st_express_name:
-      influence_conversation: false
-  - entity_st_express_id:
-      influence_conversation: false
-  # 韵达
-  - entity_yd_express_name:
-      influence_conversation: false
-  - entity_yd_express_id:
-      influence_conversation: false
-  # 邮政(包括EMS)
-  - entity_yz_express_name:
-      influence_conversation: false
-  - entity_yz_express_id:
-      influence_conversation: false
-  # 百世
-  - entity_bs_express_name:
-      influence_conversation: false
-  - entity_bs_express_id:
-      influence_conversation: false
-  # 德邦
-  - entity_db_express_name:
-      influence_conversation: false
-  - entity_db_express_id:
-      influence_conversation: false
-  # 京东
-  - entity_jd_express_name:
-      influence_conversation: false
-  - entity_jd_express_id:
-      influence_conversation: false
+  # # 极兔
+  # - entity_jt_express_name:
+  #     influence_conversation: false
+  # - entity_jt_express_id:
+  #     influence_conversation: false
+  # # 顺丰
+  # - entity_sf_express_name:
+  #     influence_conversation: false
+  # - entity_sf_express_id:
+  #     influence_conversation: false
+  # # 中通
+  # - entity_zt_express_name:
+  #     influence_conversation: false
+  # - entity_zt_express_id:
+  #     influence_conversation: false
+  # # 申通
+  # - entity_st_express_name:
+  #     influence_conversation: false
+  # - entity_st_express_id:
+  #     influence_conversation: false
+  # # 韵达
+  # - entity_yd_express_name:
+  #     influence_conversation: false
+  # - entity_yd_express_id:
+  #     influence_conversation: false
+  # # 邮政(包括EMS)
+  # - entity_yz_express_name:
+  #     influence_conversation: false
+  # - entity_yz_express_id:
+  #     influence_conversation: false
+  # # 百世
+  # - entity_bs_express_name:
+  #     influence_conversation: false
+  # - entity_bs_express_id:
+  #     influence_conversation: false
+  # # 德邦
+  # - entity_db_express_name:
+  #     influence_conversation: false
+  # - entity_db_express_id:
+  #     influence_conversation: false
+  # # 京东
+  # - entity_jd_express_name:
+  #     influence_conversation: false
+  # - entity_jd_express_id:
+  #     influence_conversation: false
 
 slots:
   slot_express_id:
@@ -1315,31 +1315,31 @@ responses:
     - text: 首先感谢您对圆通速递的信任！关于加盟问题，我们建议您咨询下加盟热线，电话为：021-69777777-6873，她们会提供最专业、全面的的回答！
 
   utter_jitu_reply:
-    - text: 您好，这边是圆通客服哦。极兔的件，建议您联系极兔快递（官网地址：https://www.jtexpress.cn），客服热线：956025
+    - text: 您好，这边是圆通客服。极兔的件，建议您联系极兔快递，客服热线是：956025
 
   utter_sf_reply:
-    - text: 您好，这边是圆通客服哦。顺丰的件，建议您联系顺丰快递（官网地址：https://www.sf-express.com），客服热线：95338
+    - text: 您好，这边是圆通客服。顺丰的件，建议您联系顺丰快递，客服热线是：95338
 
   utter_zt_reply:
-    - text: 您好，这边是圆通客服哦。中通的件，建议您联系中通快递（官网地址：https://www.zto.com），客服热线：95311
+    - text: 您好，这边是圆通客服。中通的件，建议您联系中通快递，客服热线是：95311
 
   utter_st_reply:
-    - text: 您好，这边是圆通客服哦。申通的件，建议您联系申通快递（官网地址：https://www.sto.cn），客服热线：95543
+    - text: 您好，这边是圆通客服。申通的件，建议您联系申通快递，客服热线是：95543
 
   utter_yd_reply:
-    - text: 您好，这边是圆通客服哦。韵达的件，建议您联系韵达快递（官网地址：http://www.yundaex.com），客服热线：95546
+    - text: 您好，这边是圆通客服。韵达的件，建议您联系韵达快递，客服热线是：95546
 
   utter_jd_reply:
-    - text: 您好，这边是圆通客服哦。京东的件，建议您联系京东快递（官网地址：https://www.jdl.com/），客服热线：950616
+    - text: 您好，这边是圆通客服。京东的件，建议您联系京东快递，客服热线是：950616
 
   utter_yz_reply:
-    - text: 您好，这边是圆通客服哦。邮政的件，建议您联系中国邮政（官网地址：https://www.ems.com.cn），客服热线：11183
+    - text: 您好，这边是圆通客服。邮政的件，建议您联系中国邮政，客服热线是：11183
 
   utter_db_reply:
-    - text: 您好，这边是圆通客服哦。德邦的件，建议您联系德邦快递（官网地址：https://www.deppon.com），客服热线：95353
+    - text: 您好，这边是圆通客服。德邦的件，建议您联系德邦快递，客服热线是：95353
 
   utter_bs_reply:
-    - text: 您好，这边是圆通客服哦。百世的件，建议您联系百世快递（官网地址：https://www.800best.com），客服热线：400-8856-561
+    - text: 您好，这边是圆通客服。百世的件，建议您联系百世快递，客服热线是：400-8856-561
 
 session_config:
   session_expiration_time: 60

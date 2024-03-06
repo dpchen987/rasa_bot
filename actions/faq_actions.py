@@ -141,9 +141,9 @@ express_id_pat1 = re.compile("(?<![A-Za-z])g\\d{9,13}")
 express_id_pat2 = re.compile("(?<![A-Za-z])ytd?\\d{12,14}")
 express_id_pat3 = re.compile("(?<![A-Za-z])ytg\\d{11,13}")
 express_id_pat4 = re.compile("(?<!\\d)\\d{13}(?!\\d)")
-exp_numbers = re.compile(r"[yY][tT]d?[零令林一幺妖二两三四五六七八九]{1,}")
-repat_numbers = re.compile(r"[零令林一幺妖二两三四五六七八九]{2,}")
-numbers_dict = {"零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
+exp_numbers = re.compile(r"[yY][tT][dg]?[\d 零令林一幺妖二两三四五六七八九]*[\d零令林一幺妖二两三四五六七八九]")
+repat_numbers = re.compile(r"[\d零令林一幺妖二两三四五六七八九][\d 零令林一幺妖二两三四五六七八九]*[\d零令林一幺妖二两三四五六七八九]")
+numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
 # 在运单号表单激活状态下，分次读取客户说的运单号片断，拼成完整的运单号
 class ActionExpPieceCollect(Action):
 
@@ -169,24 +169,32 @@ class ActionExpPieceCollect(Action):
                     exp_numbers_txt = exp_numbers_txt.replace(k, numbers_dict[k])
             _event.append(SlotSet('slot_express_id_piece', exp_numbers_txt))
             print('express_id_piece after:', exp_numbers_txt)
-            if len(exp_numbers_txt) > 9 and (express_id_pat1.search(exp_numbers_txt) or express_id_pat2.search(exp_numbers_txt) or express_id_pat3.search(exp_numbers_txt) or express_id_pat4.search(exp_numbers_txt)):
+            if len(exp_numbers_txt) > 15:
+                dispatcher.utter_message(text='运单号无效，请提供正确的快递单号！')
+                _event.pop()
+                _event.append(SlotSet('slot_express_id', express_id_piece))
+            elif len(exp_numbers_txt) > 9 and (express_id_pat1.search(exp_numbers_txt) or express_id_pat2.search(exp_numbers_txt) or express_id_pat3.search(exp_numbers_txt) or express_id_pat4.search(exp_numbers_txt)):
                 _event.append(SlotSet('slot_express_id', exp_numbers_txt))
         elif exp_pc_mth:
             exp_pc_txt = exp_pc_mth.group()
             for k in numbers_dict:
                 if k in exp_pc_txt:
                     exp_pc_txt = exp_pc_txt.replace(k, numbers_dict[k])
-            express_id_piece = express_id_piece + exp_pc_txt
+            express_id_piece = express_id_piece + exp_pc_txt if express_id_piece else exp_pc_txt
             _event.append(SlotSet('slot_express_id_piece', express_id_piece))
             print('express_id_piece after:', express_id_piece)
-            if len(express_id_piece) > 9 and (express_id_pat1.search(express_id_piece) or express_id_pat2.search(express_id_piece) or express_id_pat3.search(express_id_piece) or express_id_pat4.search(express_id_piece)):
+            if len(express_id_piece) > 15:
+                dispatcher.utter_message(text='运单号无效，请提供正确的快递单号！')
+                _event.pop()
+                _event.append(SlotSet('slot_express_id', express_id_piece))
+            elif len(express_id_piece) > 9 and (express_id_pat1.search(express_id_piece) or express_id_pat2.search(express_id_piece) or express_id_pat3.search(express_id_piece) or express_id_pat4.search(express_id_piece)):
                 _event.append(SlotSet('slot_express_id', express_id_piece))
         
         # 以下代码待删除
         
         # 最后返回一个“用户回退事件”，该事件的目的是忽略外界的这一轮输入
-        # return [UserUtteranceReverted()] + _event + [ActionExecuted('action_validate_slot_mappings')]
-        return [UserUtteranceReverted()] + _event + [ActionExecuted('validate_collect_express_id_form')]
+        return [UserUtteranceReverted()] + _event + [ActionExecuted('action_validate_slot_mappings')]
+        # return [UserUtteranceReverted()] + _event + [ActionExecuted('validate_collect_express_id_form')]
         # return [UserUtteranceReverted()] + _event + [ActionExecuted('collect_express_id_form')] + [ActionExecuted('validate_collect_express_id_form')]
     
 class ActionInputServicer(Action):
