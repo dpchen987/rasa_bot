@@ -17,7 +17,7 @@ utils/__pycache__/
 .DS_Store
 data/.DS_Store
 __pycache__/
-config.yml
+# config.yml
 bert
 results_svm/
 train_test_split_1205/

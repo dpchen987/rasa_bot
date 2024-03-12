@@ -1,0 +1,68 @@
+recipe: default.v1
+language: zh
+pipeline:
+- name: JiebaTokenizer
+#  token_pattern: '[^A-Z^a-z^0-9^\u4e00-\u9fa5]'
+#  #自定义词典
+#  dictionary_path: "path/to/custom/dictionary/dir"
+#  #不切分intent
+  # "intent_tokenization_flag": False
+# - name: "RegexFeaturizer"
+#   # Text will be processed with case sensitive as default
+#   "case_sensitive": False
+#   # use match word boundaries for lookup table
+#   "use_word_boundaries": False
+#   number_additional_patterns: 10
+- name: "CountVectorsFeaturizer"
+  # analyzer: "char_wb"
+  # use_shared_vocab: True
+  min_ngram: 1
+  max_ngram: 2
+  min_df: 3
+  max_df: 100
+  # max_features: 4096
+# - name: LanguageModelFeaturizer
+#   model_name: bert
+#   model_weights: bert/roberta-yto-cls-v3
+- name: DIETClassifier
+  entity_recognition: False
+  constrain_similarities: True
+  epochs: 28
+  hidden_layers_sizes:
+    text: [64]
+  # embedding_dimension: 64 # 默认20
+  # number_of_transformer_layers: 2  # 默认2
+  transformer_size: 128 # 默认256
+  connection_density: 0.2 # 默认0.2
+# - name: LogisticRegressionClassifier
+#   max_iter: 100
+#   solver: lbfgs
+#   tol: 0.0001
+#   random_state: 42
+#   ranking_length: 3
+# - name: SpacyNLP
+#   model: zh_core_web_sm  # 注意，不是短杆"-"连接
+# - name: SpacyEntityExtractor
+#   dimensions: ["PERSON"]
+# - name: RegexEntityExtractor
+#   use_word_boundaries: False
+#   case_sensitive: False
+#   use_lookup_tables: True
+#   use_regexes: True
+# - name: "EntitySynonymMapper"
+- name: ResponseSelector
+  constrain_similarities: True
+  epochs: 30
+  retrieval_intent: faq
+- name: FallbackClassifier
+  threshold: 0.22
+  ambiguity_threshold: 0.05
+  threshold_faq: 0.5
+  ambiguity_threshold_faq: 0.3
+
+policies:
+- name: MemoizationPolicy
+- name: RulePolicy
+  core_fallback_threshold: 0.2
+  core_fallback_action_name: action_default_fallback
+assistant_id: yto-call-assistant-v0.1-20240226
