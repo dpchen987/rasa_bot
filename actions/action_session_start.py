@@ -56,7 +56,6 @@ class ActionSessionStart(Action):
             if phone is not None:
                 _events.append(SlotSet('slot_phone', phone))
             if express_id is not None:
-                print("metadata中获取运单号")
                 _events.append(SlotSet('slot_express_id', express_id))
         else:
             logging.warning('metadata is None!')
@@ -131,6 +130,8 @@ class ActionSessionStart(Action):
             _events.append(SlotSet("slot_jd_express_key", 0))
         if tracker.get_slot("slot_unable_contact_key") != 1:
             _events.append(SlotSet("slot_unable_contact_key", 1))
+        if tracker.get_slot("slot_express_id_form_max_count") != 0:
+            _events.append(SlotSet("slot_express_id_form_max_count", 0))
 
         # 最后需要添加action_listen事件，以监听外界的输入
         _events.append(ActionExecuted('action_listen'))

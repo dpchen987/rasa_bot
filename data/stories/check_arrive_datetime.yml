@@ -1,0 +1,12 @@
+version: "3.1"
+
+stories:
+
+- story: check_arrive_datetime
+  steps:
+    - intent: check_arrive_datetime
+    - action: collect_express_id_form
+    - active_loop: collect_express_id_form
+    - active_loop: null
+    - action: action_check_arrive_datetime
+    - action: action_session_start

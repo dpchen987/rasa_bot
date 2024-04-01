@@ -110,110 +110,110 @@ stories:
     - action: action_session_start
 
 # 其他快递公司
-- story: inform and intent is ji tu
-  steps:
-    - or:
-      - intent: inform
-      - intent: other_express
-    - action: action_set_inform_key
-    - slot_was_set:
-        - slot_jt_express_key: 1
-    - action: utter_jitu_reply
-    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
+# - story: inform and intent is ji tu
+#   steps:
+#     - or:
+#       - intent: inform
+#       - intent: other_express
+#     - action: action_set_inform_key
+#     - slot_was_set:
+#         - slot_jt_express_key: 1
+#     - action: utter_jitu_reply
+#     - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+#     - action: action_session_start
 
-- story: inform and intent is shun feng
-  steps:
-    - or:
-      - intent: inform
-      - intent: other_express
-    - action: action_set_inform_key
-    - slot_was_set:
-        - slot_sf_express_key: 1
-    - action: utter_sf_reply
-    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
+# - story: inform and intent is shun feng
+#   steps:
+#     - or:
+#       - intent: inform
+#       - intent: other_express
+#     - action: action_set_inform_key
+#     - slot_was_set:
+#         - slot_sf_express_key: 1
+#     - action: utter_sf_reply
+#     - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+#     - action: action_session_start
 
-- story: inform and intent is zhong tong
-  steps:
-    - or:
-      - intent: inform
-      - intent: other_express
-    - action: action_set_inform_key
-    - slot_was_set:
-        - slot_zt_express_key: 1
-    - action: utter_zt_reply
-    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
+# - story: inform and intent is zhong tong
+#   steps:
+#     - or:
+#       - intent: inform
+#       - intent: other_express
+#     - action: action_set_inform_key
+#     - slot_was_set:
+#         - slot_zt_express_key: 1
+#     - action: utter_zt_reply
+#     - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+#     - action: action_session_start
 
-- story: inform and intent is shen tong
-  steps:
-    - or:
-      - intent: inform
-      - intent: other_express
-    - action: action_set_inform_key
-    - slot_was_set:
-        - slot_st_express_key: 1
-    - action: utter_st_reply
-    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
+# - story: inform and intent is shen tong
+#   steps:
+#     - or:
+#       - intent: inform
+#       - intent: other_express
+#     - action: action_set_inform_key
+#     - slot_was_set:
+#         - slot_st_express_key: 1
+#     - action: utter_st_reply
+#     - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+#     - action: action_session_start
 
-- story: inform and intent is yun da
-  steps:
-    - or:
-      - intent: inform
-      - intent: other_express
-    - action: action_set_inform_key
-    - slot_was_set:
-        - slot_yd_express_key: 1
-    - action: utter_yd_reply
-    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
+# - story: inform and intent is yun da
+#   steps:
+#     - or:
+#       - intent: inform
+#       - intent: other_express
+#     - action: action_set_inform_key
+#     - slot_was_set:
+#         - slot_yd_express_key: 1
+#     - action: utter_yd_reply
+#     - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+#     - action: action_session_start
 
-- story: inform and intent is jing dong
-  steps:
-    - or:
-      - intent: inform
-      - intent: other_express
-    - action: action_set_inform_key
-    - slot_was_set:
-        - slot_jd_express_key: 1
-    - action: utter_jd_reply
-    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
+# - story: inform and intent is jing dong
+#   steps:
+#     - or:
+#       - intent: inform
+#       - intent: other_express
+#     - action: action_set_inform_key
+#     - slot_was_set:
+#         - slot_jd_express_key: 1
+#     - action: utter_jd_reply
+#     - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+#     - action: action_session_start
 
-- story: inform and intent is you zheng
-  steps:
-    - or:
-      - intent: inform
-      - intent: other_express
-    - action: action_set_inform_key
-    - slot_was_set:
-        - slot_yz_express_key: 1
-    - action: utter_yz_reply
-    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
+# - story: inform and intent is you zheng
+#   steps:
+#     - or:
+#       - intent: inform
+#       - intent: other_express
+#     - action: action_set_inform_key
+#     - slot_was_set:
+#         - slot_yz_express_key: 1
+#     - action: utter_yz_reply
+#     - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+#     - action: action_session_start
 
-- story: inform and intent is de bang
-  steps:
-    - or:
-      - intent: inform
-      - intent: other_express
-    - action: action_set_inform_key
-    - slot_was_set:
-        - slot_db_express_key: 1
-    - action: utter_db_reply
-    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
+# - story: inform and intent is de bang
+#   steps:
+#     - or:
+#       - intent: inform
+#       - intent: other_express
+#     - action: action_set_inform_key
+#     - slot_was_set:
+#         - slot_db_express_key: 1
+#     - action: utter_db_reply
+#     - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+#     - action: action_session_start
 
-- story: inform and intent is bai shi
-  steps:
-    - or:
-      - intent: inform
-      - intent: other_express
-    - action: action_set_inform_key
-    - slot_was_set:
-        - slot_bs_express_key: 1
-    - action: utter_bs_reply
-    - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
+# - story: inform and intent is bai shi
+#   steps:
+#     - or:
+#       - intent: inform
+#       - intent: other_express
+#     - action: action_set_inform_key
+#     - slot_was_set:
+#         - slot_bs_express_key: 1
+#     - action: utter_bs_reply
+#     - action: action_confirm_set                # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
+#     - action: action_session_start

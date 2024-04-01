@@ -6,56 +6,20 @@ pipeline:
 #  #自定义词典
 #  dictionary_path: "path/to/custom/dictionary/dir"
 #  #不切分intent
-  # "intent_tokenization_flag": False
-- name: "RegexFeaturizer"
-  # Text will be processed with case sensitive as default
-  "case_sensitive": False
-  # use match word boundaries for lookup table
-  "use_word_boundaries": False
-  number_additional_patterns: 10
-# - name: "CountVectorsFeaturizer"
-#   analyzer: "word"
-#   # use_shared_vocab: True
-#   min_ngram: 1
-#   max_ngram: 2
-#   min_df: 2
-#   max_df: 80
-  # max_features: 4096
+#  "intent_tokenization_flag": False
 - name: LanguageModelFeaturizer
   model_name: bert
   model_weights: bert/roberta-yto-cls-v3
 - name: DIETClassifier
   entity_recognition: False
   constrain_similarities: True
-  epochs: 10
-  # hidden_layers_sizes:
-  #   text: [64]
+  epochs: 12
+#  hidden_layers_sizes: [256,128]
+#  text: [256, 128] # 默认[]
   embedding_dimension: 64 # 默认20
   number_of_transformer_layers: 2  # 默认2
   transformer_size: 128 # 默认256
   connection_density: 0.2 # 默认0.2
-# - name: LogisticRegressionClassifier
-#   max_iter: 100
-#   solver: lbfgs
-#   tol: 0.001
-#   random_state: 42
-#   ranking_length: 3
-# - name: "SklearnIntentClassifier"
-#   # Specifies the list of regularization values to
-#   # cross-validate over for C-SVM.
-#   # This is used with the ``kernel`` hyperparameter in GridSearchCV.
-#   C: [1, 2, 5, 10, 20, 50, 100]
-#   # Specifies the kernel to use with C-SVM.
-#   # This is used with the ``C`` hyperparameter in GridSearchCV.
-#   kernels: ["linear"]
-#   # Gamma parameter of the C-SVM.
-#   "gamma": [0.1]
-#   # We try to find a good number of cross folds to use during
-#   # intent training, this specifies the max number of folds.
-#   "max_cross_validation_folds": 5
-#   # Scoring function used for evaluating the hyper parameters.
-#   # This can be a name or a function.
-#   "scoring_function": "f1_weighted"
 # - name: SpacyNLP
 #   model: zh_core_web_sm  # 注意，不是短杆"-"连接
 # - name: SpacyEntityExtractor
@@ -65,10 +29,10 @@ pipeline:
   case_sensitive: False
   use_lookup_tables: True
   use_regexes: True
-# - name: "EntitySynonymMapper"
+- name: "EntitySynonymMapper"
 - name: ResponseSelector
   constrain_similarities: True
-  epochs: 20
+  epochs: 12
   retrieval_intent: faq
 - name: FallbackClassifier
   threshold: 0.22
@@ -77,7 +41,7 @@ pipeline:
   ambiguity_threshold_faq: 0.3
 
 policies:
-- name: MemoizationPolicy
+- name: AugmentedMemoizationPolicy
 - name: RulePolicy
   core_fallback_threshold: 0.2
   core_fallback_action_name: action_default_fallback

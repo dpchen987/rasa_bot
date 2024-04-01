@@ -1,0 +1,1 @@
+DOCKER_STORAGE_OPTIONS="--selinux-enabled --log-driver=journald --signature-verification=false"

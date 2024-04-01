@@ -1,0 +1,210 @@
+version: "3.1"
+
+stories:
+- story: signed but not received start
+  steps:
+    - intent: pretend_signed
+    - action: action_intent_count
+    - slot_was_set:
+        - slot_signed_but_not_received_count_key: 1
+    - action: collect_express_id_form
+    - active_loop: collect_express_id_form
+    - active_loop: null
+    - action: action_check_workorder    #查询历史工单
+    - checkpoint: get_history_workorder_signed_not_received
+
+- story: signed but not received has history workorder
+  steps:
+    - checkpoint: get_history_workorder_signed_not_received
+    - slot_was_set:
+      - slot_history_workorder_key: hasWorkorder
+    - action: utter_has_been_processing    #已有催件工单安抚话术6
+    - action: action_session_start
+
+- story: signed but not received doesnt have history workorder + has phone
+  steps:
+    - checkpoint: get_history_workorder_signed_not_received
+    - slot_was_set:
+      - slot_history_workorder_key: noWorkorder
+    - action: utter_signed_but_not_received_2    #签收未收到安抚话术2
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+      - slot_phone_key: 1
+    - action: action_session_start
+
+- story: signed but not received doesnt have history workorder + ask phone
+  steps:
+    - checkpoint: get_history_workorder_signed_not_received
+    - slot_was_set:
+      - slot_history_workorder_key: noWorkorder
+    - action: utter_signed_but_not_received_2    #签收未收到安抚话术2
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+      - slot_phone_key: 0
+    - action: utter_ask_phone_appease    #询问电话号码
+    - action: action_session_start
+
+# 二次询问签收未收到
+- story: signed but not received twice
+  steps:
+    - intent: pretend_signed
+    - action: action_intent_count
+    - slot_was_set:
+        - slot_signed_but_not_received_count_key: 2
+    - action: action_check_workorder    #查询历史工单
+    - checkpoint: get_history_workorder_signed_not_received_2
+
+- story: signed but not received twice
+  steps:
+    - checkpoint: get_history_workorder_signed_not_received_2
+    - slot_was_set:
+        - slot_history_workorder_key: hasWorkorder
+    - action: utter_signed_but_not_received_appease_2
+    - action: action_session_start
+
+- story: signed but not received twice
+  steps:
+    - checkpoint: get_history_workorder_signed_not_received_2
+    - slot_was_set:
+        - slot_history_workorder_key: noWorkorder
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+        - slot_phone_key: 1
+    - action: utter_signed_but_not_received_appease_2
+    - action: utter_guide_to_end
+    - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
+    - action: action_session_start
+
+- story: signed but not received twice
+  steps:
+    - checkpoint: get_history_workorder_signed_not_received_2
+    - slot_was_set:
+        - slot_history_workorder_key: noWorkorder
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+      - slot_phone_key: 0
+    - action: utter_ask_phone_appease    #询问电话号码
+    - action: action_session_start
+
+
+# 三次及以上询问签收未收到
+- story: signed but not received trice
+  steps:
+    - intent: pretend_signed
+    - action: action_intent_count
+    # 此处的数字“100”并不是表示意图计数100次，而是表示大于“计数槽位最大值”的意思，假如“计数槽位最大值”为5，则大于等于6的数字都可以表示大于“计数槽位最大值”的意思，我们为了统一，指定了一个较大的数字100
+    - slot_was_set:
+        - slot_signed_but_not_received_count_key: 100
+    - action: action_check_workorder    #查询历史工单
+    - checkpoint: get_history_workorder_signed_not_received_3
+
+- story: signed but not received trice
+  steps:
+    - checkpoint: get_history_workorder_signed_not_received_3
+    - slot_was_set:
+        - slot_history_workorder_key: hasWorkorder
+    - action: utter_signed_but_not_received_appease_2
+    - action: utter_guide_to_end
+    - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
+    - action: action_session_start
+
+- story: signed but not received trice
+  steps:
+    - checkpoint: get_history_workorder_signed_not_received_3
+    - slot_was_set:
+        - slot_history_workorder_key: noWorkorder
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+      - slot_phone_key: 0
+    - action: utter_ask_phone_appease    #询问电话号码
+    - action: action_session_start
+
+# 三次询问签收未收到
+- story: signed but not received trice
+  steps:
+    - checkpoint: get_history_workorder_signed_not_received_3
+    - slot_was_set:
+        - slot_history_workorder_key: noWorkorder
+    - action: action_set_slot_phone_key
+    - slot_was_set:
+        - slot_phone_key: 1
+    - action: utter_signed_but_not_received_appease_3
+    - action: utter_guide_to_end
+    - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
+    - action: action_session_start
+
+
+# 用户仅仅说未收到(需要先判断有没有签收,如果已签收，则走和“虚假签收”意图相同的流程)
+- story: has_not_received and has signed 1
+  steps:
+    - intent: has_not_received
+    - action: action_intent_count
+    - slot_was_set:
+        - slot_signed_but_not_received_count_key: 1
+    - action: collect_express_id_form
+    - active_loop: collect_express_id_form
+    - active_loop: null
+    - action: action_check_sign_status
+    - slot_was_set:
+        - slot_sign_status_key: hasSigned                    # 已签收
+    - action: action_check_workorder                        #查询历史工单
+    - checkpoint: get_history_workorder_signed_not_received
+
+# 二次触发
+- story: has_not_received and has signed 2
+  steps:
+    - intent: has_not_received
+    - action: action_intent_count
+    - slot_was_set:
+        - slot_signed_but_not_received_count_key: 2
+    - action: action_check_sign_status
+    - slot_was_set:
+        - slot_sign_status_key: hasSigned                    # 已签收
+    - action: action_check_workorder                        #查询历史工单
+    - checkpoint: get_history_workorder_signed_not_received_2
+
+# 三次及以上触发
+- story: has_not_received and has signed 3
+  steps:
+    - intent: has_not_received
+    - action: action_intent_count
+    # 此处的数字“100”并不是表示意图计数100次，而是表示大于“计数槽位最大值”的意思，假如“计数槽位最大值”为5，则大于等于6的数字都可以表示大于“计数槽位最大值”的意思，我们为了统一，指定了一个较大的数字100
+    - slot_was_set:
+        - slot_signed_but_not_received_count_key: 100
+    - action: action_check_sign_status
+    - slot_was_set:
+        - slot_sign_status_key: hasSigned                    # 已签收
+    - action: action_check_workorder                        #查询历史工单
+    - checkpoint: get_history_workorder_signed_not_received_3
+
+# 用户仅仅说未收到(需要先判断有没有签收,如果未签收，则走和“查件”意图相同的流程)
+- story: signed but not received start
+  steps:
+    - intent: has_not_received
+    - action: action_intent_count
+    - slot_was_set:
+        - slot_signed_but_not_received_count_key: 1
+    - action: collect_express_id_form
+    - active_loop: collect_express_id_form
+    - active_loop: null
+    - action: action_check_sign_status
+    - slot_was_set:
+        - slot_sign_status_key: onTheWay                    # 未签收
+    - action: action_check_express_status
+    - action: action_session_start
+
+- story: signed but not received start
+  steps:
+    - intent: has_not_received
+    - action: action_intent_count
+    - or:
+      - slot_was_set:
+          - slot_signed_but_not_received_count_key: 2
+      # 此处的数字“100”并不是表示意图计数100次，而是表示大于“计数槽位最大值”的意思，假如“计数槽位最大值”为5，则大于等于6的数字都可以表示大于“计数槽位最大值”的意思，我们为了统一，指定了一个较大的数字100
+      - slot_was_set:
+          - slot_signed_but_not_received_count_key: 100
+    - action: action_check_sign_status
+    - slot_was_set:
+        - slot_sign_status_key: onTheWay                    # 未签收
+    - action: action_check_express_status
+    - action: action_session_start

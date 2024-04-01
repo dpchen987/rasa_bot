@@ -61,7 +61,9 @@ class ActionUrge(Action):
                 # 对该流程进行分类，供自动登记工单中的大小类自动识别使用
                 dispatcher.utter_message(json_message={"story": "urge"})
                 return []
-
+        # test
+        dispatcher.utter_message(text='催件意图')
+        return []
         # 从跟踪器tracker中获取“运单号槽位”的值
         slot_express_id = tracker.get_slot('slot_express_id')
         if not slot_express_id:

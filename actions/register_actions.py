@@ -59,6 +59,9 @@ class ActionRegister(Action):
         # 告知已登记
         dispatcher.utter_message(response='utter_register_is_signing')
         dispatcher.utter_message(response='utter_register_has_signed_base')
+        # test
+        # dispatcher.utter_message(text='签收状态查询')
+        return []
         # 马上去处理。与告知已登记可以二选一，也可以都用
         # slot_core_intent = tracker.get_slot('slot_core_intent')
         # if intent_map.get(slot_core_intent) is not None and \

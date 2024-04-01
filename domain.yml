@@ -110,19 +110,23 @@ intents:
   - not_process_threaten_complaint
   - join_in
   - input_servicer
+  - predict_call_end
+  - phone_number_required
 
 entities:
-  - express_id:
+  - user_messages:
+      influence_conversation: false
+  - phone_collect:
       influence_conversation: false
   - express_id_piece:
       influence_conversation: false
-  - express_id_prefix:
-      influence_conversation: false
-  - digital_piece:
+  - express_id:
       influence_conversation: false
   - order_id:
       influence_conversation: false
   - PERSON:
+      influence_conversation: false
+  - phone_piece:
       influence_conversation: false
   - phone:
       influence_conversation: false
@@ -130,11 +134,11 @@ entities:
       influence_conversation: false
   - entity_item:
       influence_conversation: false
-  # # 极兔
-  # - entity_jt_express_name:
-  #     influence_conversation: false
-  # - entity_jt_express_id:
-  #     influence_conversation: false
+  # 极兔
+  - entity_jt_express_name:
+      influence_conversation: false
+  - entity_jt_express_id:
+      influence_conversation: false
   # # 顺丰
   # - entity_sf_express_name:
   #     influence_conversation: false
@@ -177,6 +181,30 @@ entities:
   #     influence_conversation: false
 
 slots:
+  slot_user_messages:
+    type: any
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: user_messages
+      - type: custom
+
+  slot_phone_collect:
+    influence_conversation: false
+    type: bool
+    mappings:
+      - type: from_entity
+        entity: phone_collect
+      - type: custom
+
+  slot_express_id_piece:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: express_id_piece
+      - type: custom
+
   slot_express_id:
     type: text
     influence_conversation: false
@@ -185,26 +213,20 @@ slots:
         entity: express_id
       - type: custom
 
-  slot_express_id_piece:
-    type: text
-    influence_conversation: false
-    mappings:
-      - type: custom
-
-  slot_express_id_prefix:
+  slot_phone_piece:
     type: text
     influence_conversation: false
     mappings:
       - type: from_entity
-        entity: express_id_prefix
+        entity: phone_piece
       - type: custom
 
-  slot_digital_piece:
+  slot_phone:
     type: text
     influence_conversation: false
     mappings:
       - type: from_entity
-        entity: digital_piece
+        entity: phone
       - type: custom
 
   slot_order_id:
@@ -220,13 +242,6 @@ slots:
     mappings:
       - type: from_entity
         entity: PERSON
-
-  slot_phone:
-    type: text
-    influence_conversation: false
-    mappings:
-      - type: from_entity
-        entity: phone
 
   slot_phone_key:
     type: categorical
@@ -547,28 +562,6 @@ slots:
     type: text
     initial_value: no_intent
     influence_conversation: false
-    mappings:
-      - type: custom
-
-  slot_main_intent:
-    initial_value: no_intent
-    type: categorical
-    values:
-      - return
-      - change_address
-      - inform
-      - check_express_status
-      - urge
-      - check_arrive_datetime
-      - signed_but_bot_received
-      - home_delivery
-      - urge_to_get_express
-      - register
-      - angry
-      - complaint
-      - consult
-      - check_weight
-    influence_conversation: true
     mappings:
       - type: custom
 
@@ -898,12 +891,14 @@ actions:
   - action_get_slot_is_receiver_key
   - action_set_slot_ask_comments
   - action_exp_piece_collect
+  # - validate_collect_express_id_form
   - action_input_servicer
 
 responses:
+
   # 默认话术
   utter_default:
-    - text: "不好意思，能把你的诉求再说的清楚一点吗"
+    - text: ""
 #    - text: 您好 我们正在查询中 请耐心等待哦!
 #    - text: 您好 因咨询量过大请耐心等待 客服小姐姐已经在竭力查询了哦!
 #    - text: 稍等
@@ -980,15 +975,12 @@ responses:
     - text: 感谢您的来访，如果没有其它问题，本次会话结束后，辛苦您给我们一个“满意”可以吗，非常感谢您的支持，祝您生活愉快
     - text: 那我们先去处理快件问题喽，有问题随时找我
 
-  # 表单话术1
-  utter_ask_offer_express_id:
-    - text: 您好，麻烦您提供一下10、12或YT+13位数的圆通运单号码，我帮您看一下。
-    - text: 您好，麻烦您提供一下YT+13位数的圆通运单号码，我帮您查看一下
-  
-  # 表单话术2
-  utter_ask_continue_express_id:
-    - text: 好的，请继续说您的运单号。
-    - text: 好的，您接着说。
+  # 表单话术
+  # utter_ask_slot_express_id:
+  #   - text: 您好，麻烦您提供一下10、12或YT+13位数的圆通运单号码，我帮您看一下。
+  #   - text: 您好，麻烦您提供一下YT+13位数的圆通运单号码，我帮您查看一下
+  utter_ask_for_express_id:
+    - text: 您好，麻烦您提供一下YT+13位数的圆通运单号，我帮您看一下
 
   utter_ask_slot_item:
     - text: 您好，请问您这边要寄什么物品呢？
@@ -1036,7 +1028,7 @@ responses:
     - text: 您电话保持通畅哦 有专员回电您哦
 
   utter_has_no_express_id:
-    - text: 您好，没有运单号的话我们这边不能帮您查询快递状态，我们也没有权限帮您查询快递单号。您可以登陆圆通官网（https://www.yto.net.cn/）或者微信小程序查询您近期的快递单号。给您带来不便，非常抱歉！
+    - text: 没有运单号的话，我们也没有权限查询您的快递。给您带来不便，非常抱歉！
 
   # faq 意图回复话术
   utter_wait_for_a_moment:
@@ -1063,7 +1055,7 @@ responses:
     - text: 您好，没关系的
 
   utter_ask_express_id:
-    - text: 您好，我们这边没有权限帮您查快递单号哦。您可以登陆圆通官网（https://www.yto.net.cn/）或者微信小程序查询您近期的快递单号。给您带来不便，非常抱歉！
+    - text: 您好，我们这边没有权限帮您查快递单号哦。您可以登陆圆通官网或者微信小程序查询您近期的快递单号。给您带来不便，非常抱歉！
 
 #  utter_other_express:
 #    - text: 您好，这边是圆通客服。其他快递公司，建议通过微信小程序联系官方客服。部分快递公司咨询电话如下：\n中国邮政：11183\n中通：95311\n申通：95543\n韵达：95546

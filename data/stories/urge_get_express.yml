@@ -7,7 +7,6 @@ stories:
 - story: urge_to_get_express 1
   steps:
     - intent: urge_to_get_express
-    - action: utter_apologize_reply
     - action: utter_get_express_appease
     - checkpoint: get_express_ckp_1
 

@@ -107,7 +107,18 @@ class ActionSetInformKey(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         intent = tracker.latest_message.get('intent').get('name')
+        from pprint import pprint
+        # pprint(tracker.latest_message)
+        # pprint(tracker.events)
         entities = tracker.latest_message.get('entities')
+        events = tracker.events
+        if tracker.get_slot('slot_express_id'):
+            # 判断轮次是否有运单号收集完成
+            for evt in reversed(events):
+                if evt['event'] == 'user': break
+                if evt['event'] == 'slot' and evt['name'] == 'slot_express_id':
+                    return [SlotSet("slot_express_id_latest_key", 1)]
+                
         if intent not in ['inform', 'other_express'] or len(entities) == 0:
             return []
         for ent in entities:

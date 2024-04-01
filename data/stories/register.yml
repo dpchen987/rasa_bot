@@ -17,7 +17,6 @@ stories:
       - intent: package_damage
       - intent: package_lack
       - intent: package_lost
-    - action: utter_apologize_reply   # 道歉
     - action: collect_express_id_form
     - active_loop: collect_express_id_form
     - active_loop: null

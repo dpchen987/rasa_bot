@@ -1,74 +1,50 @@
 version: "3.1"
 
-rules:
+stories:
 
 # version 2.0
 
-- rule: urge base
+- story: urge base
   steps:
-  - or:
-    - intent: urge
-    - intent: too_slow
-    - intent: urge_to_process
-    - intent: urge_to_send
-    - intent: sup_urge
-    - intent: ask_send_on_time
-    - intent: add_money
-    - intent: logistics_not_updated
-    - intent: send_wrong_address
-    - intent: has_not_received_yet
-  - action: action_form_count_rollback
-  - action: collect_express_id_form
-  - active_loop: collect_express_id_form
+    - or:
+      - intent: urge
+      - intent: too_slow
+      - intent: urge_to_process
+      - intent: urge_to_send
+      - intent: sup_urge
+      - intent: ask_send_on_time
+      - intent: add_money
+      - intent: logistics_not_updated
+      - intent: send_wrong_address
+      - intent: has_not_received_yet
+    - action: action_intent_count
+    - checkpoint: urge_ckp
 
-- rule: hurry_as_urge
+- story: hurry_as_urge
   steps:
-  - intent: hurry
-  - action: action_get_slot_hurry_key       # 判断上文是否为引导结束话术
-  - slot_was_set:
-    - slot_hurry_key: 0                   # 上文没有引导登记，说明为催件，走催件流程
-  - action: action_form_count_rollback
-  - action: collect_express_id_form
-  - active_loop: collect_express_id_form
-  # - action: action_intent_count
-  # - checkpoint: action_intent_count
-  # wait_for_user_input: false
+    - intent: hurry
+    - action: action_get_slot_hurry_key       # 判断上文是否为引导结束话术
+    - slot_was_set:
+        - slot_hurry_key: 0                   # 上文没有引导登记，说明为催件，走催件流程
+    - action: action_intent_count
+    - checkpoint: urge_ckp
 
- # 提交表单urge
-- rule: submit form and urge 1
-  condition:
-  - active_loop: collect_express_id_form   # this form must be active
+- story: urge 1
   steps:
-  - action: collect_express_id_form      # run the form
-  - active_loop: null   
-  - slot_was_set:         # the form is no longer active because it has been filled
-    - slot_main_intent: urge
-  - action: action_intent_count
-  # - checkpoint: action_intent_count
-  wait_for_user_input: false
+    - checkpoint: urge_ckp
+    - slot_was_set:
+        - slot_urge_count_key: 1
+    - action: collect_express_id_form
+    - active_loop: collect_express_id_form
+    - active_loop: null
+    - action: action_urge
+    - action: action_session_start
 
-- rule: urge 1
-#   steps:
-    # - action: action_intent_count
-#     - slot_was_set:
-#         - slot_urge_count_key: 1
-#     - action: utter_apologize_reply     # 道歉
-#     - action: collect_express_id_form
-#     - active_loop: collect_express_id_form
-#     - active_loop: null
-#     - action: action_urge
-#     - action: action_session_start
-  steps:
-  - action: action_intent_count
-  - slot_was_set:
-    - slot_urge_count_key: 1
-  - action: action_urge         # action to take after the form is complete
-  - action: action_session_start
 
 # 多次催。2-5次催需要检查是否登记，没登记的话引导登记。
-- rule: urge 2-1
+- story: urge 2
   steps:
-    - action: action_intent_count
+    - checkpoint: urge_ckp
     - slot_was_set:
         - slot_urge_count_key: 2
     - action: action_set_slot_phone_key
@@ -80,9 +56,9 @@ rules:
     - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
     - action: action_session_start
 
-- rule: urge 2-0
+- story: urge 2
   steps:
-    - action: action_intent_count
+    - checkpoint: urge_ckp
     - slot_was_set:
         - slot_urge_count_key: 2
     - action: action_set_slot_phone_key
@@ -92,9 +68,9 @@ rules:
     - action: utter_ask_phone_appease     # 要电话
     - action: action_session_start
 
-- rule: urge 3
+- story: urge 3
   steps:
-    - action: action_intent_count
+    - checkpoint: urge_ckp
     - slot_was_set:
         - slot_urge_count_key: 3
     - action: action_set_slot_phone_key
@@ -106,9 +82,9 @@ rules:
     - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
     - action: action_session_start
 
-- rule: urge 3
+- story: urge 3
   steps:
-    - action: action_intent_count
+    - checkpoint: urge_ckp
     - slot_was_set:
         - slot_urge_count_key: 3
     - action: action_set_slot_phone_key
@@ -118,9 +94,9 @@ rules:
     - action: utter_ask_phone_appease     # 要电话
     - action: action_session_start
 
-- rule: urge 4
+- story: urge 4
   steps:
-    - action: action_intent_count
+    - checkpoint: urge_ckp
     - slot_was_set:
         - slot_urge_count_key: 4
     - action: action_set_slot_phone_key
@@ -129,9 +105,9 @@ rules:
     - action: utter_urge_appease_reply_4  # 安抚话术4
     - action: action_session_start
 
-- rule: urge 4
+- story: urge 4
   steps:
-    - action: action_intent_count
+    - checkpoint: urge_ckp
     - slot_was_set:
         - slot_urge_count_key: 4
     - action: action_set_slot_phone_key
@@ -141,9 +117,9 @@ rules:
     - action: utter_ask_phone_appease     # 要电话
     - action: action_session_start
 
-- rule: urge 5
+- story: urge 5
   steps:
-    - action: action_intent_count
+    - checkpoint: urge_ckp
     - slot_was_set:
         - slot_urge_count_key: 5
     - action: action_set_slot_phone_key
@@ -152,9 +128,9 @@ rules:
     - action: utter_urge_appease_reply_5  # 安抚话术5
     - action: action_session_start
 
-- rule: urge 5
+- story: urge 5
   steps:
-    - action: action_intent_count
+    - checkpoint: urge_ckp
     - slot_was_set:
         - slot_urge_count_key: 5
     - action: action_set_slot_phone_key
@@ -164,9 +140,9 @@ rules:
     - action: utter_ask_phone_appease     # 要电话
     - action: action_session_start
 
-- rule: urge 6 and greater than 6
+- story: urge 6 and greater than 6
   steps:
-    - action: action_intent_count
+    - checkpoint: urge_ckp
     # 此处的数字“100”并不是表示意图计数100次，而是表示大于“计数槽位最大值”的意思，假如“计数槽位最大值”为5，则大于等于6的数字都可以表示大于“计数槽位最大值”的意思，我们为了统一，指定了一个较大的数字100
     - slot_was_set:
         - slot_urge_count_key: 100

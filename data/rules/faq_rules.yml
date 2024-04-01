@@ -12,5 +12,21 @@ rules:
 # 客服通话文本处理
 - rule: respond to servicer
   steps:
-  - intent: input_servicer
+  - or:
+    - intent: predict_call_end
+    - intent: input_servicer
+    - intent: phone_number_required
   - action: action_input_servicer
+
+# 客服通话文本处理2
+- rule: respond to servicer 2
+  condition:
+    - active_loop: collect_express_id_form
+  steps:
+  - or:
+    - intent: predict_call_end
+    - intent: input_servicer
+    - intent: phone_number_required
+  - action: action_input_servicer
+  - action: collect_express_id_form
+  - active_loop: collect_express_id_form

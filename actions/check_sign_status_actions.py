@@ -23,6 +23,9 @@ class ActionCheckSignStatus(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        # test
+        dispatcher.utter_message(text='签收状态查询')
+        return []
         # 从跟踪器tracker中获取“运单号槽位”的值
         slot_express_id = tracker.get_slot('slot_express_id')
         if not slot_express_id:

@@ -36,7 +36,9 @@ class ActionCheckArriveDatetime(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
+        # test
+        dispatcher.utter_message(text='快件到达时间查询')
+        return []
         # 如果之前已经触发过某个流程，现在切换到预计达到时间
         slot_core_intent = tracker.get_slot('slot_core_intent')
         slot_phone = tracker.get_slot('slot_phone')

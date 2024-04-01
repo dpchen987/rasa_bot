@@ -155,50 +155,31 @@ class ActionExpPieceCollect(Action):
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         # 从跟踪器tracker中获取最近机器人的回复事件
+        _event = []
         current_state = tracker.current_state()
         answer_text = tracker.latest_message['text']
         express_id_piece = tracker.get_slot('slot_express_id_piece')
-        print('express_id_piece before:', express_id_piece)
-        exp_numbers_mth = exp_numbers.search(answer_text)
-        exp_pc_mth = repat_numbers.search(answer_text)
-        _event = []
-        if exp_numbers_mth:
-            exp_numbers_txt = exp_numbers_mth.group()
-            for k in numbers_dict:
-                if k in exp_numbers_txt:
-                    exp_numbers_txt = exp_numbers_txt.replace(k, numbers_dict[k])
-            _event.append(SlotSet('slot_express_id_piece', exp_numbers_txt))
-            print('express_id_piece after:', exp_numbers_txt)
-            if len(exp_numbers_txt) > 15:
-                dispatcher.utter_message(text='运单号无效，请提供正确的快递单号！')
-                _event.pop()
-                _event.append(SlotSet('slot_express_id', express_id_piece))
-            elif len(exp_numbers_txt) > 9 and (express_id_pat1.search(exp_numbers_txt) or express_id_pat2.search(exp_numbers_txt) or express_id_pat3.search(exp_numbers_txt) or express_id_pat4.search(exp_numbers_txt)):
-                _event.append(SlotSet('slot_express_id', exp_numbers_txt))
-            else:
-                dispatcher.utter_message(response='utter_ask_continue_express_id')
-        elif exp_pc_mth:
-            exp_pc_txt = exp_pc_mth.group()
-            for k in numbers_dict:
-                if k in exp_pc_txt:
-                    exp_pc_txt = exp_pc_txt.replace(k, numbers_dict[k])
-            express_id_piece = express_id_piece + exp_pc_txt if express_id_piece else exp_pc_txt
+        express_id = tracker.get_slot('slot_express_id')
+        user_messages = tracker.get_slot('slot_user_messages')
+        phone_collect = tracker.get_slot('slot_phone_collect')
+        if express_id_piece:
             _event.append(SlotSet('slot_express_id_piece', express_id_piece))
-            print('express_id_piece after:', express_id_piece)
-            if len(express_id_piece) > 15:
-                dispatcher.utter_message(text='运单号无效，请提供正确的快递单号！')
-                _event.pop()
-                _event.append(SlotSet('slot_express_id', express_id_piece))
-            elif len(express_id_piece) > 9 and (express_id_pat1.search(express_id_piece) or express_id_pat2.search(express_id_piece) or express_id_pat3.search(express_id_piece) or express_id_pat4.search(express_id_piece)):
-                _event.append(SlotSet('slot_express_id', express_id_piece))
-            else:
-                dispatcher.utter_message(response='utter_ask_continue_express_id')
-        
-        # 以下代码待删除
+        if express_id:
+            _event.append(SlotSet('slot_express_id', express_id))
+        if user_messages:
+            _event.append(SlotSet('slot_user_messages', user_messages))
+        if phone_collect:
+            _event.append(SlotSet('slot_phone_collect', phone_collect))
+        # if not express_id_piece:
+        #     dispatcher.utter_message(text='您好，麻烦您提供一下YT+13位数的圆通运单号码，我帮您查看一下')
+        # elif express_id_piece and not express_id:
+        #     # 在收集运单号的过程中
+        #     dispatcher.utter_message(text='请继续说您的运单号')
+        #     dispatcher.utter_message(text= f'运单号：{express_id_piece}_')
         
         # 最后返回一个“用户回退事件”，该事件的目的是忽略外界的这一轮输入
-        return _event
-        # return [UserUtteranceReverted()] + _event + [ActionExecuted('action_validate_slot_mappings')]
+    
+        return [UserUtteranceReverted()] + _event
         # return [UserUtteranceReverted()] + _event + [ActionExecuted('validate_collect_express_id_form')]
         # return [UserUtteranceReverted()] + _event + [ActionExecuted('collect_express_id_form')] + [ActionExecuted('validate_collect_express_id_form')]
     
@@ -214,4 +195,17 @@ class ActionInputServicer(Action):
         print(metadata)
         dispatcher.utter_message(text='标准话术执行率：90%')
         dispatcher.utter_message(text='违规话术识别：无违规话术')
-        return [UserUtteranceReverted()]
+        _event = []
+        express_id_piece = tracker.get_slot('slot_express_id_piece')
+        express_id = tracker.get_slot('slot_express_id')
+        user_messages = tracker.get_slot('slot_user_messages')
+        phone_collect = tracker.get_slot('slot_phone_collect')
+        if express_id_piece:
+            _event.append(SlotSet('slot_express_id_piece', express_id_piece))
+        if express_id:
+            _event.append(SlotSet('slot_express_id', express_id))
+        if user_messages:
+            _event.append(SlotSet('slot_user_messages', user_messages))
+        if phone_collect:
+            _event.append(SlotSet('slot_phone_collect', phone_collect))
+        return [UserUtteranceReverted()] + _event
