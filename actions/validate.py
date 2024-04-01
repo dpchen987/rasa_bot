@@ -12,7 +12,6 @@ import sys
 sys.path.append("..")
 import global_config
 
-
 # 对机器人识别的槽位进行验证(比如运单号、电话等槽位)
 class ValidatePredefinedSlots(ValidationAction):
     def __init__(self):
@@ -31,6 +30,32 @@ class ValidatePredefinedSlots(ValidationAction):
 
         return False
 
+    # 运单号槽位抽取
+    async def extract_slot_express_id(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 从metadata抽取运单号
+        # 从跟踪器的metadata中获取运单号实体
+        print("metadata中获取运单号")
+        meta_exp_id = tracker.latest_message.get("metadata").get("express_id")
+        if meta_exp_id:
+            slot_express_id = tracker.get_slot("slot_express_id")
+            if not slot_express_id:
+                slot_express_id = meta_exp_id
+                return {"slot_express_id": slot_express_id}
+        # metadata = tracker.get_slot("session_started_metadata")
+        # if metadata is not None:
+        #     user_type = metadata.get('user_type', None)
+        #     phone = metadata.get('phone', None)
+        #     express_id = metadata.get('express_id', None)
+        #     if user_type is not None:
+        #         _events.append(SlotSet('slot_user_type', user_type))
+        #     if phone is not None:
+        #         _events.append(SlotSet('slot_phone', phone))
+        #     if express_id is not None:
+        #         print("metadata中获取运单号")
+        #         _events.append(SlotSet('slot_express_id', express_id))
+
     # 验证运单号槽位
     def validate_slot_express_id(
         self,
@@ -40,7 +65,7 @@ class ValidatePredefinedSlots(ValidationAction):
         domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot express_id."""
-        print('Validate slot express_id')
+        print('验证运单号槽位')
         # 将运单号中的字母转化为大写以适配后端接口规则
         slot_express_id = str(slot_value).upper()
 
@@ -70,10 +95,6 @@ class ValidatePredefinedSlots(ValidationAction):
             if json.loads(response.text)['data']:
                 return {"slot_express_id": slot_express_id}
 
-        # 从跟踪器的metadata中获取运单号实体
-        exp_id = tracker.latest_message.get("metadata").get("express_id")
-        if exp_id:
-            return {"slot_express_id": exp_id}
 
         # validation failed
         utter_messages = ["您好，这个运单号不正确",
@@ -134,6 +155,20 @@ class ValidatePredefinedSlots(ValidationAction):
     #     dispatcher.utter_message(text=random.sample(utter_messages, 1)[0])
     #     return {"slot_express_id_piece": None}
 
+    # 手机号槽位抽取
+    async def extract_slot_phone(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 从metadata抽取手机号
+        # 从跟踪器的metadata中获取手机号实体
+        print("metadata中获取手机号")
+        meta_phone = tracker.latest_message.get("metadata").get("phone")
+        if meta_phone:
+            slot_phone = tracker.get_slot("slot_phone")
+            if not slot_phone:
+                slot_phone = meta_phone
+                return {"slot_phone": slot_phone}
+            
     # 验证手机号槽位
     def validate_slot_phone(
             self,
@@ -167,10 +202,20 @@ class ValidatePredefinedSlots(ValidationAction):
 
 
 
-class ValidateCollectExpressIdForm(FormValidationAction):
-    def name(self) -> Text:
-        return "validate_collect_express_id_form"
+# class ValidateCollectExpressIdForm(FormValidationAction):
+#     def name(self) -> Text:
+#         return "validate_collect_express_id_form"
 
+#     # 运单号槽位抽取
+#     async def extract_slot_express_id(
+#         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+#     ) -> Dict[Text, Any]:
+#         # 从metadata抽取运单号
+#         # 从跟踪器的metadata中获取运单号实体
+#         print("form中获取运单号")
+#         slot_express_id = tracker.get_slot("slot_express_id")
+#         if slot_express_id:
+#             return {"slot_express_id": slot_express_id}
     # @staticmethod
     # def cuisine_db() -> List[Text]:
     #     """Database of supported cuisines"""

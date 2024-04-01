@@ -1,0 +1,25 @@
+version: "3.1"
+
+rules:
+
+  # urge激活表单
+  # - rule: urge 1
+  #   steps:
+  #     - checkpoint: urge_ckp
+  #     - slot_was_set:
+  #       - slot_urge_count_key: 1
+  #     - action: action_form_count_rollback
+  #     - action: collect_express_id_form
+  #     - active_loop: collect_express_id_form
+
+  # 提交表单urge
+  # - rule: submit form and urge 1
+  #   condition:
+  #   - active_loop: collect_express_id_form   # this form must be active
+  #   steps:
+  #     - action: collect_express_id_form      # run the form
+  #     - active_loop: null   
+  #     - slot_was_set:         # the form is no longer active because it has been filled
+  #       - slot_main_intent: urge
+  #     - action: action_urge         # action to take after the form is complete
+  #     - action: action_session_start

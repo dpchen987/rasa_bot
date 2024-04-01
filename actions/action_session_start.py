@@ -56,6 +56,7 @@ class ActionSessionStart(Action):
             if phone is not None:
                 _events.append(SlotSet('slot_phone', phone))
             if express_id is not None:
+                print("metadata中获取运单号")
                 _events.append(SlotSet('slot_express_id', express_id))
         else:
             logging.warning('metadata is None!')

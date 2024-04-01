@@ -71,7 +71,8 @@ class ActionIntentCount(Action):
         # 何时回复
         intent_dict['when_to_contact'] = 'when_to_contact'
 
-        intent = str(tracker.latest_message.get('intent')['name'])
+        # intent = str(tracker.latest_message.get('intent')['name'])
+        intent = str(tracker.get_slot('slot_main_intent'))
 
         if intent_dict.get(intent) is None:
             logging.warning('Intent map did not get current intent')

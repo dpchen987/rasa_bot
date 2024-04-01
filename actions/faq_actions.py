@@ -175,6 +175,8 @@ class ActionExpPieceCollect(Action):
                 _event.append(SlotSet('slot_express_id', express_id_piece))
             elif len(exp_numbers_txt) > 9 and (express_id_pat1.search(exp_numbers_txt) or express_id_pat2.search(exp_numbers_txt) or express_id_pat3.search(exp_numbers_txt) or express_id_pat4.search(exp_numbers_txt)):
                 _event.append(SlotSet('slot_express_id', exp_numbers_txt))
+            else:
+                dispatcher.utter_message(response='utter_ask_continue_express_id')
         elif exp_pc_mth:
             exp_pc_txt = exp_pc_mth.group()
             for k in numbers_dict:
@@ -189,11 +191,14 @@ class ActionExpPieceCollect(Action):
                 _event.append(SlotSet('slot_express_id', express_id_piece))
             elif len(express_id_piece) > 9 and (express_id_pat1.search(express_id_piece) or express_id_pat2.search(express_id_piece) or express_id_pat3.search(express_id_piece) or express_id_pat4.search(express_id_piece)):
                 _event.append(SlotSet('slot_express_id', express_id_piece))
+            else:
+                dispatcher.utter_message(response='utter_ask_continue_express_id')
         
         # 以下代码待删除
         
         # 最后返回一个“用户回退事件”，该事件的目的是忽略外界的这一轮输入
-        return [UserUtteranceReverted()] + _event + [ActionExecuted('action_validate_slot_mappings')]
+        return _event
+        # return [UserUtteranceReverted()] + _event + [ActionExecuted('action_validate_slot_mappings')]
         # return [UserUtteranceReverted()] + _event + [ActionExecuted('validate_collect_express_id_form')]
         # return [UserUtteranceReverted()] + _event + [ActionExecuted('collect_express_id_form')] + [ActionExecuted('validate_collect_express_id_form')]
     

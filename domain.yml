@@ -116,6 +116,10 @@ entities:
       influence_conversation: false
   - express_id_piece:
       influence_conversation: false
+  - express_id_prefix:
+      influence_conversation: false
+  - digital_piece:
+      influence_conversation: false
   - order_id:
       influence_conversation: false
   - PERSON:
@@ -185,8 +189,22 @@ slots:
     type: text
     influence_conversation: false
     mappings:
+      - type: custom
+
+  slot_express_id_prefix:
+    type: text
+    influence_conversation: false
+    mappings:
       - type: from_entity
-        entity: express_id_piece
+        entity: express_id_prefix
+      - type: custom
+
+  slot_digital_piece:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: digital_piece
       - type: custom
 
   slot_order_id:
@@ -532,6 +550,28 @@ slots:
     mappings:
       - type: custom
 
+  slot_main_intent:
+    initial_value: no_intent
+    type: categorical
+    values:
+      - return
+      - change_address
+      - inform
+      - check_express_status
+      - urge
+      - check_arrive_datetime
+      - signed_but_bot_received
+      - home_delivery
+      - urge_to_get_express
+      - register
+      - angry
+      - complaint
+      - consult
+      - check_weight
+    influence_conversation: true
+    mappings:
+      - type: custom
+
   slot_core_intent_key:
     initial_value: no_intent
     type: categorical
@@ -858,14 +898,12 @@ actions:
   - action_get_slot_is_receiver_key
   - action_set_slot_ask_comments
   - action_exp_piece_collect
-  - validate_collect_express_id_form
   - action_input_servicer
 
 responses:
-
   # 默认话术
   utter_default:
-    - text: ""
+    - text: "不好意思，能把你的诉求再说的清楚一点吗"
 #    - text: 您好 我们正在查询中 请耐心等待哦!
 #    - text: 您好 因咨询量过大请耐心等待 客服小姐姐已经在竭力查询了哦!
 #    - text: 稍等
@@ -942,10 +980,15 @@ responses:
     - text: 感谢您的来访，如果没有其它问题，本次会话结束后，辛苦您给我们一个“满意”可以吗，非常感谢您的支持，祝您生活愉快
     - text: 那我们先去处理快件问题喽，有问题随时找我
 
-  # 表单话术
-  utter_ask_slot_express_id:
+  # 表单话术1
+  utter_ask_offer_express_id:
     - text: 您好，麻烦您提供一下10、12或YT+13位数的圆通运单号码，我帮您看一下。
     - text: 您好，麻烦您提供一下YT+13位数的圆通运单号码，我帮您查看一下
+  
+  # 表单话术2
+  utter_ask_continue_express_id:
+    - text: 好的，请继续说您的运单号。
+    - text: 好的，您接着说。
 
   utter_ask_slot_item:
     - text: 您好，请问您这边要寄什么物品呢？

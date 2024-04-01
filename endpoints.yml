@@ -16,16 +16,16 @@ action_endpoint:
 # Tracker store which is used to store the conversations.
 # By default the conversations are stored in memory.
 # https://rasa.com/docs/rasa/api/tracker-stores/
-tracker_store:
-  type: 'utils.cluster_tracker_store.RedisClusterTrackerStore'
-  url: 10.130.132.133
-  port: 6380
-  startup_nodes:
-    ### test
-    - host: 10.130.132.133
-      port: 6380
-    - host: 10.130.133.45
-      port: 6380
+# tracker_store:
+#   type: 'utils.cluster_tracker_store.RedisClusterTrackerStore'
+#   url: 10.130.132.133
+#   port: 6380
+#   startup_nodes:
+#     ### test
+#     - host: 10.130.132.133
+#       port: 6380
+#     - host: 10.130.133.45
+#       port: 6380
     ### online
 #    - host: 10.6.110.109
 #      port: 6389
@@ -37,18 +37,18 @@ tracker_store:
 #      port: 6388
 #    - host: 10.6.110.119
 #      port: 6389
-  key_prefix: rasa
-  record_exp: 3600 #以秒为单位记录过期时间
+#   key_prefix: rasa
+#   record_exp: 3600 #以秒为单位记录过期时间
 
-lock_store:
- type: 'utils.cluster_lock_store.RedisClusterLockStore'
- key_prefix: wdgj
- startup_nodes:
-   ### test
-   - host: 10.130.132.133
-     port: 6380
-   - host: 10.130.133.45
-     port: 6380
+# lock_store:
+#  type: 'utils.cluster_lock_store.RedisClusterLockStore'
+#  key_prefix: wdgj
+#  startup_nodes:
+#    ### test
+#    - host: 10.130.132.133
+#      port: 6380
+#    - host: 10.130.133.45
+#      port: 6380
    ### online
 #    - host: 10.6.110.109
 #      port: 6389
