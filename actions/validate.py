@@ -330,14 +330,15 @@ class ValidatePredefinedSlots(ValidationAction):
         slot_phone = tracker.get_slot("slot_phone")
         # validation succeeded
         if slot_phone_piece == "clear":
+            dispatcher.utter_message(text= f'电话号码不太对，请您重新说一次~')
             return {"slot_phone_piece": None}
         if slot_phone_piece:
             print("validate_slot_phone_piece")
             if len(slot_phone_piece) == 11:
-                dispatcher.utter_message(text= f'运单号：{slot_phone_piece}')
+                dispatcher.utter_message(text= f'电话：{slot_phone_piece}')
                 return {"slot_phone_piece": None}
             else:
-                dispatcher.utter_message(text= f'手机号：{slot_phone_piece}_')
+                dispatcher.utter_message(text= f'电话：{slot_phone_piece}_')
                 return {"slot_phone_piece": slot_phone_piece}
 
 
@@ -398,66 +399,21 @@ class ValidatePredefinedSlots(ValidationAction):
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
         # 从metadata抽取运单号
-        # 从跟踪器的metadata中获取运单号实体
-        print("metadata中获取运单号")
-        tem = None
-        meta_exp_id = tracker.latest_message.get("metadata").get("phone")
-        if meta_exp_id:
-            tem = meta_exp_id
-            slot_phone = tracker.get_slot("slot_phone")
-            if not slot_phone:
-                slot_phone = meta_exp_id
-                # return {"slot_phone": slot_phone}
-        if tem:
-            print('tem metadata:', tem)
-            return {"slot_phone": tem}
+        print("--- extract slot phone ---")
+        meta_phone = tracker.latest_message.get("metadata").get("phone")
+        if meta_phone:
+            print('meta phone:', meta_phone)
+            return {"slot_phone": meta_phone}
         # 从metadata抽取运单号
-        answer_text = tracker.latest_message['text']
         intent_latest = tracker.get_intent_of_latest_message()
         phone_piece = tracker.get_slot('slot_phone_piece')
-        print('tem before:', tem)
-        current_state = tracker.current_state()
-        active_loop = current_state['active_loop']
-        # _event = []
-        phone_numbers_mth = phone_numbers.search(answer_text) if not phone_piece else None
-        exp_pc_mth = repat_numbers.search(answer_text) if phone_piece else None
-        # _event = []
-        if phone_numbers_mth:
-            phone_numbers_txt = phone_numbers_mth.group()
-            for k in numbers_dict:
-                if k in phone_numbers_txt:
-                    phone_numbers_txt = phone_numbers_txt.replace(k, numbers_dict[k])
-            if len(phone_numbers_txt) > 11:
-                dispatcher.utter_message(text='号码无效，请提供正确的手机号！')
-            elif len(phone_numbers_txt) == 11:
-                print('extract after:', phone_numbers_txt)
-                tem = phone_numbers_txt
-        if tem:
-            print('tem_phone piece prefix:', tem)
-            return {"slot_phone": tem}
-        if exp_pc_mth:
-            exp_pc_txt = exp_pc_mth.group()
-            for k in numbers_dict:
-                if k in exp_pc_txt:
-                    exp_pc_txt = exp_pc_txt.replace(k, numbers_dict[k])
-            # 重复检测
-            if phone_piece:
-                max_window = min(len(phone_piece), len(exp_pc_txt))
-                for wlen in range(max_window, 1, -1):
-                    if phone_piece[-1 * wlen:] == exp_pc_txt[:wlen]:
-                        print(exp_pc_txt, "--replace-->", exp_pc_txt[wlen:])
-                        exp_pc_txt = exp_pc_txt[wlen:]
-                        break
+        if phone_piece and len(phone_piece) == 11:
+            print('extract phone:', phone_piece)
+            return {"slot_phone": phone_piece}
 
-            phone_piece = phone_piece + exp_pc_txt if phone_piece else exp_pc_txt
-            if len(phone_piece) > 11:
-                dispatcher.utter_message(text='号码无效，请提供正确的手机号！')
-            elif len(phone_piece) == 11:
-                print('extract after:', phone_piece)
-                tem = phone_piece
-        if tem and intent_latest in ['inform', 'service_code']:
-            print('tem_phone end:', tem)
-            return {"slot_phone": tem}
+        # if tem and intent_latest in ['inform', 'service_code']:
+        #     print('tem_phone end:', tem)
+        #     return {"slot_phone": tem}
         
     # 验证手机号槽位
     def validate_slot_phone(
@@ -486,49 +442,6 @@ class ValidatePredefinedSlots(ValidationAction):
         # validation failed
         dispatcher.utter_message(text="电话号码不正确，麻烦您重新提供一下")
         return {"slot_phone": None}
-
-
-
-# class ValidateCollectExpressIdForm(FormValidationAction):
-#     def name(self) -> Text:
-#         return "validate_collect_express_id_form"
-
-    # @staticmethod
-    # def cuisine_db() -> List[Text]:
-    #     """Database of supported cuisines"""
-
-    #     return ["caribbean", "chinese", "french"]
-
-    # def validate_slot_express_id(
-    #     self,
-    #     slot_value: Any,
-    #     dispatcher: CollectingDispatcher,
-    #     tracker: Tracker,
-    #     domain: DomainDict,
-    # ) -> Dict[Text, Any]:
-    #     """Validate cuisine value."""
-    #     print("validate_slot_express_id")
-    #     express_id_piece = tracker.get_slot("slot_express_id_piece")
-    #     # if express_id_piece and len(express_id_piece) > 10:
-    #     #     # validation succeeded, set the value of the "cuisine" slot to value
-    #     return {"slot_express_id": slot_value}
-        # else:
-        #     # validation failed, set this slot to None so that the
-        #     # user will be asked for the slot again
-        #     return {"cuisine": None}
-
-    # async def extract_slot_express_id(
-    #     self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
-    # ) -> Dict[Text, Any]:
-    #     # text_of_last_user_message = tracker.latest_message.get("text")
-    #     # sit_outside = "outdoor" in text_of_last_user_message
-    #     print("extract_slot_express_id")
-    #     # return {"outdoor_seating": sit_outside}
-    #     express_id_piece = tracker.get_slot("slot_express_id_piece")
-    #     if express_id_piece and len(express_id_piece) > 10:
-    #         # validation succeeded, set the value of the "cuisine" slot to value
-    #         return {"slot_express_id": express_id_piece}
-
 
 
 if __name__ == '__main__':
