@@ -45,6 +45,7 @@ class ValidatePredefinedSlots(ValidationAction):
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
         # 保存最近的n个用户输入信息
+        print("--- extract slot user_messages --->")
         user_messages = str(tracker.get_slot('slot_user_messages'))
         user_messages = eval(user_messages)
         message_text = tracker.latest_message['text']
@@ -62,10 +63,11 @@ class ValidatePredefinedSlots(ValidationAction):
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
         # 保存最近的n个用户输入信息
+        print("--- extract slot phone_collect --->")
         intent_latest = tracker.get_intent_of_latest_message()
         text_latest = tracker.latest_message['text']
         phone_collect = tracker.get_slot('slot_phone_collect')
-        print(phone_collect)
+        # print(phone_collect)
         if phone_collect and intent_latest in ['check_express_status','check_arrive_datetime','signed_but_bot_received','home_delivery']:
             print(intent_latest)
             return {'slot_phone_collect': False}
@@ -91,7 +93,7 @@ class ValidatePredefinedSlots(ValidationAction):
             domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot phone."""
-        print('validate_slot_user_messages')
+        print("--- validate slot user_messages --->")
         slot_user_messages = str(slot_value)
         if slot_user_messages:
             return {"slot_user_messages": slot_user_messages}
@@ -104,7 +106,7 @@ class ValidatePredefinedSlots(ValidationAction):
             domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot phone."""
-        print('validate_slot_phone_collect')
+        print("--- validate slot phone_collect --->")
         slot_phone_collect = str(slot_value)
         if slot_phone_collect:
             return {"slot_phone_collect": slot_phone_collect}
@@ -114,92 +116,35 @@ class ValidatePredefinedSlots(ValidationAction):
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
         # 从metadata抽取运单号
-        # 从跟踪器的metadata中获取运单号实体
-        print("metadata中获取运单号")
-        piece = tracker.get_slot('slot_express_id_piece')
-        print('-----', piece)
-        tem = None
+        print("--- extract slot express_id --->")
         meta_exp_id = tracker.latest_message.get("metadata").get("express_id")
         if meta_exp_id:
-            tem = meta_exp_id
-            slot_express_id = tracker.get_slot("slot_express_id")
-            if not slot_express_id:
-                slot_express_id = meta_exp_id
-                # return {"slot_express_id": slot_express_id}
-        if tem:
-            print('tem metadata:', tem)
-            return {"slot_express_id": tem}
-        
-        # 从metadata抽取运单号
-        answer_text = tracker.latest_message['text']
+            print('metadata exp_id:', meta_exp_id)
+            return {"slot_express_id": meta_exp_id}
+        # 从express_id_piece抽取运单号
         intent_latest = tracker.get_intent_of_latest_message()
         express_id_piece = tracker.get_slot('slot_express_id_piece')
-        print('tem before:', tem)
-        exp_numbers_mth = exp_numbers.search(answer_text)
-        exp_pc_mth = repat_numbers.search(answer_text)
-        current_state = tracker.current_state()
-        active_loop = current_state['active_loop']
-        # _event = []
-        if exp_numbers_mth:
-            exp_numbers_txt = exp_numbers_mth.group()
-            for k in numbers_dict:
-                if k in exp_numbers_txt:
-                    exp_numbers_txt = exp_numbers_txt.replace(k, numbers_dict[k])
-            # _event.append(SlotSet('slot_express_id_piece', exp_numbers_txt))
-            print('express_id_piece after:', exp_numbers_txt)
-            if len(exp_numbers_txt) > 15:
-                dispatcher.utter_message(text='运单号无效，请提供正确的快递单号！')
-                # _event.pop()
-                # return {'slot_express_id', express_id_piece}
-            elif len(exp_numbers_txt) > 9 and (express_id_pat1.search(exp_numbers_txt) or express_id_pat2.search(exp_numbers_txt) or express_id_pat3.search(exp_numbers_txt) or express_id_pat4.search(exp_numbers_txt)):
-                print('extract after:', exp_numbers_txt)
-                tem = exp_numbers_txt
-                # return {"slot_express_id", exp_numbers_txt}
-        elif exp_pc_mth:
-            exp_pc_txt = exp_pc_mth.group()
-            for k in numbers_dict:
-                if k in exp_pc_txt:
-                    exp_pc_txt = exp_pc_txt.replace(k, numbers_dict[k])
-            # 重复检测
-            if express_id_piece:
-                max_window = min(len(express_id_piece), len(exp_pc_txt))
-                for wlen in range(max_window, 1, -1):
-                    if express_id_piece[-1 * wlen:] == exp_pc_txt[:wlen]:
-                        print(exp_pc_txt, "--replace-->", exp_pc_txt[wlen:])
-                        exp_pc_txt = exp_pc_txt[wlen:]
-                        break
-            express_id_piece = express_id_piece + exp_pc_txt if express_id_piece else exp_pc_txt
-            # _event.append(SlotSet('slot_express_id_piece', express_id_piece))
-            if len(express_id_piece) > 15:
-                dispatcher.utter_message(text='运单号无效，请提供正确的快递单号！')
-                # _event.pop()
-                # return {'slot_express_id', express_id_piece}
-            elif len(express_id_piece) > 9 and (express_id_pat1.search(express_id_piece) or express_id_pat2.search(express_id_piece) or express_id_pat3.search(express_id_piece) or express_id_pat4.search(express_id_piece)):
-                print('extract after:', express_id_piece)
-                tem = express_id_piece
-                # return {"slot_express_id", express_id_piece}
-        if tem and (intent_latest in ['inform', 'service_code'] or 'name' in active_loop):
-            print('tem end:', tem)
-            return {"slot_express_id": tem}
+        if express_id_piece and len(express_id_piece) > 9 and (express_id_pat1.search(express_id_piece) or express_id_pat2.search(express_id_piece) or express_id_pat3.search(express_id_piece) or express_id_pat4.search(express_id_piece)):
+            print('extract express_id:', express_id_piece)
+            return {"slot_express_id": express_id_piece}
 
     # 运单号槽位抽取
     async def extract_slot_express_id_piece(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
         # 从metadata抽取运单号
-        # 从跟踪器的metadata中获取运单号实体
-        print("slot_express_id_piece获取")
         if tracker.get_slot('slot_phone_collect'): return
+        print("--- extract slot express_id piece --->")
         tem = None
         # 从metadata抽取运单号
         express_id_piece = tracker.get_slot('slot_express_id_piece')
-        print("tracker_slot_express_id_piece获取", express_id_piece)
+        print("tracker_slot_express_id_piece:", express_id_piece)
         current_state = tracker.current_state()
         active_loop = current_state['active_loop']
 
         answer_text = tracker.latest_message['text']
         intent_latest = tracker.get_intent_of_latest_message()
-        print('tem_piece before:', tem)
+        # print('tem_piece before:', tem)
         exp_numbers_mth = exp_numbers.search(answer_text)
         exp_pc_mth = repat_numbers.search(answer_text)
         # _event = []
@@ -247,18 +192,17 @@ class ValidatePredefinedSlots(ValidationAction):
     ) -> Dict[Text, Any]:
         """Validate slot phone."""
 
+        print("--- validate slot express_id piece --->")
         slot_express_id_piece = str(slot_value)
         slot_express_id = tracker.get_slot("slot_express_id")
         # validation succeeded
         if slot_express_id_piece == "clear":
             return {"slot_express_id_piece": None}
         if slot_express_id_piece:
-            print("validate_slot_express_id_piece")
             if express_id_pat1.search(slot_express_id_piece) or express_id_pat2.search(slot_express_id_piece) or express_id_pat3.search(slot_express_id_piece) or express_id_pat4.search(slot_express_id_piece):
                 dispatcher.utter_message(text= f'运单号：{slot_express_id_piece}')
                 return {"slot_express_id_piece": None}
             else:
-                dispatcher.utter_message(text='请继续说您的运单号')
                 dispatcher.utter_message(text= f'运单号：{slot_express_id_piece}_')
                 return {"slot_express_id_piece": slot_express_id_piece}
 
@@ -268,20 +212,17 @@ class ValidatePredefinedSlots(ValidationAction):
     ) -> Dict[Text, Any]:
         # 从metadata抽取运单号
         # 从跟踪器的metadata中获取运单号实体
-        print("slot_phone_piece获取")
-        if not tracker.get_slot('slot_phone_collect'): 
-            print('not slot_phone_collect')
-            return
+        if not tracker.get_slot('slot_phone_collect'): return
+        print("--- extract slot phone piece --->")
         tem = None
         # 从metadata抽取运单号
         phone_piece = tracker.get_slot('slot_phone_piece')
-        print("tracker_slot_phone_piece获取", phone_piece)
+        print("tracker_slot_phone_piece", phone_piece)
         current_state = tracker.current_state()
         active_loop = current_state['active_loop']
 
         answer_text = tracker.latest_message['text']
         intent_latest = tracker.get_intent_of_latest_message()
-        print('tem_piece before:', tem)
         phone_numbers_mth = phone_numbers.search(answer_text) if not phone_piece else None
         exp_pc_mth = repat_numbers.search(answer_text) if phone_piece else None
         # _event = []
@@ -325,7 +266,7 @@ class ValidatePredefinedSlots(ValidationAction):
             domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot phone."""
-
+        print("--- validate slot phone_piece --->")
         slot_phone_piece = str(slot_value)
         slot_phone = tracker.get_slot("slot_phone")
         # validation succeeded
@@ -351,7 +292,7 @@ class ValidatePredefinedSlots(ValidationAction):
         domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot express_id."""
-        print('Validate slot express_id')
+        print("--- validate slot express_id --->")
         # 将运单号中的字母转化为大写以适配后端接口规则
         slot_express_id = str(slot_value).upper()
 
@@ -380,26 +321,22 @@ class ValidatePredefinedSlots(ValidationAction):
             # validation succeeded
             if json.loads(response.text)['data']:
                 return {"slot_express_id": slot_express_id}
-
         # 从跟踪器的metadata中获取运单号实体
         exp_id = tracker.latest_message.get("metadata").get("express_id")
         if exp_id:
             print("踪器的metadata中获取运单号---")
             return {"slot_express_id": exp_id}
-
         # validation failed
-        utter_messages = ["您好，这个运单号不正确",
-                          "您好，这边看到您提供的单号不对",
-                          "您提供的运单号不对"]
-        dispatcher.utter_message(text=random.sample(utter_messages, 1)[0])
+        dispatcher.utter_message(text="运单号不正确，麻烦您重新提供一下")
         return {"slot_express_id": None}
 
-    # 手机号号槽位抽取
+    # 手机号槽位抽取
     async def extract_slot_phone(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
         # 从metadata抽取运单号
-        print("--- extract slot phone ---")
+        print("--- extract slot phone --->")
+        if not tracker.get_slot('slot_phone_collect'): return
         meta_phone = tracker.latest_message.get("metadata").get("phone")
         if meta_phone:
             print('meta phone:', meta_phone)
@@ -428,7 +365,7 @@ class ValidatePredefinedSlots(ValidationAction):
         def validate_phone_number(number):
             pattern = r'^1[3-9]\d{9}$'
             return re.match(pattern, number) is not None
-
+        print("--- validate slot phone --->")
         slot_phone = str(slot_value)
 
         # validation succeeded
@@ -458,9 +395,3 @@ if __name__ == '__main__':
         "19512265668",
         "12234567281"
     ]
-
-    for number in numbers:
-        if validate_phone_number(number):
-            print(f"{number} 是一个合法的手机号码")
-        else:
-            print(f"{number} 不是一个合法的手机号码")
