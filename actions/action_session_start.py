@@ -1,4 +1,5 @@
 import sys
+from .logging import logger
 import logging
 from typing import Any, Text, Dict, List
 from pprint import pprint
@@ -58,7 +59,7 @@ class ActionSessionStart(Action):
             if express_id is not None:
                 _events.append(SlotSet('slot_express_id', express_id))
         else:
-            logging.warning('metadata is None!')
+            logger.info('metadata is None!')
 
         # 每次该动作都会将绝大多数影响会话的槽位进行初始化，目的是可以成功的切换到其他流程
         # initialize related slots

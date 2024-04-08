@@ -5,11 +5,13 @@
 *.ipr
 *.csv
 *.xlsx
+*.out
+*.log
 
 ### rasa ### 
 .rasa
 log.out
-log
+logs
 models
 actions/__pycache__/
 utils/__pycache__/

@@ -196,14 +196,14 @@ class ActionInputServicer(Action):
         dispatcher.utter_message(text='标准话术执行率：90%')
         dispatcher.utter_message(text='违规话术识别：无违规话术')
         _event = []
-        express_id_piece = tracker.get_slot('slot_express_id_piece')
-        express_id = tracker.get_slot('slot_express_id')
+        # express_id_piece = tracker.get_slot('slot_express_id_piece')
+        # express_id = tracker.get_slot('slot_express_id')
         user_messages = tracker.get_slot('slot_user_messages')
         phone_collect = tracker.get_slot('slot_phone_collect')
-        if express_id_piece:
-            _event.append(SlotSet('slot_express_id_piece', express_id_piece))
-        if express_id:
-            _event.append(SlotSet('slot_express_id', express_id))
+        # if express_id_piece:
+        #     _event.append(SlotSet('slot_express_id_piece', express_id_piece))
+        # if express_id:
+        #     _event.append(SlotSet('slot_express_id', express_id))
         if user_messages:
             _event.append(SlotSet('slot_user_messages', user_messages))
         if phone_collect:

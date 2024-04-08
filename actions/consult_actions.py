@@ -468,20 +468,19 @@ class ActionDefaultFallbackConsultSendItem(Action):
         # 设置一个值max_count用来存储上述槽位值，主要是用于防止上述槽位没有配置的情况
         max_count = 5
 
-        if not express_id_piece and slot_express_id_form_count < max_count:
+        if slot_express_id_form_count == 1:
             dispatcher.utter_message(text='麻烦您提供一下YT+13位数的圆通运单号，我帮您看一下')
-        elif express_id_piece and not express_id and slot_express_id_form_count < max_count:
-            # 获取最近的text，防止重复输出
-            last_bot_text = ''
-            for evt in reversed(events):
-                if evt['event'] == 'user': break
-                if evt['event'] == 'bot':
-                    last_bot_text = evt['text']
-                    break
-            if last_bot_text != f'运单号：{express_id_piece}_':
-                # 在收集运单号的过程中
-                dispatcher.utter_message(text='请继续说您的运单号')
-                dispatcher.utter_message(text= f'运单号：{express_id_piece}_')
+        # elif express_id_piece and not express_id and slot_express_id_form_count < max_count:
+        #     # 获取最近的text，防止重复输出
+        #     last_bot_text = ''
+        #     for evt in reversed(events):
+        #         if evt['event'] == 'user': break
+        #         if evt['event'] == 'bot':
+        #             last_bot_text = evt['text']
+        #             break
+        #     if last_bot_text != f'运单号：{express_id_piece}_':
+        #         # 在收集运单号的过程中
+        #         dispatcher.utter_message(text= f'运单号：{express_id_piece}_')
         # if slot_express_id_form_count:
         #     max_count = slot_express_id_form_count
         # 当填槽失败次数达到填槽失败最大次数，则指定话术名称传递到调度台dispatcher以供机器人输出
