@@ -166,7 +166,7 @@ class ValidatePredefinedSlots(ValidationAction):
                 max_window = min(len(express_id_piece), len(exp_pc_txt))
                 for wlen in range(max_window, 1, -1):
                     if express_id_piece[-1 * wlen:] == exp_pc_txt[:wlen]:
-                        logger.info(f'{exp_pc_txt}, "--replace-->", {exp_pc_txt[wlen:]}')
+                        logger.info(f'{exp_pc_txt} --replace--> {exp_pc_txt[wlen:]}')
                         exp_pc_txt = exp_pc_txt[wlen:]
                         break
 
@@ -244,7 +244,7 @@ class ValidatePredefinedSlots(ValidationAction):
                 max_window = min(len(phone_piece), len(exp_pc_txt))
                 for wlen in range(max_window, 1, -1):
                     if phone_piece[-1 * wlen:] == exp_pc_txt[:wlen]:
-                        logger.info(f'{exp_pc_txt}, "--replace-->", {exp_pc_txt[wlen:]}')
+                        logger.info(f'{exp_pc_txt} --replace--> {exp_pc_txt[wlen:]}')
                         exp_pc_txt = exp_pc_txt[wlen:]
                         break
 

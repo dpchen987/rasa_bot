@@ -21,6 +21,6 @@ handlers:
     encoding: 'utf8'
 loggers:
   rasa:
-    handlers: [console, file]
+    handlers: [file] # [console, file]
     propagate: no
     level: INFO
