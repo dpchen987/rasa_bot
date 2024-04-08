@@ -2,6 +2,7 @@ import requests
 import json
 from typing import Text, Any, Dict
 import re
+import jieba.posseg as pseg
 import random
 import structlog
 from rasa_sdk import Tracker, ValidationAction, FormValidationAction
@@ -17,6 +18,7 @@ express_id_pat2 = re.compile("(?<![A-Za-z])ytd?\\d{12,14}")
 express_id_pat3 = re.compile("(?<![A-Za-z])ytg\\d{11,13}")
 express_id_pat4 = re.compile("(?<!\\d)\\d{13}(?!\\d)")
 collect_phone_pat1 = re.compile("电话|号码|手机号")
+dname_pat = re.compile("上官|欧阳|司马")
 exp_numbers = re.compile(r"[yY][tT]+[dg]?[\d 零令林一幺妖二两三四五六七八九]*")
 phone_numbers = re.compile(r"(?<![A-Za-z\d])[1幺妖][3-9三四五六七八九][\d 零令林一幺妖二两三四五六七八九]{,9}(?![A-Za-z\d])")
 repat_numbers = re.compile(r"(?<![点月块])[\d零令林一幺妖二两三四五六七八九][\d 零令林一幺妖二两三四五六七八九]*[\d零令林一幺妖二两三四五六七八九](?![点号月块个位])")
@@ -56,6 +58,23 @@ class ValidatePredefinedSlots(ValidationAction):
             user_messages.append(user_message)
             if len(user_messages) > 10: user_messages = user_messages[-10:]
         return {'slot_user_messages': user_messages}
+
+    async def extract_slot_name(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        logger.info("--- extract slot name --->")
+        name = tracker.get_slot('slot_name')
+        if name:
+            logger.info(f"---slot name : {name}")
+            return
+        intent_latest = tracker.get_intent_of_latest_message()
+        if intent_latest in ['inform', ]:
+            message_text = tracker.latest_message['text']
+            name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr']
+            if name_ls:
+                logger.info(f"{name_ls=}")
+                return {'slot_name': ' '.join(name_ls)}
     
     async def extract_slot_phone_collect(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
@@ -95,6 +114,27 @@ class ValidatePredefinedSlots(ValidationAction):
         slot_user_messages = str(slot_value)
         if slot_user_messages:
             return {"slot_user_messages": slot_user_messages}
+            
+    # 验证槽位
+    def validate_slot_name(
+            self,
+            slot_value: Any,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate slot phone."""
+        logger.info("--- validate slot name --->")
+        slot_name = str(slot_value)
+        message_text = tracker.latest_message['text']
+        dname = dname_pat.search(message_text)
+        if dname and slot_name[0] in ['姓']:
+            return {"slot_name": '姓' + dname.group()}
+        elif dname and len(slot_name) > 2 and slot_name[-2:] in ['先生', '小姐', '女士']:
+            return {"slot_name": dname.group() + slot_name[-2:]}
+        else:
+            return {"slot_name": slot_name}
+
     # 验证槽位
     def validate_slot_phone_collect(
             self,
@@ -294,36 +334,27 @@ class ValidatePredefinedSlots(ValidationAction):
         # 将运单号中的字母转化为大写以适配后端接口规则
         slot_express_id = str(slot_value).upper()
 
-        # 用户首句发送的是单号，需要回复一句问候语
-        if self.is_first_in(tracker) and len(slot_express_id) == len(tracker.latest_message['text']):
-            # resp_tools = global_config.RespTools()
-            # dispatcher.utter_message(text=resp_tools.generate_resp_randomly(resp_tools.greet))
-            # dispatcher.utter_message(response='utter_greet')
-            dispatcher.utter_message(response='utter_help')
-
         # 单号验证
-        if slot_express_id.isdigit():
-            pre = ['YT', 'YTD', 'YTG', 'G']  # G开头的共12位，其他共15位
-            for p in pre:
-                slot_express_id = p+slot_express_id
+        try:
+            if slot_express_id.isdigit():
+                pre = ['YT', 'YTD', 'YTG', 'G']  # G开头的共12位，其他共15位
+                for p in pre:
+                    slot_express_id = p+slot_express_id
+                    payload = json.dumps({"waybillNo": slot_express_id})
+                    headers = {'Content-Type': 'application/json'}
+                    response = requests.request("POST", self.check_url, headers=headers, data=payload)
+                    # validation succeeded
+                    if json.loads(response.text)['data']:
+                        return {"slot_express_id": slot_express_id}
+            else:
                 payload = json.dumps({"waybillNo": slot_express_id})
                 headers = {'Content-Type': 'application/json'}
                 response = requests.request("POST", self.check_url, headers=headers, data=payload)
                 # validation succeeded
                 if json.loads(response.text)['data']:
                     return {"slot_express_id": slot_express_id}
-        else:
-            payload = json.dumps({"waybillNo": slot_express_id})
-            headers = {'Content-Type': 'application/json'}
-            response = requests.request("POST", self.check_url, headers=headers, data=payload)
-            # validation succeeded
-            if json.loads(response.text)['data']:
-                return {"slot_express_id": slot_express_id}
-        # 从跟踪器的metadata中获取运单号实体
-        exp_id = tracker.latest_message.get("metadata").get("express_id")
-        if exp_id:
-            logger.info("踪器的metadata中获取运单号---")
-            return {"slot_express_id": exp_id}
+        except Exception as e:
+            logger.exception(f'validate slot_express_id failed: {e}')
         # validation failed
         dispatcher.utter_message(text="运单号不正确，麻烦您重新提供一下")
         return {"slot_express_id": None}
