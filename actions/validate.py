@@ -22,6 +22,8 @@ dname_pat = re.compile("上官|欧阳|司马")
 exp_numbers = re.compile(r"[yY][tT]+[dg]?[\d 零令林一幺妖二两三四五六七八九]*")
 phone_numbers = re.compile(r"(?<![A-Za-z\d])[1幺妖][3-9三四五六七八九][\d 零令林一幺妖二两三四五六七八九]{,9}(?![A-Za-z\d])")
 repat_numbers = re.compile(r"(?<![点月块])[\d零令林一幺妖二两三四五六七八九][\d 零令林一幺妖二两三四五六七八九]*[\d零令林一幺妖二两三四五六七八九](?![点号月块个位])")
+xing = '王张李刘陈杨黄周胡赵吴徐孙朱宋郭罗林曹马高何梁郑韩谢唐董夏傅冯许袁薛姚于彭肖曾谭卢苏贾余毛汪邓戴江丁蔡叶程闫钟廖田任姜范方潘杜魏沈熊金陆郝孔白崔吕邱秦蒋石史顾侯邵孟邹段钱汤黎常尹武乔贺赖龚庞樊殷施翟倪严牛陶俞章鲁葛韦毕聂焦向柳邢骆岳齐梅庄涂祁耿詹关费纪靳童欧甄裴屈鲍覃霍司柯阮房'
+
 numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
 # 对机器人识别的槽位进行验证(比如运单号、电话等槽位)
 class ValidatePredefinedSlots(ValidationAction):
@@ -64,17 +66,24 @@ class ValidatePredefinedSlots(ValidationAction):
     ) -> Dict[Text, Any]:
         # 用户输入信息
         logger.info("--- extract slot name --->")
-        name = tracker.get_slot('slot_name')
-        if name:
+        # import pprint
+        # pprint.pprint(tracker.latest_message)
+        entities = tracker.latest_message['entities']
+        name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and ent['value'][-1] not in '啊什么呢吧了姓名是怎吗啥呀我女士先生']
+        # if name and name[0].startswith('姓') and name[-1] in '啊什么呢吧了姓名吗啥呀':
+        #     logger.info(f"---invalid name : {name}")
+        #     return {'slot_name': None}
+        if name and name[0].startswith('姓'):
             logger.info(f"---slot name : {name}")
             return
         intent_latest = tracker.get_intent_of_latest_message()
         if intent_latest in ['inform', ]:
             message_text = tracker.latest_message['text']
-            name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr']
+            name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr' and pr.word[0] in xing]
             if name_ls:
                 logger.info(f"{name_ls=}")
                 return {'slot_name': ' '.join(name_ls)}
+        return {'slot_name': None}
     
     async def extract_slot_phone_collect(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict

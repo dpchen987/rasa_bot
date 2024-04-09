@@ -17,6 +17,8 @@ from rasa.core.channels.channel import (
 
 logger = structlog.getLogger(__name__)
 
+x_ge_y_pat = re.compile(r"[1-6一二两三四五六]个[\d 零令林一幺妖二两三四五六七八九]")
+numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
 
 # 目前rasa使用的IO，目的是对外界输入进行预处理
 class WdgjIO(InputChannel):
@@ -79,23 +81,25 @@ class WdgjIO(InputChannel):
                     )
                 )
             else:
-                text = text.replace("&hellip;", "…").replace("&mdash;", "—").replace("&nbsp;", " ").replace("👌🏻", "ok")
-                # 处理系统消息,只提取单号
-                if len(text) > 20 and ("我要咨询的单据是" in text or "【系统消息】用户发送了一个" in text):
-                    text = text[len(text)-15:]
-
+                # 处理三个5、一个8的情况
+                x_ge_y = x_ge_y_pat.findall(text)
+                if x_ge_y:
+                    for pat in x_ge_y:
+                        x = int(pat[0] if pat[0] not in numbers_dict else numbers_dict[pat[0]])
+                        y = pat[-1] if pat[-1] not in numbers_dict else numbers_dict[pat[-1]]
+                        text = text.replace(pat, x * y)
                 # 需要保留符号："-"(防止去除后字符串变为13或19位纯数字，从而误识别为运单号或订单号)
-                comp = re.compile('[^A-Z^a-z^0-9^\u4e00-\u9fa5,，.。?？!！~～\[\]-]')
-                text = comp.sub('', text).strip()
+                # comp = re.compile('[^A-Z^a-z^0-9^\u4e00-\u9fa5,，.。?？!！~～\[\]-]')
+                # text = comp.sub('', text).strip()
 
                 # # 去掉句尾的标点符号
                 # if len(text) > 0 and text[-1] in {',', '，', '.', '。', '?', '？', '!', '！', '~', '～'}:
                 #     text = text[:-1]
 
                 # 处理手机号码前面有“+86”的情况
-                text = text.replace('+86', '')
-                text = text.replace('圆通快递员', '快递员').replace('圆通快递', '').replace('圆通速递', '')\
-                    .replace('圆通公司', '').replace('圆通总公司', '')
+                # text = text.replace('+86', '')
+                # text = text.replace('圆通快递员', '快递员').replace('圆通快递', '').replace('圆通速递', '')\
+                #     .replace('圆通公司', '').replace('圆通总公司', '')
 
                 if len(text) > 0:
                     await on_new_message(

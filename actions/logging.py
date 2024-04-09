@@ -36,7 +36,7 @@ LOGGING = {
         'file': {  # 向文件中输出日志
             'level': 'DEBUG' if DEBUG_MOD else 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(WORK_PATH, '..\logs', 'actions.log'), #os.path.join(os.path.dirname(BASE_DIR), "logs/XXXXX.log"),  # 日志文件的位置
+            'filename': os.path.join(WORK_PATH, '../logs', 'actions.log'), #os.path.join(os.path.dirname(BASE_DIR), "logs/XXXXX.log"),  # 日志文件的位置
             'formatter': 'standard',
             'encoding': 'utf8',
             'maxBytes': 1024 * 1024,
