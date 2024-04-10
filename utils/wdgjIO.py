@@ -59,7 +59,7 @@ class WdgjIO(InputChannel):
             if text.startswith('servicer'):
                 if not metadata: metadata = {}
                 metadata['servicer'] = text.replace('servicer', '').strip(":：")
-                text = '模型文本是' + metadata['servicer'] + '，这是模型文本'
+                text = metadata['servicer'] + '，模型函数'
                 await on_new_message(
                     UserMessage(
                         text,
