@@ -79,7 +79,7 @@ class ValidatePredefinedSlots(ValidationAction):
         intent_latest = tracker.get_intent_of_latest_message()
         if intent_latest in ['inform', ]:
             message_text = tracker.latest_message['text']
-            name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr' and pr.word[0] in xing]
+            name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr' and pr.word[0] in xing and pr.word[-1] not in '区村庄镇乡屯港家']
             if name_ls:
                 logger.info(f"{name_ls=}")
                 return {'slot_name': ' '.join(name_ls)}
