@@ -3,6 +3,7 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import UserUttered, UserUtteranceReverted, SlotSet,  ActionExecuted
 from rasa_sdk.executor import CollectingDispatcher
+from .logging import logger
 import re
 
 # 当外界输入是faq意图时，需要对会话标记为非首句并且将会话进行回滚，并根据需要考虑是否将机器人之前的回复(外界输出之后机器人的回复)进行二次输出
@@ -193,6 +194,8 @@ class ActionInputServicer(Action):
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         metadata = tracker.latest_message.get("metadata")
         print(metadata)
+        if tracker.get_intent_of_latest_message() == 'predict_call_end':
+            logger.info(f"sender_id:{tracker.sender_id} predict_call_end: {tracker.latest_message['text']}")
         dispatcher.utter_message(text='标准话术执行率：90%')
         dispatcher.utter_message(text='违规话术识别：无违规话术')
         _event = []

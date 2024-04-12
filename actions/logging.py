@@ -39,7 +39,7 @@ LOGGING = {
             'filename': os.path.join(WORK_PATH, '../logs', 'actions.log'), #os.path.join(os.path.dirname(BASE_DIR), "logs/XXXXX.log"),  # 日志文件的位置
             'formatter': 'standard',
             'encoding': 'utf8',
-            'maxBytes': 1024 * 1024,
+            'maxBytes': 1024 * 102400,
             'backupCount': 10
         },
 #        'asr_file': {  # 向文件中输出日志

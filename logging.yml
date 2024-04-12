@@ -15,7 +15,7 @@ handlers:
     class: logging.handlers.RotatingFileHandler
     formatter: file
     level: INFO
-    filename: logs\rasa.log # 文件名可以根据你的需求修改
+    filename: logs/rasa.log # 文件名可以根据你的需求修改
     maxBytes: 1048576
     backupCount: 6
     encoding: 'utf8'

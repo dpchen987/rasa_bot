@@ -13,10 +13,10 @@ pipeline:
 - name: DIETClassifier
   entity_recognition: False
   constrain_similarities: True
-  epochs: 12
+  epochs: 15
 #  hidden_layers_sizes: [256,128]
 #  text: [256, 128] # 默认[]
-  embedding_dimension: 64 # 默认20
+  embedding_dimension: 128 # 默认20
   number_of_transformer_layers: 2  # 默认2
   transformer_size: 128 # 默认256
   connection_density: 0.2 # 默认0.2
@@ -32,7 +32,7 @@ pipeline:
 - name: "EntitySynonymMapper"
 - name: ResponseSelector
   constrain_similarities: True
-  epochs: 12
+  epochs: 15
   retrieval_intent: faq
 - name: FallbackClassifier
   threshold: 0.22

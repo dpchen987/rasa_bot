@@ -51,14 +51,24 @@ class ValidatePredefinedSlots(ValidationAction):
         user_messages = str(tracker.get_slot('slot_user_messages'))
         user_messages = eval(user_messages)
         message_text = tracker.latest_message['text']
-        user_message = {'intent': tracker.get_intent_of_latest_message(), 'text':message_text, 'usr_type': 1 if message_text.startswith('模型文本') else 0}
-        # logger.info('user_messages', type(user_messages), user_messages)
+        user_message = {'intent': tracker.get_intent_of_latest_message(), 'text':message_text, 'usr_type': 1 if message_text.startswith('模型') else 0}
+        # logger.info(tracker.latest_message)
 
         if not user_messages:
+            user_message['sender_id'] = tracker.sender_id
+            user_message['express_id_piece'] = False
+            user_message['express_id'] = True if tracker.latest_message.get("metadata").get("express_id") else False
             user_messages = [user_message]
         else:
+            # 判断有无运单号抽取
+            if tracker.latest_message.get("metadata").get("express_id"):
+                user_messages[0]['express_id'] = True
+            if tracker.get_slot("slot_express_id_piece"):
+                user_messages[0]['express_id_piece'] = True
             user_messages.append(user_message)
-            if len(user_messages) > 10: user_messages = user_messages[-10:]
+            # if len(user_messages) > 10: user_messages = user_messages[-10:]
+            if len(user_messages) > 4 and not user_messages[0]['express_id']:
+                logger.info(f'{user_messages=}')
         return {'slot_user_messages': user_messages}
 
     async def extract_slot_name(
@@ -74,16 +84,16 @@ class ValidatePredefinedSlots(ValidationAction):
         #     logger.info(f"---invalid name : {name}")
         #     return {'slot_name': None}
         if name and name[0].startswith('姓'):
-            logger.info(f"---slot name : {name}")
+            logger.info(f"sender_id:{tracker.sender_id} slot name : {name}")
             return
         intent_latest = tracker.get_intent_of_latest_message()
         if intent_latest in ['inform', ]:
             message_text = tracker.latest_message['text']
             name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr' and pr.word[0] in xing and pr.word[-1] not in '区村庄镇乡屯港家']
             if name_ls:
-                logger.info(f"{name_ls=}")
+                logger.info(f"sender_id:{tracker.sender_id} {name_ls=}")
                 return {'slot_name': ' '.join(name_ls)}
-        return {'slot_name': None}
+        # return {'slot_name': None}
     
     async def extract_slot_phone_collect(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
@@ -102,13 +112,13 @@ class ValidatePredefinedSlots(ValidationAction):
         elif not phone_collect and intent_latest in ['phone_number_required', 'provided_phone', 'confirm_whose_phone']:
             return {'slot_phone_collect': True}
         # 根据前面的对话内容判断是否在聊手机号相关内容
-        user_messages = eval(str(tracker.get_slot('slot_user_messages')))
-        if phone_collect and intent_latest != "inform":
-            for inf in reversed(user_messages):
-                if inf['intent'] in ['phone_number_required', 'provided_phone', 'confirm_whose_phone']:
-                    return
-                if collect_phone_pat1.search(inf['text']): return
-            return {'slot_phone_collect': False}
+        # user_messages = eval(str(tracker.get_slot('slot_user_messages')))
+        # if phone_collect and intent_latest != "inform":
+        #     for inf in reversed(user_messages):
+        #         if inf['intent'] in ['phone_number_required', 'provided_phone', 'confirm_whose_phone']:
+        #             return
+        #         if collect_phone_pat1.search(inf['text']): return
+        #     return {'slot_phone_collect': False}
 
     # 验证槽位
     def validate_slot_user_messages(
@@ -141,8 +151,11 @@ class ValidatePredefinedSlots(ValidationAction):
             return {"slot_name": '姓' + dname.group()}
         elif dname and len(slot_name) > 2 and slot_name[-2:] in ['先生', '小姐', '女士']:
             return {"slot_name": dname.group() + slot_name[-2:]}
-        else:
+        elif slot_name: 
             return {"slot_name": slot_name}
+        else:
+            return
+            
 
     # 验证槽位
     def validate_slot_phone_collect(
@@ -172,7 +185,7 @@ class ValidatePredefinedSlots(ValidationAction):
         intent_latest = tracker.get_intent_of_latest_message()
         express_id_piece = tracker.get_slot('slot_express_id_piece')
         if express_id_piece and len(express_id_piece) > 9 and (express_id_pat1.search(express_id_piece) or express_id_pat2.search(express_id_piece) or express_id_pat3.search(express_id_piece) or express_id_pat4.search(express_id_piece)):
-            logger.info(f'extract express_id:, {express_id_piece}')
+            logger.info(f'sender_id:{tracker.sender_id} extract express_id:, {express_id_piece}')
             return {"slot_express_id": express_id_piece}
 
     # 运单号槽位抽取
@@ -180,12 +193,12 @@ class ValidatePredefinedSlots(ValidationAction):
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
         # 从metadata抽取运单号
-        if tracker.get_slot('slot_phone_collect'): return
+        # if tracker.get_slot('slot_phone_collect'): return
         logger.info("--- extract slot express_id piece --->")
         tem = None
         # 从metadata抽取运单号
         express_id_piece = tracker.get_slot('slot_express_id_piece')
-        logger.info(f"tracker_slot_express_id_piece:, {express_id_piece}")
+        logger.info(f"sender_id:{tracker.sender_id} tracker_slot_express_id_piece:, {express_id_piece}")
         current_state = tracker.current_state()
         active_loop = current_state['active_loop']
 
@@ -203,7 +216,7 @@ class ValidatePredefinedSlots(ValidationAction):
             # _event.append(SlotSet('slot_express_id_piece_piece', exp_numbers_txt))
             tem = exp_numbers_txt if len(exp_numbers_txt) <= 15 else "clear"
         if tem:
-            logger.info(f'tem_piece prefix:, {tem}')
+            logger.info(f'sender_id:{tracker.sender_id} piece prefix:, {tem}')
             return {"slot_express_id_piece": tem}
         if exp_pc_mth:
             exp_pc_txt = exp_pc_mth.group()
@@ -215,7 +228,7 @@ class ValidatePredefinedSlots(ValidationAction):
                 max_window = min(len(express_id_piece), len(exp_pc_txt))
                 for wlen in range(max_window, 1, -1):
                     if express_id_piece[-1 * wlen:] == exp_pc_txt[:wlen]:
-                        logger.info(f'{exp_pc_txt} --replace--> {exp_pc_txt[wlen:]}')
+                        logger.info(f'sender_id:{tracker.sender_id} {exp_pc_txt} --replace--> {exp_pc_txt[wlen:]}')
                         exp_pc_txt = exp_pc_txt[wlen:]
                         break
 
@@ -223,10 +236,10 @@ class ValidatePredefinedSlots(ValidationAction):
             # _event.append(SlotSet('slot_express_id_piece_piece', express_id_piece))
             tem = express_id_piece if len(express_id_piece) <= 15 else "clear"
         if tem and (express_id_piece.startswith("yt") or 'name' in active_loop):
-            logger.info(f'tem_piece end:, {tem}')
+            logger.info(f'sender_id:{tracker.sender_id} piece end:, {tem}')
             return {"slot_express_id_piece": tem}
         if tem and intent_latest in ['inform', 'service_code']:
-            logger.info(f'tem_piece end:, {tem}')
+            logger.info(f'sender_id:{tracker.sender_id} piece end:, {tem}')
             return {"slot_express_id_piece": tem}
 
     # 验证槽位
@@ -264,7 +277,7 @@ class ValidatePredefinedSlots(ValidationAction):
         tem = None
         # 从metadata抽取运单号
         phone_piece = tracker.get_slot('slot_phone_piece')
-        logger.info(f"tracker_slot_phone_piece, {phone_piece}")
+        logger.info(f"sender_id:{tracker.sender_id} tracker_slot_phone_piece, {phone_piece}")
         current_state = tracker.current_state()
         active_loop = current_state['active_loop']
 
@@ -281,7 +294,7 @@ class ValidatePredefinedSlots(ValidationAction):
             # _event.append(SlotSet('slot_phone_piece_piece', phone_numbers_txt))
             tem = phone_numbers_txt
         if tem:
-            logger.info(f'tem_phone piece prefix:, {tem}')
+            logger.info(f'sender_id:{tracker.sender_id} phone piece prefix:, {tem}')
             return {"slot_phone_piece": tem}
         if exp_pc_mth:
             exp_pc_txt = exp_pc_mth.group()
@@ -293,7 +306,7 @@ class ValidatePredefinedSlots(ValidationAction):
                 max_window = min(len(phone_piece), len(exp_pc_txt))
                 for wlen in range(max_window, 1, -1):
                     if phone_piece[-1 * wlen:] == exp_pc_txt[:wlen]:
-                        logger.info(f'{exp_pc_txt} --replace--> {exp_pc_txt[wlen:]}')
+                        logger.info(f'sender_id:{tracker.sender_id} {exp_pc_txt} --replace--> {exp_pc_txt[wlen:]}')
                         exp_pc_txt = exp_pc_txt[wlen:]
                         break
 
@@ -301,7 +314,7 @@ class ValidatePredefinedSlots(ValidationAction):
             # _event.append(SlotSet('slot_phone_piece_piece', phone_piece))
             tem = phone_piece if len(phone_piece) <= 11 else "clear"
         if tem and intent_latest in ['inform', 'service_code']:
-            logger.info(f'tem_phone_piece end:, {tem}')
+            logger.info(f'sender_id:{tracker.sender_id} phone_piece end:, {tem}')
             return {"slot_phone_piece": tem}
 
     # 验证槽位
@@ -321,7 +334,6 @@ class ValidatePredefinedSlots(ValidationAction):
             dispatcher.utter_message(text= f'电话号码不太对，请您重新说一次~')
             return {"slot_phone_piece": None}
         if slot_phone_piece:
-            logger.info("validate_slot_phone_piece")
             if len(slot_phone_piece) == 11:
                 dispatcher.utter_message(text= f'电话：{slot_phone_piece}')
                 return {"slot_phone_piece": None}
@@ -363,7 +375,7 @@ class ValidatePredefinedSlots(ValidationAction):
                 if json.loads(response.text)['data']:
                     return {"slot_express_id": slot_express_id}
         except Exception as e:
-            logger.exception(f'validate slot_express_id failed: {e}')
+            logger.exception(f'sender_id:{tracker.sender_id} validate slot_express_id failed: {e}')
         # validation failed
         dispatcher.utter_message(text="运单号不正确，麻烦您重新提供一下")
         return {"slot_express_id": None}
@@ -383,7 +395,7 @@ class ValidatePredefinedSlots(ValidationAction):
         intent_latest = tracker.get_intent_of_latest_message()
         phone_piece = tracker.get_slot('slot_phone_piece')
         if phone_piece and len(phone_piece) == 11:
-            logger.info(f'extract phone:, {phone_piece}')
+            logger.info(f'sender_id:{tracker.sender_id} extract phone:, {phone_piece}')
             return {"slot_phone": phone_piece}
 
         # if tem and intent_latest in ['inform', 'service_code']:
