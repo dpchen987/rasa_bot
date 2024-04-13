@@ -103,13 +103,16 @@ class ValidatePredefinedSlots(ValidationAction):
         intent_latest = tracker.get_intent_of_latest_message()
         text_latest = tracker.latest_message['text']
         phone_collect = tracker.get_slot('slot_phone_collect')
-        # logger.info(phone_collect)
+        # logger.info(type(phone_collect))
+        # if phone_collect: logger.info(type(intent_latest))
         if phone_collect and intent_latest in ['check_express_status','check_arrive_datetime','signed_but_bot_received','home_delivery']:
-            logger.info(intent_latest)
-            return {'slot_phone_collect': False}
-        elif phone_collect and 'yt' in text_latest:
-            return {'slot_phone_collect': False}
-        elif not phone_collect and intent_latest in ['phone_number_required', 'provided_phone', 'confirm_whose_phone']:
+            logger.info('slot_phone_collect clear')
+            return {'slot_phone_collect': ''}
+        if phone_collect and 'yt' in text_latest:
+            logger.info('slot_phone_collect clear')
+            return {'slot_phone_collect': ''}
+        if not phone_collect and intent_latest in ['phone_number_required', 'provided_phone', 'confirm_whose_phone']:
+            logger.info('slot_phone_collect set')
             return {'slot_phone_collect': True}
         # 根据前面的对话内容判断是否在聊手机号相关内容
         # user_messages = eval(str(tracker.get_slot('slot_user_messages')))
@@ -143,9 +146,8 @@ class ValidatePredefinedSlots(ValidationAction):
             domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot phone."""
-        logger.info(f"--- validate slot name ：{slot_value}--->")
+        # logger.info(f"--- validate slot name ：{slot_value}--->")
         slot_name = str(slot_value)
-        return {"slot_name": slot_value}
         message_text = tracker.latest_message['text']
         dname = dname_pat.search(message_text)
         if dname and slot_name[0] in ['姓']:
@@ -167,7 +169,7 @@ class ValidatePredefinedSlots(ValidationAction):
             domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot phone."""
-        # logger.info("--- validate slot phone_collect --->")
+        logger.info(f"--- validate slot phone_collect: {slot_value}--->")
         slot_phone_collect = str(slot_value)
         if slot_phone_collect:
             return {"slot_phone_collect": slot_phone_collect}
@@ -365,13 +367,14 @@ class ValidatePredefinedSlots(ValidationAction):
             if slot_express_id.isdigit():
                 pre = ['YT', 'YTD', 'YTG', 'G']  # G开头的共12位，其他共15位
                 for p in pre:
-                    slot_express_id = p+slot_express_id
-                    payload = json.dumps({"waybillNo": slot_express_id})
+                    p_express_id = p+slot_express_id
+                    # print(p_express_id)
+                    payload = json.dumps({"waybillNo": p_express_id})
                     headers = {'Content-Type': 'application/json'}
                     response = requests.request("POST", self.check_url, headers=headers, data=payload)
                     # validation succeeded
                     if json.loads(response.text)['data']:
-                        return {"slot_express_id": slot_express_id}
+                        return {"slot_express_id": p_express_id}
             else:
                 payload = json.dumps({"waybillNo": slot_express_id})
                 headers = {'Content-Type': 'application/json'}
@@ -383,7 +386,7 @@ class ValidatePredefinedSlots(ValidationAction):
             logger.exception(f'sender_id:{tracker.sender_id} validate slot_express_id failed: {e}')
         # validation failed
         dispatcher.utter_message(text="运单号不正确，麻烦您重新提供一下")
-        return {"slot_express_id": slot_express_id}
+        return {"slot_express_id": slot_value}
         # return {"slot_express_id": None}
 
     # 手机号槽位抽取
