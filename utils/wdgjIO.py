@@ -19,7 +19,7 @@ logger = structlog.getLogger(__name__)
 
 x_ge_y_pat = re.compile(r"[1-6一二两三四五六]个[\d 零令林一幺妖二两三四五六七八九]")
 numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
-
+yt_rep_pat = re.compile(r"[yY] {,3}7")
 # 目前rasa使用的IO，目的是对外界输入进行预处理
 class WdgjIO(InputChannel):
     def name(self) -> Text:
@@ -81,6 +81,11 @@ class WdgjIO(InputChannel):
                     )
                 )
             else:
+                # 
+                yt_rep = yt_rep_pat.findall(text)
+                if yt_rep:
+                    for pat in yt_rep:
+                        text = text.replace(pat, 'yt')
                 # 处理三个5、一个8的情况
                 x_ge_y = x_ge_y_pat.findall(text)
                 if x_ge_y:

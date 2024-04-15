@@ -21,7 +21,7 @@ collect_phone_pat1 = re.compile("电话|号码|手机号")
 dname_pat = re.compile("上官|欧阳|司马")
 exp_numbers = re.compile(r"[yY][tT]+[dg]?[\d 零令林一幺妖二两三四五六七八九]*")
 phone_numbers = re.compile(r"(?<![A-Za-z\d])[1幺妖][3-9三四五六七八九][\d 零令林一幺妖二两三四五六七八九]{,9}(?![A-Za-z\d])")
-repat_numbers = re.compile(r"(?<![点月块])[\d零令林一幺妖二两三四五六七八九][\d 零令林一幺妖二两三四五六七八九]*[\d零令林一幺妖二两三四五六七八九](?![点号月块个位])")
+repat_numbers = re.compile(r"(?<![点:月块\d零一幺妖二两三四五六七八九])[\d零令林一幺妖二两三四五六七八九][\d 零令林一幺妖二两三四五六七八九]*[\d零令林一幺妖二两三四五六七八九](?![点:号小天月块个位\d零一幺妖二两三四五六七八九])")
 xing = '王张李刘陈杨黄周胡赵吴徐孙朱宋郭罗林曹马高何梁郑韩谢唐董夏傅冯许袁薛姚于彭肖曾谭卢苏贾余毛汪邓戴江丁蔡叶程闫钟廖田任姜范方潘杜魏沈熊金陆郝孔白崔吕邱秦蒋石史顾侯邵孟邹段钱汤黎常尹武乔贺赖龚庞樊殷施翟倪严牛陶俞章鲁葛韦毕聂焦向柳邢骆岳齐梅庄涂祁耿詹关费纪靳童欧甄裴屈鲍覃霍司柯阮房'
 
 numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
@@ -169,7 +169,7 @@ class ValidatePredefinedSlots(ValidationAction):
             domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot phone."""
-        logger.info(f"--- validate slot phone_collect: {slot_value}--->")
+        # logger.info(f"--- validate slot phone_collect: {slot_value}--->")
         slot_phone_collect = str(slot_value)
         if slot_phone_collect:
             return {"slot_phone_collect": slot_phone_collect}
