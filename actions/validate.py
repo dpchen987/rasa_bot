@@ -195,6 +195,9 @@ class ValidatePredefinedSlots(ValidationAction):
     async def extract_slot_express_id_piece(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
+        # 判断是否为客服的话
+        intent_latest = tracker.get_intent_of_latest_message()
+        if intent_latest in ['predict_call_end', 'input_servicer', 'phone_number_required']: return
         # 从metadata抽取运单号
         # if tracker.get_slot('slot_phone_collect'): return
         # logger.info("--- extract slot express_id piece --->")
@@ -206,7 +209,6 @@ class ValidatePredefinedSlots(ValidationAction):
         active_loop = current_state['active_loop']
 
         answer_text = tracker.latest_message['text']
-        intent_latest = tracker.get_intent_of_latest_message()
         # logger.info('tem_piece before:', tem)
         exp_numbers_mth = exp_numbers.search(answer_text)
         exp_pc_mth = repat_numbers.search(answer_text)
@@ -273,6 +275,9 @@ class ValidatePredefinedSlots(ValidationAction):
     async def extract_slot_phone_piece(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
+        # 判断是否为客服的话
+        intent_latest = tracker.get_intent_of_latest_message()
+        if intent_latest in ['predict_call_end', 'input_servicer', 'phone_number_required']: return
         # 从metadata抽取运单号
         # 从跟踪器的metadata中获取运单号实体
         if not tracker.get_slot('slot_phone_collect'): return
@@ -285,7 +290,6 @@ class ValidatePredefinedSlots(ValidationAction):
         active_loop = current_state['active_loop']
 
         answer_text = tracker.latest_message['text']
-        intent_latest = tracker.get_intent_of_latest_message()
         phone_numbers_mth = phone_numbers.search(answer_text) if not phone_piece else None
         exp_pc_mth = repat_numbers.search(answer_text) if phone_piece else None
         # _event = []
