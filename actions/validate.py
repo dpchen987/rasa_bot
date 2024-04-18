@@ -169,7 +169,7 @@ class ValidatePredefinedSlots(ValidationAction):
             domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot phone."""
-        logger.info(f"--- validate slot name ：{slot_value}--->")
+        # logger.info(f"--- validate slot name ：{slot_value}--->")
         slot_gender = tracker.get_slot('slot_gender')
         gender = slot_gender if slot_gender else ''
         slot_name = str(slot_value)
