@@ -126,6 +126,7 @@ class WdgjIO(InputChannel):
                             metadata=metadata,
                         )
                     )
+            logger.info(collector.messages)
             return response.json(collector.messages)
 
         return custom_webhook
