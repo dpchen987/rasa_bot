@@ -71,6 +71,23 @@ class ValidatePredefinedSlots(ValidationAction):
                 logger.info(f'{user_messages=}')
         return {'slot_user_messages': user_messages}
 
+    async def extract_slot_gender(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        # logger.info("--- extract slot gender --->")
+        # import pprint
+        # pprint.pprint(tracker.latest_message)
+        intent_latest = tracker.get_intent_of_latest_message()
+        if intent_latest in ['predict_call_end', 'input_servicer', 'phone_number_required']:
+            message_text = tracker.latest_message['text']
+            if '女士' in message_text or '小姐' in message_text:
+                logger.info(f"sender_id:{tracker.sender_id} {message_text} slot_gender: 女士")
+                return {'slot_gender': '女士'}
+            if '先生' in message_text:
+                logger.info(f"sender_id:{tracker.sender_id} {message_text} slot_gender: 先生")
+                return {'slot_gender': '先生'}
+
     async def extract_slot_name(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
@@ -84,16 +101,22 @@ class ValidatePredefinedSlots(ValidationAction):
         #     logger.info(f"---invalid name : {name}")
         #     return {'slot_name': None}
         if name and name[0].startswith('姓'):
-            logger.info(f"sender_id:{tracker.sender_id} slot name : {name}")
-            return
+            logger.info(f"sender_id:{tracker.sender_id} PERSON1: {name}")
+            return {'slot_name': name[0]}
+        
+        name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and len(ent['value']) == 3 and ent['value'][0] in xing]
+        if name: 
+            logger.info(f"sender_id:{tracker.sender_id} PERSON2: {name}")
+            return {'slot_name': name[0]}
+        
         intent_latest = tracker.get_intent_of_latest_message()
         if intent_latest in ['inform', ]:
             message_text = tracker.latest_message['text']
             name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr' and pr.word[0] in xing and pr.word[-1] not in '区村庄镇乡屯港家']
             if name_ls:
-                logger.info(f"sender_id:{tracker.sender_id} {name_ls=}")
+                logger.info(f"sender_id:{tracker.sender_id} pseg_nr: {name_ls}")
                 return {'slot_name': ' '.join(name_ls)}
-        # return {'slot_name': None}
+        return {'slot_name': ''}
     
     async def extract_slot_phone_collect(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
@@ -146,18 +169,25 @@ class ValidatePredefinedSlots(ValidationAction):
             domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot phone."""
-        # logger.info(f"--- validate slot name ：{slot_value}--->")
+        logger.info(f"--- validate slot name ：{slot_value}--->")
+        slot_gender = tracker.get_slot('slot_gender')
+        gender = slot_gender if slot_gender else ''
         slot_name = str(slot_value)
-        message_text = tracker.latest_message['text']
-        dname = dname_pat.search(message_text)
-        if dname and slot_name[0] in ['姓']:
-            return {"slot_name": '姓' + dname.group()}
-        elif dname and len(slot_name) > 2 and slot_name[-2:] in ['先生', '小姐', '女士']:
-            return {"slot_name": dname.group() + slot_name[-2:]}
-        elif slot_name: 
+        # 判断是不是复姓
+        if slot_name:
+            dname = dname_pat.search(tracker.latest_message['text'])
+            if dname and slot_name[0] in ['姓']:
+                return {"slot_name": dname.group() + gender}
+            elif dname and len(slot_name) > 2 and slot_name[-2:] in ['先生', '小姐', '女士']:
+                return {"slot_name": dname.group() + slot_name[-2:]}
+        # 一般流程
+        if slot_name and len(slot_name) > 2 and slot_name[-2:] in ['先生', '小姐', '女士']:
             return {"slot_name": slot_name}
+        elif slot_name:
+            print(slot_name.replace('姓', ''))
+            return {"slot_name": slot_name.replace('姓', '') + gender}
         else:
-            return
+            return {"slot_name": None}
             
 
     # 验证槽位

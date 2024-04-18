@@ -16,7 +16,6 @@ stories:
       - intent: has_sent_or_not
       - intent: pretend_sent
       - intent: if_has_lost
-    - action: utter_ask_for_express_id
     - action: collect_express_id_form
     - active_loop: collect_express_id_form
     - active_loop: null

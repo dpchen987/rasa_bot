@@ -193,7 +193,7 @@ class ActionInputServicer(Action):
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         metadata = tracker.latest_message.get("metadata")
-        print(metadata)
+        # print(metadata)
         if tracker.get_intent_of_latest_message() == 'predict_call_end':
             logger.info(f"sender_id:{tracker.sender_id} predict_call_end: {tracker.latest_message['text']}")
         dispatcher.utter_message(text='标准话术执行率：90%')
@@ -203,6 +203,7 @@ class ActionInputServicer(Action):
         # express_id = tracker.get_slot('slot_express_id')
         user_messages = tracker.get_slot('slot_user_messages')
         phone_collect = tracker.get_slot('slot_phone_collect')
+        gender = tracker.get_slot('slot_gender')
         # if express_id_piece:
         #     _event.append(SlotSet('slot_express_id_piece', express_id_piece))
         # if express_id:
@@ -211,4 +212,6 @@ class ActionInputServicer(Action):
             _event.append(SlotSet('slot_user_messages', user_messages))
         if phone_collect:
             _event.append(SlotSet('slot_phone_collect', phone_collect))
+        if gender:
+            _event.append(SlotSet('slot_gender', gender))
         return [UserUtteranceReverted()] + _event

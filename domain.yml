@@ -236,6 +236,12 @@ slots:
       - type: from_entity
         entity: order_id
 
+  slot_gender:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
   slot_name:
     type: text
     influence_conversation: false
