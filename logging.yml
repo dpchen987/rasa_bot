@@ -16,9 +16,9 @@ handlers:
     formatter: file
     level: INFO
     filename: logs/rasa.log # 文件名可以根据你的需求修改
-    maxBytes: 1048576
+    maxBytes: 104857600
     backupCount: 6
-    encoding: 'utf8'
+    encoding: 'utf-8'
 loggers:
   rasa:
     handlers: [file] # [console, file]
