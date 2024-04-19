@@ -59,13 +59,13 @@ LOGGING = {
         #     'backupCount': 10
         # },
         # 20200512新增
-       'file': {  # 向文件中输出日志
-           'level': 'INFO',
-           'class': 'logging.FileHandler', 
-           'filename': os.path.join(WORK_PATH, '../logs', 'rasa_io0.log'), #os.path.join(os.path.dirname(BASE_DIR), "logs/XXXXX.log"),  # 日志文件的位置
-           'formatter': 'standard',
-           'encoding': 'utf8',
-       },
+    #    'file': {  # 向文件中输出日志
+    #        'level': 'INFO',
+    #        'class': 'logging.FileHandler', 
+    #        'filename': os.path.join(WORK_PATH, '../logs', 'rasa_io0.log'), #os.path.join(os.path.dirname(BASE_DIR), "logs/XXXXX.log"),  # 日志文件的位置
+    #        'formatter': 'standard',
+    #        'encoding': 'utf8',
+    #    },
     },
     'loggers': {  # 日志器
         'rasa_logger': {  # 定义了一个名为logger的日志器
