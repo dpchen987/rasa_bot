@@ -14,8 +14,8 @@ from rasa.core.channels.channel import (
     CollectingOutputChannel,
     UserMessage,
 )
-
-logger = structlog.getLogger(__name__)
+from .logging import logger
+# logger = structlog.getLogger(__name__)
 
 x_ge_y_pat = re.compile(r"[1-6一二两三四五六]个[\d 零令林一幺妖二两三四五六七八九]")
 numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
@@ -48,8 +48,9 @@ class WdgjIO(InputChannel):
             metadata = request.json.get("metadata")
             collector = CollectingOutputChannel()
 
-            logger.info(" ", query=f"{text}")
-            logger.info(" ", metadata=json.dumps(copy.deepcopy(metadata), ensure_ascii=False, indent=4))
+            logger.info(f"query: {request.json}")
+            # logger.info(f"query={text} {metadata=}")
+            # logger.info(json.dumps(copy.deepcopy(metadata), ensure_ascii=False, indent=4))
 
 
             #先对text进行首尾去除空格处理
@@ -126,7 +127,7 @@ class WdgjIO(InputChannel):
                             metadata=metadata,
                         )
                     )
-            logger.info(collector.messages)
+            logger.info(f"response: {collector.messages}")    
             return response.json(collector.messages)
 
         return custom_webhook

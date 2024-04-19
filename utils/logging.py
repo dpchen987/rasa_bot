@@ -59,16 +59,16 @@ LOGGING = {
         #     'backupCount': 10
         # },
         # 20200512新增
-    #    'file': {  # 向文件中输出日志
-    #        'level': 'INFO',
-    #        'class': 'logging.FileHandler', 
-    #        'filename': os.path.join(WORK_PATH, '../logs', 'action_0.log'), #os.path.join(os.path.dirname(BASE_DIR), "logs/XXXXX.log"),  # 日志文件的位置
-    #        'formatter': 'standard',
-    #        'encoding': 'utf8',
-    #    },
+       'file': {  # 向文件中输出日志
+           'level': 'INFO',
+           'class': 'logging.FileHandler', 
+           'filename': os.path.join(WORK_PATH, '../logs', 'rasa_io0.log'), #os.path.join(os.path.dirname(BASE_DIR), "logs/XXXXX.log"),  # 日志文件的位置
+           'formatter': 'standard',
+           'encoding': 'utf8',
+       },
     },
     'loggers': {  # 日志器
-        'action_logger': {  # 定义了一个名为logger的日志器
+        'rasa_logger': {  # 定义了一个名为logger的日志器
             'handlers': ['console'],  # ['console', 'file']可以同时向终端与文件中输出日志
             'propagate': True,  # 是否继续传递日志信息
             'level': 'DEBUG',  # 日志器接收的最低日志级别
@@ -84,7 +84,7 @@ formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 queue_handler = logging.handlers.QueueHandler(log_queue)
 queue_handler.setFormatter(formatter)
 logging.config.dictConfig(LOGGING)
-logger = logging.getLogger('action_logger')
+logger = logging.getLogger('rasa_logger')
 logger.addHandler(queue_handler)
 
 # log_queue = multiprocessing.Queue(-1)
@@ -112,7 +112,7 @@ logger.addHandler(queue_handler)
 
 def listener_process(queue):
     formatter = logging.Formatter("%(message)s")
-    handler = logging.handlers.RotatingFileHandler(filename=os.path.join(WORK_PATH, '../logs', 'action.log'), maxBytes=1024 * 1024 * 100, backupCount=9)
+    handler = logging.handlers.RotatingFileHandler(filename=os.path.join(WORK_PATH, '../logs', 'rasa_io.log'), maxBytes=1024 * 1024 * 100, backupCount=9)
     handler.setFormatter(formatter)
     listener = logging.handlers.QueueListener(queue, handler)
     return listener

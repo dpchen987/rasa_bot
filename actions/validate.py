@@ -96,26 +96,26 @@ class ValidatePredefinedSlots(ValidationAction):
         # import pprint
         # pprint.pprint(tracker.latest_message)
         entities = tracker.latest_message['entities']
-        name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and ent['value'][-1] not in '啊什么呢吧了姓名是怎吗啥呀我女士先生']
+        name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and ent['value'][-1] not in '啊什么呃呢吧了姓名是怎吗啥呀我女士先生']
         # if name and name[0].startswith('姓') and name[-1] in '啊什么呢吧了姓名吗啥呀':
         #     logger.info(f"---invalid name : {name}")
         #     return {'slot_name': None}
         if name and name[0].startswith('姓'):
             logger.info(f"sender_id:{tracker.sender_id} PERSON1: {name}")
-            return {'slot_name': name[0]}
+            return {'slot_name': name[-1]}
         
         name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and len(ent['value']) == 3 and ent['value'][0] in xing]
         if name: 
             logger.info(f"sender_id:{tracker.sender_id} PERSON2: {name}")
-            return {'slot_name': name[0]}
+            return {'slot_name': name[-1]}
         
         intent_latest = tracker.get_intent_of_latest_message()
         if intent_latest in ['inform', ]:
             message_text = tracker.latest_message['text']
-            name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr' and pr.word[0] in xing and pr.word[-1] not in '区村庄镇乡屯港家']
+            name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr' and pr.word[0] in xing and pr.word[-1] not in '区村庄镇乡屯港家路']
             if name_ls:
                 logger.info(f"sender_id:{tracker.sender_id} pseg_nr: {name_ls}")
-                return {'slot_name': ' '.join(name_ls)}
+                return {'slot_name': name_ls[0]}
         return {'slot_name': ''}
     
     async def extract_slot_phone_collect(
