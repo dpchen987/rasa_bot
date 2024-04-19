@@ -8,9 +8,9 @@ logging.basicConfig(filename='../actions.log',
                     level=logging.WARNING)
 
 # web url
-WEB_URL = "http://wdgj-chatbot-inter.yto56.com.cn:18990/"        # 生产环境
+# WEB_URL = "http://wdgj-chatbot-inter.yto56.com.cn:18990/"        # 生产环境
 # WEB_URL = "http://10.7.36.141:18991/"                            # 生产环境，可视化版本
-# WEB_URL = "http://10.130.10.210:18990/"                          # 测试环境
+WEB_URL = "http://10.130.10.210:18990/"                          # 测试环境
 
 intent_map = dict()
 # 催中转
