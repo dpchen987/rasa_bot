@@ -8,9 +8,9 @@ logging.basicConfig(filename='../actions.log',
                     level=logging.WARNING)
 
 # web url
-# WEB_URL = "http://wdgj-chatbot-inter.yto56.com.cn:18990/"        # 生产环境
+WEB_URL = "http://wdgj-chatbot-inter.yto56.com.cn:18990/"        # 生产环境
 # WEB_URL = "http://10.7.36.141:18991/"                            # 生产环境，可视化版本
-WEB_URL = "http://10.130.10.210:18990/"                          # 测试环境
+# WEB_URL = "http://10.130.10.210:18990/"                          # 测试环境
 
 intent_map = dict()
 # 催中转
@@ -117,7 +117,7 @@ def resp_has_exception(d):
 class RespTools:
     def __init__(self):
         self.please_wait = [
-            '您好，这边正在查询中，请耐心等待',
+            '这边正在查询中，请耐心等待',
             '请稍等',
             '这边马上帮您查看一下，请稍等'
         ]
@@ -143,7 +143,7 @@ class RespTools:
             '已经帮您催促了，请耐心等候一下',
         ]
         self.greet = [
-            "您好，圆通速递，很高兴为您服务。请问有什么可以帮到您？",
+            "圆通速递，很高兴为您服务。请问有什么可以帮到您？",
             "您好, 这里是圆通快递客服中心, 很高兴为您服务。请问有什么能帮到您的吗?",
             "您好! 这里是圆通快递客服中心, 请问有什么可以帮您?"
             "您好 圆通快递，很高兴为您服务！",
