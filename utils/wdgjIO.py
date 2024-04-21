@@ -7,7 +7,7 @@ from sanic.request import Request
 from sanic.response import HTTPResponse
 from typing import Text, Dict, Any, Optional, Callable, Awaitable, NoReturn
 import json, copy
-
+import time
 import rasa.utils.endpoints
 from rasa.core.channels.channel import (
     InputChannel,
@@ -51,7 +51,7 @@ class WdgjIO(InputChannel):
             logger.info(f"query: {request.json}")
             # logger.info(f"query={text} {metadata=}")
             # logger.info(json.dumps(copy.deepcopy(metadata), ensure_ascii=False, indent=4))
-
+            start_time = time.time()
 
             #先对text进行首尾去除空格处理
             text = text.strip()
@@ -127,7 +127,7 @@ class WdgjIO(InputChannel):
                             metadata=metadata,
                         )
                     )
-            logger.info(f"response: {collector.messages}")    
+            logger.info(f"response: {collector.messages}, time: {time.time() - start_time:.2f}")    
             return response.json(collector.messages)
 
         return custom_webhook
