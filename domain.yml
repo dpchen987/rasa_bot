@@ -262,7 +262,6 @@ slots:
 
   slot_user_type:
     type: text
-    initial_value: 收件人
     influence_conversation: false
     mappings:
       - type: from_intent
