@@ -40,7 +40,6 @@ stories:
 - story: change_address + is_sender
   steps:
     - intent: is_sender
-    - action: utter_get                           # 给出确认话术
     - action: action_get_slot_core_intent_key     # 获取更址意图标记槽位
     - slot_was_set:
         - slot_core_intent_key: change_address    # 表明此前用户已经表达过更址意图了

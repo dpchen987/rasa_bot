@@ -28,7 +28,6 @@ stories:
 - story: return + is_sender
   steps:
     - intent: is_sender
-    - action: utter_get                          # 给出确认话术
     - action: action_get_slot_core_intent_key       # 获取退回意图标记槽位
     - slot_was_set:
         - slot_core_intent_key: return              # 表明此前用户已经表达过退回意图了
@@ -53,7 +52,6 @@ stories:
 - story: is_sender + return
   steps:
     - intent: is_sender
-    - action: utter_get                            # 给出确认话术
     - action: action_get_slot_core_intent_key
     - slot_was_set:
         - slot_core_intent_key: no_intent             # 表明此前用户没有表达过退回意图

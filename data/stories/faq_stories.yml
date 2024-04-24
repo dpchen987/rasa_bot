@@ -47,10 +47,10 @@ stories:
 - story: tip_off
   steps:
     - intent: tip_off
-    - action: utter_angry_appease_apologize
     - action: utter_angry_appease_threaten_complaint
     - action: action_session_start
 
+# 要区分收件人和发件人
 - story: check_weight
   steps:
     - intent: check_weight
@@ -72,7 +72,6 @@ stories:
     - intent: unable_to_contact_courier
     - action: utter_apologize_reply
     - action: utter_unable_to_contact_courier
-    - action: utter_urge_to_process_again
     - action: action_session_start
 
 # 联系不上网点
@@ -81,7 +80,6 @@ stories:
     - intent: unable_to_contact_net_station
     - action: utter_apologize_reply
     - action: utter_unable_to_contact_net_station
-    - action: utter_urge_to_process_again
     - action: action_session_start
 
 # 服务码
@@ -97,7 +95,6 @@ stories:
     - or:
       - intent: greet
       - intent: online
-    - action: utter_online
     - action: utter_help
     - action: action_session_start
 

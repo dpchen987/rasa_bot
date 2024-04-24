@@ -121,7 +121,6 @@ stories:
     - slot_was_set:
         - slot_phone_key: 1
     - action: utter_consult_invoice_2
-    - action: utter_register_has_signed_base
     - action: utter_guide_to_end
     - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
     - action: action_session_start
