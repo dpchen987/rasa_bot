@@ -118,6 +118,36 @@ class ValidatePredefinedSlots(ValidationAction):
                 return {'slot_name': name_ls[0]}
         return {'slot_name': ''}
     
+    async def extract_slot_user_type(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        # logger.info("--- extract slot user_type --->")
+        # from pprint import pprint
+        # pprint(tracker.slots)
+        intent_latest = tracker.get_intent_of_latest_message()
+        if intent_latest in ['is_receiver', 'home_delivery', 'ask_home_delivery','check_arrive_datetime', 'has_not_received','has_not_received_yet','urge_to_get_express', ]:
+            return {'slot_user_type': '收件人'}
+        if intent_latest in ['is_sender', 'urge_to_send_goods', 'faq/consult_send_item_door_pickup']:
+            return {'slot_user_type': '发件人'}
+
+        user_type = tracker.get_slot('slot_user_type')
+        # print('user_type',user_type)
+        # if True:
+        if not user_type:
+            intent_ranking = tracker.latest_message['intent_ranking']
+            # pprint(tracker.latest_message['intent_ranking'])
+            if len(intent_ranking) > 3:
+                for intent_dt in intent_ranking[:3]:
+                    # pprint(intent_dt)
+                    if intent_dt['name'] in ['is_receiver', 'home_delivery', 'ask_home_delivery']:
+                        return {'slot_user_type': '收件人'}
+                    if intent_dt['name'] in ['is_sender', 'urge_to_send_goods']:
+                        return {'slot_user_type': '发件人'}
+        # home_delivery
+        # faq/consult_send_item_door_pickup
+        # urge_to_send_goods
+            
     async def extract_slot_phone_collect(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
