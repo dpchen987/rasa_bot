@@ -142,7 +142,7 @@ intent_service_dt = {
  'package_lack': [['催件', '短少破损'], ['短少', '短少']],
  'package_lost': [['催件', '短少破损'], ['遗失', '派送遗失']],
  'pretend_sent': [],
- 'pretend_signed': [['催件', '签收未收到'], ['虚假签收', '未收到货且不知道在哪']],
+ 'pretend_signed': [['虚假签收', '未收到货且不知道在哪']],
  'reject_reason': [['快件查询', '拒收原因']],
  'request_sent_to_delivery_cabinet': [['快件查询', '核实地址'], ['催件', '核实签收地址']],
  'return': [['催件', '客户拒收'], ['其他', '催退回']],
