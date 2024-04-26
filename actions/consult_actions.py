@@ -453,6 +453,12 @@ class ActionDefaultFallbackConsultSendItem(Action):
             _event.append(SlotSet('slot_user_messages', user_messages))
         if phone_collect:
             _event.append(SlotSet('slot_phone_collect', phone_collect))
+
+        save_slots = ['slot_name', 'slot_user_type', 'slot_big_category', 'slot_small_category']
+        for slot in save_slots:
+            slot_value = tracker.get_slot(slot)
+            if slot_value: 
+                _event.append(SlotSet(slot, slot_value))
         # 计算出填槽失败次数和最近轮次机器人的回复
         failure_count, action_name_list = self._count_slot_failure_num(events)
 

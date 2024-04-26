@@ -9,6 +9,7 @@ from rasa_sdk import Tracker, ValidationAction, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.types import DomainDict
 from .logging import logger
+from .service_intent_map import *
 import sys
 sys.path.append("..")
 import global_config
@@ -67,7 +68,8 @@ class ValidatePredefinedSlots(ValidationAction):
                 user_messages[0]['express_id_piece'] = True
             user_messages.append(user_message)
             # if len(user_messages) > 10: user_messages = user_messages[-10:]
-            if len(user_messages) > 4 and not user_messages[0]['express_id']:
+            # if len(user_messages) > 4 and not user_messages[0]['express_id']:
+            if len(user_messages) > 4:
                 logger.info(f'{user_messages=}')
         return {'slot_user_messages': user_messages}
 
@@ -147,7 +149,43 @@ class ValidatePredefinedSlots(ValidationAction):
         # home_delivery
         # faq/consult_send_item_door_pickup
         # urge_to_send_goods
-            
+
+    async def extract_slot_big_category(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        # logger.info("--- extract slot big_category --->")
+        # import pprint
+        # pprint.pprint(tracker.latest_message)
+        intent_latest = tracker.get_intent_of_latest_message()
+        intent_service_ls = intent_service_dt.get(intent_latest, None)
+        if intent_service_ls:
+            big_category = tracker.get_slot('slot_big_category')
+            for service_ls in intent_service_ls:
+                # print(f'big_category--: {service_ls}')
+                if big_category in complaint_ls and service_ls[0] not in complaint_ls: continue
+                if big_category in urge_query_ls and service_ls[0] in consult_ls: continue
+                if big_category in urge_query_ls and service_ls[0] in urge_query_ls and urge_query_ls.index(big_category) > urge_query_ls.index(service_ls[0]): continue
+                logger.info(f'big_category: {service_ls}')
+                return {'slot_big_category': service_ls[0]}
+
+    async def extract_slot_small_category(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        # logger.info("--- extract slot small_category --->")
+        # import pprint
+        # pprint.pprint(tracker.latest_message)
+        big_category = tracker.get_slot('slot_big_category')
+        intent_latest = tracker.get_intent_of_latest_message()
+        intent_service_ls = intent_service_dt.get(intent_latest, None)
+        if big_category and intent_service_ls:
+            for service_ls in intent_service_ls:
+                # print(f'small_category: {service_ls}')
+                if service_ls[0] == big_category and len(service_ls) > 1:
+                    logger.info(f'small_category: {service_ls}')
+                    return {'slot_small_category': service_ls[1]}
+
     async def extract_slot_phone_collect(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
