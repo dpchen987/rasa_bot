@@ -55,62 +55,26 @@ class WdgjIO(InputChannel):
 
             #先对text进行首尾去除空格处理
             text = text.strip()
-
-            # servicer: 开头的是客服的语料
-            if text.startswith('servicer'):
-                if not metadata: metadata = {}
-                metadata['servicer'] = text.replace('servicer', '').strip(":：")
-                text = '语言模型，' + metadata['servicer']
-                await on_new_message(
-                    UserMessage(
-                        text,
-                        collector,
-                        sender_id,
-                        input_channel=input_channel,
-                        metadata=metadata,
-                    )
-                )
-            # 对"....."之类的无语意图不做处理
-            elif len(set(text) - {'。', '…', '.', '？', '?'}) == 0:
-                await on_new_message(
-                    UserMessage(
-                        text,
-                        collector,
-                        sender_id,
-                        input_channel=input_channel,
-                        metadata=metadata,
-                    )
-                )
-            else:
-                # 
-                yt_rep = yt_rep_pat.findall(text)
-                if yt_rep:
-                    for pat in yt_rep:
-                        text = text.replace(pat, 'yt')
-                # 处理三个5、一个8的情况
-                x_ge_y = x_ge_y_pat.findall(text)
-                if x_ge_y:
-                    for pat in x_ge_y:
-                        x = int(pat[0] if pat[0] not in numbers_dict else numbers_dict[pat[0]])
-                        y = pat[-1] if pat[-1] not in numbers_dict else numbers_dict[pat[-1]]
-                        text = text.replace(pat, x * y)
-                # 需要保留符号："-"(防止去除后字符串变为13或19位纯数字，从而误识别为运单号或订单号)
-                # comp = re.compile('[^A-Z^a-z^0-9^\u4e00-\u9fa5,，.。?？!！~～\[\]-]')
-                # text = comp.sub('', text).strip()
-
-                # # 去掉句尾的标点符号
-                # if len(text) > 0 and text[-1] in {',', '，', '.', '。', '?', '？', '!', '！', '~', '～'}:
-                #     text = text[:-1]
-
-                # 处理手机号码前面有“+86”的情况
-                # text = text.replace('+86', '')
-                # text = text.replace('圆通快递员', '快递员').replace('圆通快递', '').replace('圆通速递', '')\
-                #     .replace('圆通公司', '').replace('圆通总公司', '')
-
-                if len(text) > 0:
+            try:
+                # servicer: 开头的是客服的语料
+                if text.startswith('servicer'):
+                    if not metadata: metadata = {}
+                    metadata['servicer'] = text.replace('servicer', '').strip(":：")
+                    text = '语言模型，' + metadata['servicer']
                     await on_new_message(
                         UserMessage(
-                            text.lower(),
+                            text,
+                            collector,
+                            sender_id,
+                            input_channel=input_channel,
+                            metadata=metadata,
+                        )
+                    )
+                # 对"....."之类的无语意图不做处理
+                elif len(set(text) - {'。', '…', '.', '？', '?'}) == 0:
+                    await on_new_message(
+                        UserMessage(
+                            text,
                             collector,
                             sender_id,
                             input_channel=input_channel,
@@ -118,15 +82,53 @@ class WdgjIO(InputChannel):
                         )
                     )
                 else:
-                    await on_new_message(
-                        UserMessage(
-                            '亲亲，您好',
-                            collector,
-                            sender_id,
-                            input_channel=input_channel,
-                            metadata=metadata,
+                    # 
+                    yt_rep = yt_rep_pat.findall(text)
+                    if yt_rep:
+                        for pat in yt_rep:
+                            text = text.replace(pat, 'yt')
+                    # 处理三个5、一个8的情况
+                    x_ge_y = x_ge_y_pat.findall(text)
+                    if x_ge_y:
+                        for pat in x_ge_y:
+                            x = int(pat[0] if pat[0] not in numbers_dict else numbers_dict[pat[0]])
+                            y = pat[-1] if pat[-1] not in numbers_dict else numbers_dict[pat[-1]]
+                            text = text.replace(pat, x * y)
+                    # 需要保留符号："-"(防止去除后字符串变为13或19位纯数字，从而误识别为运单号或订单号)
+                    # comp = re.compile('[^A-Z^a-z^0-9^\u4e00-\u9fa5,，.。?？!！~～\[\]-]')
+                    # text = comp.sub('', text).strip()
+    
+                    # # 去掉句尾的标点符号
+                    # if len(text) > 0 and text[-1] in {',', '，', '.', '。', '?', '？', '!', '！', '~', '～'}:
+                    #     text = text[:-1]
+    
+                    # 处理手机号码前面有“+86”的情况
+                    # text = text.replace('+86', '')
+                    # text = text.replace('圆通快递员', '快递员').replace('圆通快递', '').replace('圆通速递', '')\
+                    #     .replace('圆通公司', '').replace('圆通总公司', '')
+    
+                    if len(text) > 0:
+                        await on_new_message(
+                            UserMessage(
+                                text.lower(),
+                                collector,
+                                sender_id,
+                                input_channel=input_channel,
+                                metadata=metadata,
+                            )
                         )
-                    )
+                    else:
+                        await on_new_message(
+                            UserMessage(
+                                '亲亲，您好',
+                                collector,
+                                sender_id,
+                                input_channel=input_channel,
+                                metadata=metadata,
+                            )
+                        )
+            except Exception as e:
+                logger.exception(f"exception: {request.json} {e}")
             logger.info(f"response: {collector.messages}, time: {time.time() - start_time:.2f}")    
             return response.json(collector.messages)
 
