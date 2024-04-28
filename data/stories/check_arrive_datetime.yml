@@ -9,4 +9,3 @@ stories:
     - active_loop: collect_express_id_form
     - active_loop: null
     - action: action_check_arrive_datetime
-    - action: action_session_start

@@ -17,7 +17,6 @@ stories:
 #    - active_loop: collect_express_id_form
 #    - active_loop: null
     - action: utter_complaint_reply_6 # 问投诉原因
-    - action: action_session_start
 
 - story: complaint with context
   steps:
@@ -60,7 +59,6 @@ stories:
     - slot_was_set:
         - slot_phone_key: 1
     - action: utter_complaint_reply_8
-    - action: action_session_start
 
 - story: complaint with reason - has no phone number
   steps:
@@ -69,7 +67,6 @@ stories:
     - slot_was_set:
         - slot_phone_key: 0
     - action: utter_complaint_reply_5    # 要电话
-    - action: action_session_start
 
 
 # 重复说要投诉
@@ -91,7 +88,6 @@ stories:
     - slot_was_set:
         - slot_phone_key: 0
     - action: utter_complaint_reply_5    # 要电话
-    - action: action_session_start
 
 - story: complaint 2
   steps:
@@ -112,4 +108,3 @@ stories:
         - slot_phone_key: 1
     - action: utter_apologize_reply      # 道歉
     - action: utter_complaint_reply_2    # 投诉安抚
-    - action: action_session_start

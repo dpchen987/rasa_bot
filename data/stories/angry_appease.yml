@@ -18,7 +18,6 @@ stories:
         - slot_angry_count_key: 1
     - action: utter_angry_appease_apologize
     - action: utter_angry_appease_processing
-    - action: action_session_start
 
 # 不接受道歉
 - story: not_accept_apology 1
@@ -28,7 +27,6 @@ stories:
     - slot_was_set:
         - slot_angry_count_key: 1
     - action: utter_angry_appease_processing
-    - action: action_session_start
 
 - story: angry 2
   steps:
@@ -44,7 +42,6 @@ stories:
         - slot_angry_count_key: 2
     - action: utter_apologize_reply
     - action: utter_angry_appease_understand
-    - action: action_session_start
 
 - story: not_accept_apology 2
   steps:
@@ -53,7 +50,6 @@ stories:
     - slot_was_set:
         - slot_angry_count_key: 2
     - action: utter_angry_appease_understand
-    - action: action_session_start
 
 - story: angry 3
   steps:
@@ -68,7 +64,6 @@ stories:
     - slot_was_set:
         - slot_angry_count_key: 3
     - action: utter_angry_appease_threaten_complaint
-    - action: action_session_start
 
 - story: not_accept_apology 3
   steps:
@@ -77,7 +72,6 @@ stories:
     - slot_was_set:
         - slot_angry_count_key: 3
     - action: utter_angry_appease_threaten_complaint
-    - action: action_session_start
 
 - story: angry 4 and greater than 4
   steps:
@@ -93,7 +87,6 @@ stories:
     - slot_was_set:
         - slot_angry_count_key: 100
     - action: utter_angry_appease_dont_angry
-    - action: action_session_start
 
 - story: not_accept_apology 4 and greater than 4
   steps:
@@ -103,7 +96,6 @@ stories:
     - slot_was_set:
         - slot_angry_count_key: 100
     - action: utter_angry_appease_dont_angry
-    - action: action_session_start
 
 # 骂人
 - story: swearing 1
@@ -114,7 +106,6 @@ stories:
         - slot_swearing_count_key: 1
     - action: utter_angry_appease_swearing_1
     - action: utter_angry_appease_processing
-    - action: action_session_start
 
 - story: swearing 2
   steps:
@@ -124,7 +115,6 @@ stories:
         - slot_swearing_count_key: 2
     - action: utter_angry_appease_swearing_1
     - action: utter_angry_appease_understand
-    - action: action_session_start
 
 - story: swearing 3
   steps:
@@ -133,7 +123,6 @@ stories:
     - slot_was_set:
         - slot_swearing_count_key: 3
     - action: utter_angry_appease_swearing_2
-    - action: action_session_start
 
 - story: swearing 4
   steps:
@@ -142,7 +131,6 @@ stories:
     - slot_was_set:
         - slot_swearing_count_key: 4
     - action: utter_angry_appease_swearing_2
-    - action: action_session_start
 
 - story: swearing 5 and greater than 5
   steps:
@@ -152,4 +140,3 @@ stories:
     - slot_was_set:
         - slot_swearing_count_key: 100
     - action: utter_angry_appease_swearing
-    - action: action_session_start

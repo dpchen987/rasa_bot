@@ -871,7 +871,7 @@ actions:
   - action_form_count_rollback
   - action_consult_station_address
   - action_set_slot_user_type_key
-  - action_session_start
+  # - action_session_start
   - action_return_first_sentence
   - action_intent_count
   - action_check_workorder

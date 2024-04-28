@@ -10,7 +10,6 @@ stories:
     - active_loop: collect_express_id_form
     - active_loop: null
     - action: action_change_address_or_not
-    - action: action_session_start
 
 # version 2.0
 #  用户只说「地址错了」，需要先澄清是用户写错地址了，还是快递发错地方了
@@ -18,7 +17,6 @@ stories:
   steps:
     - intent: address_is_wrong
     - action: utter_write_wrong_or_send_wrong_11
-    - action: action_session_start
 
 ### 声明客服无法修改
 - story: change address + has singed
@@ -34,7 +32,6 @@ stories:
     - action: utter_change_address_reply_6       # 声明客服无法修改
     - action: action_confirm_set                 # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
     - action: action_set_slot_core_intent        # 对更址意图进行标记
-    - action: action_session_start
 
 # 表明发件人身份(在表达过更址意图之后)
 - story: change_address + is_sender
@@ -48,7 +45,6 @@ stories:
     - active_loop: null
     - action: action_consult_send_station_info    # 给出发件网点信息
     - action: utter_change_address_reply_8        # 请客户联系上述网点
-    - action: action_session_start
 
 # 表明收件人身份(在表达过更址意图之后)
 - story: change_address + is_receiver
@@ -58,7 +54,6 @@ stories:
     - slot_was_set:
         - slot_is_receiver_key: change_address                 # 表明此前用户已经表达过更址意图了
     - action: utter_change_address_reply_6
-    - action: action_session_start
 
 # 发件人更址
 - story: change_address 1
@@ -78,7 +73,6 @@ stories:
     - active_loop: null
     - action: action_consult_send_station_info        # 给出发件网点信息
     - action: utter_change_address_reply_8            # 请客户联系上述网点
-    - action: action_session_start
 
 - story: insist to change address
   steps:
@@ -100,7 +94,6 @@ stories:
     - action: utter_register_has_signed_appease    # 登记完成话术
     - action: utter_guide_to_end_has_workorder     # 是否还有其他问题
     - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
-    - action: action_session_start
 
 - story: insist to change address
   steps:
@@ -120,7 +113,6 @@ stories:
         - slot_phone_key: 0
     - action: utter_change_address_reply_7  # 声明不一定更址成功并引导联系商家
     - action: utter_ask_phone_appease       # 要电话
-    - action: action_session_start
 
 # 公共流程
 - story: change_address base
@@ -147,7 +139,6 @@ stories:
         - slot_sign_status_key: hasSigned        # 已签收
     - action: utter_change_address_reply_1       # 已签收安抚
     - action: action_confirm_set                 # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
 
 # 运输途中，声明无法修改
 - story: change address + on the way + statement
@@ -161,7 +152,6 @@ stories:
     - action: utter_register_has_signed_appease    # 登记完成话术
     - action: utter_guide_to_end_has_workorder    # 是否还有其他问题
     - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
-    - action: action_session_start
 
 - story: change address + on the way + statement
   steps:
@@ -172,7 +162,6 @@ stories:
         - slot_phone_key: 0
     - action: utter_change_address_reply_5  # 声明不一定更址成功并引导联系商家
     - action: utter_ask_phone_appease    # 要电话
-    - action: action_session_start
 
 - story: insist to change address
   steps:
@@ -192,7 +181,6 @@ stories:
     - action: utter_register_has_signed_appease    # 登记完成话术
     - action: utter_guide_to_end_has_workorder     # 是否还有其他问题
     - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
-    - action: action_session_start
 
 - story: insist to change address
   steps:
@@ -210,4 +198,3 @@ stories:
         - slot_phone_key: 0
     - action: utter_change_address_reply_7  # 声明不一定更址成功并引导联系商家
     - action: utter_ask_phone_appease       # 要电话
-    - action: action_session_start

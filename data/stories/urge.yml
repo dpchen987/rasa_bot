@@ -38,7 +38,6 @@ stories:
     - active_loop: collect_express_id_form
     - active_loop: null
     - action: action_urge
-    - action: action_session_start
 
 
 # 多次催。2-5次催需要检查是否登记，没登记的话引导登记。
@@ -53,7 +52,6 @@ stories:
     - action: utter_urge_appease_reply_2  # 安抚话术2
     - action: utter_ask_good_comments     # 要好评
     - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
-    - action: action_session_start
 
 - story: urge 2
   steps:
@@ -65,7 +63,6 @@ stories:
         - slot_phone_key: 0
     - action: utter_urge_appease_reply_2  # 安抚话术2
     - action: utter_ask_phone_appease     # 要电话
-    - action: action_session_start
 
 - story: urge 3
   steps:
@@ -78,7 +75,6 @@ stories:
     - action: utter_urge_appease_reply_3  # 安抚话术3
     - action: utter_ask_good_comments     # 要好评
     - action: action_set_slot_ask_comments      # 对要好评话术进行标记，之后用户如果说“好的/ok”，则推荐谢谢/再见话术
-    - action: action_session_start
 
 - story: urge 3
   steps:
@@ -90,7 +86,6 @@ stories:
         - slot_phone_key: 0
     - action: utter_urge_appease_reply_3  # 安抚话术3
     - action: utter_ask_phone_appease     # 要电话
-    - action: action_session_start
 
 - story: urge 4
   steps:
@@ -101,7 +96,6 @@ stories:
     - slot_was_set:
         - slot_phone_key: 1
     - action: utter_urge_appease_reply_4  # 安抚话术4
-    - action: action_session_start
 
 - story: urge 4
   steps:
@@ -113,7 +107,6 @@ stories:
         - slot_phone_key: 0
     - action: utter_urge_appease_reply_4  # 安抚话术4
     - action: utter_ask_phone_appease     # 要电话
-    - action: action_session_start
 
 - story: urge 5
   steps:
@@ -124,7 +117,6 @@ stories:
     - slot_was_set:
         - slot_phone_key: 1
     - action: utter_urge_appease_reply_5  # 安抚话术5
-    - action: action_session_start
 
 - story: urge 5
   steps:
@@ -136,7 +128,6 @@ stories:
         - slot_phone_key: 0
     - action: utter_urge_appease_reply_5  # 安抚话术5
     - action: utter_ask_phone_appease     # 要电话
-    - action: action_session_start
 
 - story: urge 6 and greater than 6
   steps:
@@ -145,4 +136,3 @@ stories:
     - slot_was_set:
         - slot_urge_count_key: 100
     - action: utter_urge_appease_reply_5  # 安抚话术5
-    - action: action_session_start

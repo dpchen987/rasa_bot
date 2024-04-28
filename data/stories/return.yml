@@ -9,7 +9,6 @@ stories:
     - active_loop: collect_express_id_form
     - active_loop: null
     - action: action_return_or_not
-    - action: action_session_start
 
 ### 声明无法退回(收件人)
 - story: return + onTheWay + has phone
@@ -22,7 +21,6 @@ stories:
     - action: utter_return_reply_5                 # 声明无法退回
     - action: action_confirm_set                   # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
     - action: action_set_slot_core_intent         # 对退回意图进行标记
-    - action: action_session_start
 
 # 表明发件人身份(在表达过退回意图之后)
 - story: return + is_sender
@@ -36,7 +34,6 @@ stories:
     - active_loop: null
     - action: action_consult_send_station_info        # 给出发件网点信息
     - action: utter_return_reply_11                   # 请客户联系上述网点
-    - action: action_session_start
 
 # 表明收件人身份(在表达过退回意图之后)
 - story: return + is_receiver
@@ -46,7 +43,6 @@ stories:
     - slot_was_set:
         - slot_is_receiver_key: return                 # 表明此前用户已经表达过退回意图了
     - action: utter_return_reply_6
-    - action: action_session_start
 
 # 表明发件人身份(在表达退回或者更址意图之前，主要用于收集slot_user_type槽位信息)
 - story: is_sender + return
@@ -55,7 +51,6 @@ stories:
     - action: action_get_slot_core_intent_key
     - slot_was_set:
         - slot_core_intent_key: no_intent             # 表明此前用户没有表达过退回意图
-    - action: action_session_start
 
 # 发件人退货
 - story: return 1
@@ -73,7 +68,6 @@ stories:
     - action: action_set_slot_core_intent
     - action: action_consult_send_station_info        # 给出发件网点信息
     - action: utter_return_reply_11                   # 请客户联系上述网点
-    - action: action_session_start
 
 - story: has contacted
   steps:
@@ -95,7 +89,6 @@ stories:
     - action: utter_register_has_signed_appease    # 登记完成话术
     - action: utter_guide_to_end_has_workorder    # 是否还有其他问题
     - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
-    - action: action_session_start
 
 - story: has contacted
   steps:
@@ -115,7 +108,6 @@ stories:
         - slot_phone_key: 0
     - action: utter_return_reply_7    # 声明不一定可以退回成功 解释可能的退回过程
     - action: utter_ask_phone_appease    # 要电话
-    - action: action_session_start
 
 
 ### 已签收
@@ -134,7 +126,6 @@ stories:
         - slot_sign_status_key: hasSigned    # 已签收
     - action: utter_return_reply_1         # 已签收安抚
     - action: action_confirm_set          # 这里的confirm意图不需要登记，需要利用辅助词槽标记一下
-    - action: action_session_start
 
 # 中转中
 - story: insist to return
@@ -157,7 +148,6 @@ stories:
     - action: utter_register_has_signed_appease    # 登记完成话术
     - action: utter_guide_to_end_has_workorder    # 是否还有其他问题
     - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
-    - action: action_session_start
 
 - story: insist to return
   steps:
@@ -177,7 +167,6 @@ stories:
         - slot_phone_key: 0
     - action: utter_return_reply_6    # 声明不一定可以退回成功 解释可能的退回过程
     - action: utter_ask_phone_appease    # 要电话
-    - action: action_session_start
 
 # 联系过了
 - story: insist to return
@@ -198,7 +187,6 @@ stories:
     - action: utter_register_has_signed_appease    # 登记完成话术
     - action: utter_guide_to_end_has_workorder    # 是否还有其他问题
     - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
-    - action: action_session_start
 
 - story: insist to return
   steps:
@@ -216,4 +204,3 @@ stories:
         - slot_phone_key: 0
     - action: utter_return_reply_7    # 声明不一定可以退回成功 解释可能的退回过程
     - action: utter_ask_phone_appease    # 要电话
-    - action: action_session_start

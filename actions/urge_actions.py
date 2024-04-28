@@ -47,7 +47,7 @@ class ActionUrge(Action):
                 dispatcher.utter_message(response='utter_register_is_signing')
                 dispatcher.utter_message(response='utter_register_has_signed_base')
                 dispatcher.utter_message(response='utter_guide_to_end_has_workorder')
-                dispatcher.utter_message(response='action_session_start')
+                # dispatcher.utter_message(response='action_session_start')
 
                 # 对该流程进行分类，供自动登记工单中的大小类自动识别使用
                 dispatcher.utter_message(json_message={"story": "urge"})
@@ -56,7 +56,7 @@ class ActionUrge(Action):
             else:
                 # dispatcher.utter_message(response='utter_apologize_reply')
                 dispatcher.utter_message(response='utter_ask_phone_appease')
-                dispatcher.utter_message(response='action_session_start')
+                # dispatcher.utter_message(response='action_session_start')
 
                 # 对该流程进行分类，供自动登记工单中的大小类自动识别使用
                 dispatcher.utter_message(json_message={"story": "urge"})

@@ -19,7 +19,6 @@ stories:
     - action: utter_register_has_signed_appease    # 登记成功
     - action: utter_guide_to_end_has_workorder    # 结束前询问
     - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
-    - action: action_session_start
 
 - story: urge_to_get_express, has no number
   steps:
@@ -28,7 +27,6 @@ stories:
     - slot_was_set:
         - slot_phone_key: 0
     - action: utter_ask_phone_appease    # 要电话，安抚
-    - action: action_session_start
 
 
 
@@ -51,7 +49,6 @@ stories:
     - action: utter_register_has_signed_appease    # 登记成功
     - action: utter_guide_to_end_has_workorder    # 结束前询问
     - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
-    - action: action_session_start
 
 - story: urge_to_get_express, has no number
   steps:
@@ -60,4 +57,3 @@ stories:
     - slot_was_set:
         - slot_phone_key: 0
     - action: utter_ask_phone_appease    # 要电话，安抚
-    - action: action_session_start

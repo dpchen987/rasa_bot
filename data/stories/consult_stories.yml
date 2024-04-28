@@ -6,7 +6,6 @@ stories:
   steps:
     - intent: consult_send_item
     - action: action_consult_send_item
-    - action: action_session_start
 
 # 查网点信息(地址和电话,已经签收，则发送派件网点信息)
 - story: consult_station_info
@@ -22,7 +21,6 @@ stories:
     - slot_was_set:
         - slot_sign_status_key: hasSigned           # 已签收
     - action: action_consult_receive_station_info
-    - action: action_session_start
 
 # 查网点信息(地址和电话,未签收，则发送发件网点信息)
 - story: consult_station_info
@@ -39,7 +37,6 @@ stories:
         - slot_sign_status_key: onTheWay            # 未签收
     - action: action_consult_send_station_info
     - action: utter_return_consult_station_info
-    - action: action_session_start
 
 # 查网点信息(地址和电话，默认情况，则发送派件网点信息)
 - story: consult_station_info
@@ -52,7 +49,6 @@ stories:
     - slot_was_set:
         - slot_core_intent_key: no_intent
     - action: action_consult_receive_station_info
-    - action: action_session_start
 
 # 查发件网点信息(地址和电话)
 - story: consult_send_station_info
@@ -62,7 +58,6 @@ stories:
     - active_loop: collect_express_id_form
     - active_loop: null
     - action: action_consult_send_station_info
-    - action: action_session_start
 
 # 查驿站(自提点)信息(地址电话)
 - story: story_consult_post_info
@@ -72,7 +67,6 @@ stories:
     - active_loop: collect_express_id_form
     - active_loop: null
     - action: action_consult_post_info
-    - action: action_session_start
 
 # 查件-查快递员电话
 - story: story_consult_have_expressman_phone
@@ -82,7 +76,6 @@ stories:
     - active_loop: collect_express_id_form
     - active_loop: null
     - action: action_consult_expressman_phone
-    - action: action_session_start
 
 ## 查件-快递员电话流程(运单号填槽失败)
 #- story: story_consult_expressman_phone
@@ -94,7 +87,6 @@ stories:
 #    - action: action_deactivate_loop
 #    - active_loop: null
 #    - action: action_consult_expressman_phone
-#    - action: action_session_start
 
 # 咨询发票（首次）
 - story: story_consult_invoice
@@ -107,7 +99,6 @@ stories:
     - action: utter_guide_to_end
     - action: action_set_slot_core_intent          # 对咨询发票意图进行标记
 #    - action: action_set_slot_guide_to_end         # 对引导结束话术进行标记 ----- 这里不需要
-    - action: action_session_start
 
 # 咨询发票（第二次或多次要发票，有电话）
 - story: story_consult_invoice
@@ -123,7 +114,6 @@ stories:
     - action: utter_consult_invoice_2
     - action: utter_guide_to_end
     - action: action_set_slot_guide_to_end          # 对引导结束话术进行标记
-    - action: action_session_start
 
 # 咨询发票（第二次或多次要发票，且无电话）
 - story: story_consult_invoice
@@ -138,4 +128,3 @@ stories:
         - slot_phone_key: 0
     - action: utter_consult_invoice_2
     - action: utter_ask_phone_base
-    - action: action_session_start
