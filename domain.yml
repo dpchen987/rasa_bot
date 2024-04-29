@@ -113,6 +113,7 @@ intents:
   - predict_call_end
   - phone_number_required
   - incorrect_language
+  - useless_intent
 
 entities:
   - user_messages:
