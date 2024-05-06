@@ -7,7 +7,7 @@ DEBUG_MOD = False
 DEBUG_MOD = True
 # 运行目录
 WORK_PATH = os.path.dirname(__file__)
-log_queue = multiprocessing.Queue(-1)
+log_queue1 = multiprocessing.Queue(-1)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,  # 是否禁用已经存在的日志器
@@ -47,7 +47,7 @@ LOGGING = {
     #        'level': 'INFO',
     #        'class': 'logging.handlers.QueueHandler', 
     #        'formatter': 'standard',
-    #        'args': (log_queue,)
+    #        'args': (log_queue1,)
     #    },
         # 'asr_file': {  # 向文件中输出日志
         #     'level': 'DEBUG' if DEBUG_MOD else 'WARNING',
@@ -81,18 +81,18 @@ LOGGING = {
     }
 }
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-queue_handler = logging.handlers.QueueHandler(log_queue)
+queue_handler = logging.handlers.QueueHandler(log_queue1)
 queue_handler.setFormatter(formatter)
 logging.config.dictConfig(LOGGING)
 logger = logging.getLogger('rasa_logger')
 logger.addHandler(queue_handler)
 
-# log_queue = multiprocessing.Queue(-1)
+# log_queue1 = multiprocessing.Queue(-1)
 # def setup_logging():
 #     # 创建一个日志队列
-#     # log_queue = multiprocessing.Queue()
+#     # log_queue1 = multiprocessing.Queue()
 #     # 创建一个队列处理程序，用于将日志消息推送到队列中
-#     queue_handler = logging.handlers.QueueHandler(log_queue)
+#     queue_handler = logging.handlers.QueueHandler(log_queue1)
 #     # 创建一个日志记录器并设置其级别
 #     logger = logging.getLogger('action_logger')
 #     logger.setLevel(logging.INFO)
@@ -117,5 +117,5 @@ def listener_process(queue):
     listener = logging.handlers.QueueListener(queue, handler)
     return listener
 
-listener = listener_process(log_queue)
+listener = listener_process(log_queue1)
 listener.start()

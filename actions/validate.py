@@ -114,6 +114,7 @@ class ValidatePredefinedSlots(ValidationAction):
         intent_latest = tracker.get_intent_of_latest_message()
         if intent_latest in ['inform', ]:
             message_text = tracker.latest_message['text']
+            print(pseg.lcut(message_text))
             name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr' and pr.word[0] in xing and pr.word[-1] not in '区村庄镇乡屯港家路']
             if name_ls:
                 logger.info(f"sender_id:{tracker.sender_id} pseg_nr: {name_ls}")
@@ -186,6 +187,24 @@ class ValidatePredefinedSlots(ValidationAction):
                     logger.info(f'small_category: {service_ls}')
                     return {'slot_small_category': service_ls[1]}
 
+    async def extract_slot_work_type(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        # logger.info("--- extract slot work_type --->")
+        # import pprint
+        # pprint.pprint(tracker.latest_message)
+        big_category = tracker.get_slot('slot_big_category')
+        if big_category:
+            work_type = tracker.get_slot('slot_work_type')
+            print(big_category, work_type)
+            if big_category in consult_ls and work_type != '咨询':
+                return {'slot_work_type': '咨询'}
+            if big_category in urge_query_ls and work_type != '催查件':
+                return {'slot_work_type': '催查件'}
+            if big_category in complaint_ls and work_type != '投诉':
+                return {'slot_work_type': '投诉'}
+            
     async def extract_slot_phone_collect(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:

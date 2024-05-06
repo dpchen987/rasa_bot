@@ -954,7 +954,6 @@ responses:
  # 谢谢
   utter_thanks:
     - text: 不客气，这是我们应该做的
-    - text: 不客气！很高兴为您服务
 
   # 道歉
   utter_apologize_reply:

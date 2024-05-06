@@ -13,7 +13,7 @@ pipeline:
 - name: DIETClassifier
   entity_recognition: False
   constrain_similarities: True
-  epochs: 15
+  epochs: 12
 #  hidden_layers_sizes: [256,128]
 #  text: [256, 128] # 默认[]
   embedding_dimension: 128 # 默认20
