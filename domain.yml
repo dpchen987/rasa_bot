@@ -114,6 +114,8 @@ intents:
   - phone_number_required
   - incorrect_language
   - useless_intent
+  - item_price_required
+  - delivery_address_required
 
 entities:
   - user_messages:
@@ -848,6 +850,20 @@ slots:
     influence_conversation: false
     mappings:
       - type: custom
+
+  slot_item_price:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  slot_delivery_address:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+
 
 forms:
   collect_express_id_form:
