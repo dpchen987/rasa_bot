@@ -23,6 +23,7 @@ dname_pat = re.compile("上官|欧阳|司马")
 exp_numbers = re.compile(r"[yY][tT]+[dg]?[\d 零令林一幺妖二两三四五六七八九]*")
 phone_numbers = re.compile(r"(?<![A-Za-z\d])[1幺妖][3-9三四五六七八九][\d 零令林一幺妖二两三四五六七八九]{,9}(?![A-Za-z\d])")
 repat_numbers = re.compile(r"(?<![点:月块\d零一幺妖二两三四五六七八九])[\d零令林一幺妖二两三四五六七八九][\d 零令林一幺妖二两三四五六七八九]*[\d零令林一幺妖二两三四五六七八九](?![点:号小天月块个位\d零一幺妖二两三四五六七八九])")
+repat_money = re.compile(r"(?<![点:月块\d零一幺妖二两三四五六七八九])[\d零令林一幺妖二两三四五六七八九][\d零令林一幺妖二两三四五六七八九]*[\d零令林一幺妖二两三四五六七八九](?![点:号小天月个位\d零一幺妖二两三四五六七八九])")
 xing = '王张李刘陈杨黄周胡赵吴徐孙朱宋郭罗林曹马高何梁郑韩谢唐董夏傅冯许袁薛姚于彭肖曾谭卢苏贾余毛汪邓戴江丁蔡叶程闫钟廖田任姜范方潘杜魏沈熊金陆郝孔白崔吕邱秦蒋石史顾侯邵孟邹段钱汤黎常尹武乔贺赖龚庞樊殷施翟倪严牛陶俞章鲁葛韦毕聂焦向柳邢骆岳齐梅庄涂祁耿詹关费纪靳童欧甄裴屈鲍覃霍司柯阮房'
 
 numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
@@ -52,7 +53,7 @@ class ValidatePredefinedSlots(ValidationAction):
         user_messages = str(tracker.get_slot('slot_user_messages'))
         user_messages = eval(user_messages)
         message_text = tracker.latest_message['text']
-        user_message = {'intent': tracker.get_intent_of_latest_message(), 'text':message_text, 'usr_type': 1 if message_text.startswith('模型') else 0}
+        user_message = {'intent': tracker.get_intent_of_latest_message(), 'text':message_text, 'usr_type': 1 if message_text.startswith('语言模型') else 0}
         # logger.info(tracker.latest_message)
 
         if not user_messages:
@@ -232,6 +233,36 @@ class ValidatePredefinedSlots(ValidationAction):
         #             return
         #         if collect_phone_pat1.search(inf['text']): return
         #     return {'slot_phone_collect': False}
+            
+    async def extract_slot_item_price(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 保存最近的n个用户输入信息
+        # logger.info("--- extract slot item_price --->")
+        # intent_latest = tracker.get_intent_of_latest_message()
+        text_latest = tracker.latest_message['text']
+        # if intent_latest in ['item_price_required']:
+        #     exp_money_mth = repat_money.search(text_latest)
+        #     if exp_money_mth:
+        #         item_price = exp_money_mth.group()
+        #         logger.info(f'sender_id:{tracker.sender_id} {text_latest} item_price:{item_price}')
+        #         return {'slot_item_price': item_price}
+            
+        if not tracker.get_slot('slot_item_price'):
+            user_messages = eval(str(tracker.get_slot('slot_user_messages')))
+            last2_srv_intend = []
+            for dt in reversed(user_messages):
+                if dt['usr_type'] == 1:
+                    last2_srv_intend.append(dt['intent'])
+                if len(last2_srv_intend) >= 2: break
+            # print(last2_srv_intend, repat_money.search(text_latest))
+            if 'item_price_required' in last2_srv_intend:
+                exp_money_mth = repat_money.search(text_latest)
+                if exp_money_mth:
+                    item_price = exp_money_mth.group()
+                    logger.info(f'sender_id:{tracker.sender_id} {text_latest} item_price:{item_price}')
+                    return {'slot_item_price': item_price}
+
 
     # 验证槽位
     def validate_slot_user_messages(

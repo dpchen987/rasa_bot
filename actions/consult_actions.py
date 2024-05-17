@@ -454,7 +454,7 @@ class ActionDefaultFallbackConsultSendItem(Action):
         if phone_collect:
             _event.append(SlotSet('slot_phone_collect', phone_collect))
 
-        save_slots = ['slot_name', 'slot_user_type', 'slot_big_category', 'slot_small_category', 'slot_work_type']
+        save_slots = ['slot_name', 'slot_user_type', 'slot_big_category', 'slot_small_category', 'slot_work_type', 'slot_item_price']
         for slot in save_slots:
             slot_value = tracker.get_slot(slot)
             if slot_value: 
