@@ -17,6 +17,8 @@ rules:
     - intent: input_servicer
     - intent: phone_number_required
     - intent: incorrect_language
+    - intent: item_price_required
+    - intent: delivery_address_required
   - action: action_input_servicer
 
 # 客服通话文本处理2
