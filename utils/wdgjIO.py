@@ -68,6 +68,7 @@ class WdgjIO(InputChannel):
                             sender_id,
                             input_channel=input_channel,
                             metadata=metadata,
+                            call_time=start_time,
                         )
                     )
                 # 对"....."之类的无语意图不做处理
@@ -79,6 +80,7 @@ class WdgjIO(InputChannel):
                             sender_id,
                             input_channel=input_channel,
                             metadata=metadata,
+                            call_time=start_time,
                         )
                     )
                 else:
@@ -115,6 +117,7 @@ class WdgjIO(InputChannel):
                                 sender_id,
                                 input_channel=input_channel,
                                 metadata=metadata,
+                                call_time=start_time,
                             )
                         )
                     else:
@@ -125,6 +128,7 @@ class WdgjIO(InputChannel):
                                 sender_id,
                                 input_channel=input_channel,
                                 metadata=metadata,
+                                call_time=start_time,
                             )
                         )
             except Exception as e:
