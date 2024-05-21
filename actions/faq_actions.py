@@ -204,6 +204,7 @@ class ActionInputServicer(Action):
         user_messages = tracker.get_slot('slot_user_messages')
         phone_collect = tracker.get_slot('slot_phone_collect')
         gender = tracker.get_slot('slot_gender')
+        name = tracker.get_slot('slot_name')
         # if express_id_piece:
         #     _event.append(SlotSet('slot_express_id_piece', express_id_piece))
         # if express_id:
@@ -214,4 +215,6 @@ class ActionInputServicer(Action):
             _event.append(SlotSet('slot_phone_collect', phone_collect))
         if gender:
             _event.append(SlotSet('slot_gender', gender))
+        if name:
+            _event.append(SlotSet('slot_name', name))
         return [UserUtteranceReverted()] + _event

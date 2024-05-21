@@ -14,6 +14,7 @@ import sys
 sys.path.append("..")
 import global_config
 
+gender_pat = re.compile(r"先生|小姐|女士")
 express_id_pat1 = re.compile("(?<![A-Za-z])g\\d{9,13}")
 express_id_pat2 = re.compile("(?<![A-Za-z])ytd?\\d{12,14}")
 express_id_pat3 = re.compile("(?<![A-Za-z])ytg\\d{11,13}")
@@ -82,7 +83,7 @@ class ValidatePredefinedSlots(ValidationAction):
         # import pprint
         # pprint.pprint(tracker.latest_message)
         intent_latest = tracker.get_intent_of_latest_message()
-        if intent_latest in ['predict_call_end', 'input_servicer', 'phone_number_required']:
+        if intent_latest in ['predict_call_end', 'input_servicer', 'phone_number_required','incorrect_language', 'item_price_required', 'delivery_address_required']:
             message_text = tracker.latest_message['text']
             if '女士' in message_text or '小姐' in message_text:
                 logger.info(f"sender_id:{tracker.sender_id} {message_text} slot_gender: 女士")
@@ -98,29 +99,37 @@ class ValidatePredefinedSlots(ValidationAction):
         # logger.info("--- extract slot name --->")
         # import pprint
         # pprint.pprint(tracker.latest_message)
-        entities = tracker.latest_message['entities']
-        name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and ent['value'][-1] not in '啊什么呃呢吧了姓名是怎吗啥呀我女士先生']
-        # if name and name[0].startswith('姓') and name[-1] in '啊什么呢吧了姓名吗啥呀':
-        #     logger.info(f"---invalid name : {name}")
-        #     return {'slot_name': None}
-        if name and name[0].startswith('姓'):
-            logger.info(f"sender_id:{tracker.sender_id} PERSON1: {name}")
-            return {'slot_name': name[-1]}
-        
-        name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and len(ent['value']) == 3 and ent['value'][0] in xing]
-        if name: 
-            logger.info(f"sender_id:{tracker.sender_id} PERSON2: {name}")
-            return {'slot_name': name[-1]}
-        
         intent_latest = tracker.get_intent_of_latest_message()
         if intent_latest in ['inform', ]:
-            message_text = tracker.latest_message['text']
-            print(pseg.lcut(message_text))
-            name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr' and pr.word[0] in xing and pr.word[-1] not in '区村庄镇乡屯港家路']
-            if name_ls:
-                logger.info(f"sender_id:{tracker.sender_id} pseg_nr: {name_ls}")
-                return {'slot_name': name_ls[0]}
-        return {'slot_name': ''}
+            entities = tracker.latest_message['entities']
+            name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and ent['value'][-1] not in '啊什么呃呢吧了姓名是怎吗啥呀你我女士先生']
+            # if name and name[0].startswith('姓') and name[-1] in '啊什么呢吧了姓名吗啥呀':
+            #     logger.info(f"---invalid name : {name}")
+            #     return {'slot_name': None}
+            if name and name[0].startswith('姓'):
+                logger.info(f"sender_id:{tracker.sender_id} PERSON1: {name}")
+                return {'slot_name': name[-1]}
+
+            name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and len(ent['value']) == 3 and ent['value'][0] in xing]
+            if name: 
+                logger.info(f"sender_id:{tracker.sender_id} PERSON2: {name}")
+                return {'slot_name': name[-1]}
+
+            # intent_latest = tracker.get_intent_of_latest_message()
+            if intent_latest in ['inform', ]:
+                message_text = tracker.latest_message['text']
+                print(pseg.lcut(message_text))
+                name_ls = [pr.word for pr in pseg.cut(message_text) if pr.flag == 'nr' and pr.word[0] in xing and pr.word[-1] not in '区村庄镇乡屯港家路']
+                if name_ls:
+                    logger.info(f"sender_id:{tracker.sender_id} pseg_nr: {name_ls}")
+                    return {'slot_name': name_ls[0]}
+        # return {'slot_name': ''}
+        slot_gender = tracker.get_slot('slot_gender')
+        if slot_gender:
+            slot_name = tracker.get_slot('slot_name')
+            name = slot_name if slot_name else ''
+            if not name: return {'slot_name': slot_gender}
+            if not gender_pat.search(name): return {'slot_name': name + slot_gender}
     
     async def extract_slot_user_type(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
@@ -299,7 +308,7 @@ class ValidatePredefinedSlots(ValidationAction):
             elif dname and len(slot_name) > 2 and slot_name[-2:] in ['先生', '小姐', '女士']:
                 return {"slot_name": dname.group() + slot_name[-2:]}
         # 一般流程
-        if slot_name and len(slot_name) > 2 and slot_name[-2:] in ['先生', '小姐', '女士']:
+        if slot_name and len(slot_name) >= 2 and slot_name[-2:] in ['先生', '小姐', '女士']:
             return {"slot_name": slot_name}
         elif slot_name:
             print(slot_name.replace('姓', ''))

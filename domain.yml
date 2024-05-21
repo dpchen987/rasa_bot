@@ -250,8 +250,7 @@ slots:
     type: text
     influence_conversation: false
     mappings:
-      - type: from_entity
-        entity: PERSON
+      - type: custom
 
   slot_phone_key:
     type: categorical
