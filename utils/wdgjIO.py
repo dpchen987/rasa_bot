@@ -20,6 +20,8 @@ from .logging import logger
 x_ge_y_pat = re.compile(r"[1-6一二两三四五六]个[\d 零令林一幺妖二两三四五六七八九]")
 numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
 yt_rep_pat = re.compile(r"[yY] {,3}7")
+incrt_lang_pat = re.compile(r"[你他][妈]|神经|变态|[傻呆妈][逼bB蛋]|妈.{,4}[逼的]|[有毛]病|我[操靠草日]|[操日].{,3}[你他妈]|[死滚猪狗贱瞎聋傻嫖]|什么玩意|人渣|不要脸|狗日|算什么东西|闭嘴|没.{,3}脑子|智障|废话|更年期|你大爷|[瞎胡]扯|"
+                            r"邮[政局]|123[104]5|消.{,5}协|市民热线|媒体|报道|举报|曝光|无[聊语]|恶心|气死|倒霉|md|没.{,3}[眼耳脑]|脑.{,3}[坏病问题]|[真太好]烦|活该")
 # 目前rasa使用的IO，目的是对外界输入进行预处理
 class WdgjIO(InputChannel):
     def name(self) -> Text:
@@ -131,6 +133,12 @@ class WdgjIO(InputChannel):
                                 call_time=start_time,
                             )
                         )
+                # 不合规回复check
+                if collector.messages and collector.messages[-1].get('last_message'):
+                    last_message = collector.messages[-1].get('last_message')
+                    if last_message['intent_name'] == 'incorrect_language' and not incrt_lang_pat.search(last_message['text']):
+                        logger.info(f"incorrect_lang_skip: {request.json}")
+                        last_message['intent_name'] = 'incorrect_lang_skip'
             except Exception as e:
                 logger.exception(f"exception: {request.json} {e}")
             logger.info(f"response: {collector.messages}, time: {time.time() - start_time:.2f}")    
