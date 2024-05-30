@@ -1,0 +1,104 @@
+version: "3.1"
+
+# 流程意图小流程
+rules:
+
+#- rule: online
+#  steps:
+#    - intent: online
+
+- rule: check_client_name_phone_address
+  steps:
+    - intent: check_client_name_phone_address
+    - action: utter_check_client_name_phone_address
+
+- rule: cancel_complain
+  steps:
+    - intent: cancel_complain
+    - action: utter_cancel_complain
+
+# - rule: ask_express_id
+#   steps:
+#     - intent: ask_express_id
+#     - action: utter_ask_express_id
+
+- rule: query_register_or_not
+  steps:
+    - intent: query_register_or_not
+    - action: utter_query_register_or_not
+
+- rule: tip_off
+  steps:
+    - intent: tip_off
+    - action: utter_angry_appease_threaten_complaint
+
+# 要区分收件人和发件人
+- rule: check_weight
+  steps:
+    - intent: check_weight
+    - action: action_set_slot_core_intent   # 对查重量意图进行标记
+    - action: utter_check_weight
+
+# 没有给用户回电
+- rule: did_not_contact_customer
+  steps:
+    - intent: did_not_contact_customer
+    - action: utter_apologize_reply
+    - action: utter_urge_to_process_again
+
+# 联系不上快递员
+- rule: unable_to_contact_courier
+  steps:
+    - intent: unable_to_contact_courier
+    - action: utter_unable_to_contact_courier
+
+# 联系不上网点
+- rule: unable_to_contact_net_station
+  steps:
+    - intent: unable_to_contact_net_station
+    - action: utter_unable_to_contact_net_station
+
+# 服务码
+- rule: service_code
+  steps:
+    - intent: service_code
+    - action: utter_service_code
+
+# 打招呼
+- rule: greet
+  steps:
+    - or:
+      - intent: greet
+      - intent: online
+    - action: utter_help
+
+# 加盟
+- rule: join_in
+  steps:
+    - intent: join_in
+    - action: utter_join_in
+# 加盟驿站
+- rule: join_in_station
+  steps:
+    - intent: join_in_station
+    - action: utter_join_in_station
+# 新闻媒体采访
+- rule: media_inquiry
+  steps:
+    - intent: media_inquiry
+    - action: utter_media_inquiry
+# 公安法院取证
+- rule: police_inquiry
+  steps:
+    - intent: police_inquiry
+    - action: utter_police_inquiry
+# 商家/其他快递号码
+- rule: other_merchant_number
+  steps:
+    - intent: other_merchant_number
+    - action: utter_other_merchant_number
+# 快递监管询问
+- rule: express_supervision_inquiry
+  steps:
+    - intent: express_supervision_inquiry
+    - action: utter_express_supervision_inquiry

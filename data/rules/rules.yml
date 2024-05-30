@@ -2,23 +2,23 @@ version: "3.1"
 
 rules:
 # 在运单号表单激活状态下，对faq进行回滚
-- rule: form condition faq goback
-  condition:
-    - active_loop: collect_express_id_form
-  steps:
-    - intent: faq
-    - action: utter_faq
-    - action: action_faq_condition
+# - rule: form condition faq goback
+#   condition:
+#     - active_loop: collect_express_id_form
+#   steps:
+#     - intent: faq
+#     - action: utter_faq
+#     - action: action_faq_condition
 
 # 在运单号表单激活状态下，对分段的运单号数字做拼接
-- rule: form condition concat goback
-  condition:
-    - active_loop: collect_express_id_form
-  steps:
-    - intent: inform
-    - action: action_exp_piece_collect
-    - action: collect_express_id_form
-    - active_loop: collect_express_id_form
+# - rule: form condition concat goback
+#   condition:
+#     - active_loop: collect_express_id_form
+#   steps:
+#     - intent: inform
+#     - action: action_exp_piece_collect
+#     - action: collect_express_id_form
+#     - active_loop: collect_express_id_form
 
 # - rule: inform and intent is express id
 #   condition:
@@ -42,122 +42,121 @@ rules:
   # wait_for_user_input: false
 
 # 在运单号表单激活状态下，对表单填槽进行计数
-- rule: express id slot filling count
-  condition:
-    - active_loop: collect_express_id_form
-  steps:
-    - or:
-      - intent: consult_send_item
-      - intent: affirm
-      - intent: is_ok
-      - intent: deny
-      - intent: no_other_questions
-      - intent: has_contacted
-      - intent: cannot_contact_seller
-      - intent: ask_to_contact
-      - intent: unable_to_contact
-      - intent: byebye
-      - intent: change_address
-      - intent: write_wrong_address
-      - intent: if_can_change_address
-      - intent: address_is_wrong
-      - intent: check_arrive_datetime
-      - intent: check_sign_info
-      - intent: reject_reason
-      - intent: return_or_not
-      - intent: change_address_or_not
-      - intent: check_express_status
-      - intent: has_sent_or_not
-      - intent: pretend_sent
-      - intent: if_has_lost
-      - intent: no_logistics_info
-      - intent: urge
-      - intent: too_slow
-      - intent: urge_to_process
-      - intent: urge_to_send
-      - intent: sup_urge
-      - intent: ask_send_on_time
-      - intent: add_money
-      - intent: logistics_not_updated
-      - intent: send_wrong_address
-      - intent: has_not_received_yet
-      - intent: logistics_not_updated
-      - intent: send_wrong_address
-      - intent: add_money
-      - intent: has_not_received_yet
-      - intent: urge_to_send_goods
-      - intent: urge_to_get_express
-      - intent: has_not_received
-      - intent: specify_method_himself
-      - intent: specify_method_not_courier_station
-      - intent: request_sent_to_delivery_cabinet
-      - intent: specify_method_not_him_want_address
-      - intent: pretend_signed
-      - intent: request_to_contact_via_phone
-      - intent: request_to_register
-      - intent: unable_to_contact_net_station
-      - intent: unable_to_contact_courier
-      - intent: consult_exception_reason
-      - intent: cancel_to_send
-      - intent: complaint
-      - intent: complaint_logistics
-      - intent: complaint_courier
-      - intent: complaint_net_station
-      - intent: complaint_did_not_sent_to_doorstep
-      - intent: complaint_service
-      - intent: complaint_courier_station
-      - intent: complaint_customer_service
-      - intent: ask_code
-      - intent: ask_damages
-      - intent: return
-      - intent: consult_expressman_phone
-      - intent: consult_station_info
-      - intent: consult_send_station_info
-      - intent: consult_post_info
-      - intent: consult_invoice
-      - intent: consult_send_item
-      - intent: affirm_to_contact
-      - intent: home_delivery
-      - intent: package_damage
-      - intent: package_lack
-      - intent: package_lost
-      - intent: ask_home_delivery
-      - intent: provided_phone
-      - intent: do_not_provide_phone
-      - intent: ask_dont_call
-      - intent: ask_send_message
-      - intent: confirm_whose_phone
-      - intent: greet
-      - intent: angry
-      - intent: no_use
-      - intent: grumble_logistics_net_courier
-      - intent: not_accept_apology
-      - intent: swearing
-      - intent: threaten_complaint
-      - intent: not_arrive_threaten_complaint
-      - intent: not_process_threaten_complaint
-      - intent: is_ok_urge
-      - intent: when_to_contact
-      - intent: wait_for_a_moment
-      - intent: ask_reply_way
-      - intent: online
-      - intent: check_client_name_phone_address
-      - intent: cancel_complain
-      - intent: has_no_express_id
-      - intent: apologize
-      - intent: ask_express_id
-      - intent: other_express
-      - intent: is_ok_thanks
-      - intent: is_sender
-      - intent: query_register_or_not
-      - intent: is_receiver
-      - intent: tip_off
-      - intent: check_weight
-      - intent: did_not_contact_customer
-      - intent: service_code
-      - intent: hurry
-      - intent: join_in
-      - intent: ask_send_on_time
-    - action: action_form_count_rollback
-    - action: collect_express_id_form
-    - active_loop: collect_express_id_form
+# - rule: express id slot filling count
+#   condition:
+#     - active_loop: collect_express_id_form
+#   steps:
+#     - or:
+#       - intent: consult_send_item
+#       - intent: affirm
+#       - intent: is_ok
+#       - intent: deny
+#       - intent: no_other_questions
+#       - intent: has_contacted
+#       - intent: cannot_contact_seller
+#       - intent: ask_to_contact
+#       - intent: unable_to_contact
+#       - intent: byebye
+#       - intent: change_address
+#       - intent: write_wrong_address
+#       - intent: if_can_change_address
+#       - intent: address_is_wrong
+#       - intent: check_arrive_datetime
+#       - intent: check_sign_info
+#       - intent: reject_reason
+#       - intent: return_or_not
+#       - intent: change_address_or_not
+#       - intent: check_express_status
+#       - intent: has_sent_or_not
+#       - intent: pretend_sent
+#       - intent: if_has_lost
+#       - intent: no_logistics_info
+#       - intent: urge
+#       - intent: too_slow
+#       - intent: urge_to_process
+#       - intent: urge_to_send
+#       - intent: sup_urge
+#       - intent: ask_send_on_time
+#       - intent: add_money
+#       - intent: logistics_not_updated
+#       - intent: send_wrong_address
+#       - intent: has_not_received_yet
+#       - intent: logistics_not_updated
+#       - intent: send_wrong_address
+#       - intent: add_money
+#       - intent: has_not_received_yet
+#       - intent: urge_to_send_goods
+#       - intent: urge_to_get_express
+#       - intent: has_not_received
+#       - intent: specify_method_himself
+#       - intent: specify_method_not_courier_station
+#       - intent: request_sent_to_delivery_cabinet
+#       - intent: specify_method_not_him_want_address
+#       - intent: pretend_signed
+#       - intent: request_to_contact_via_phone
+#       - intent: request_to_register
+#       - intent: unable_to_contact_net_station
+#       - intent: unable_to_contact_courier
+#       - intent: consult_exception_reason
+#       - intent: cancel_to_send
+#       - intent: complaint
+#       - intent: complaint_logistics
+#       - intent: complaint_courier
+#       - intent: complaint_net_station
+#       - intent: complaint_did_not_sent_to_doorstep
+#       - intent: complaint_service
+#       - intent: complaint_courier_station
+#       - intent: complaint_customer_service
+#       - intent: ask_code
+#       - intent: ask_damages
+#       - intent: return
+#       - intent: consult_expressman_phone
+#       - intent: consult_station_info
+#       - intent: consult_send_station_info
+#       - intent: consult_post_info
+#       - intent: consult_invoice
+#       - intent: consult_send_item
+#       - intent: affirm_to_contact
+#       - intent: home_delivery
+#       - intent: package_damage
+#       - intent: package_lack
+#       - intent: package_lost
+#       - intent: ask_home_delivery
+#       - intent: provided_phone
+#       - intent: do_not_provide_phone
+#       - intent: ask_dont_call
+#       - intent: ask_send_message
+#       - intent: confirm_whose_phone
+#       - intent: greet
+#       - intent: angry
+#       - intent: no_use
+#       - intent: grumble_logistics_net_courier
+#       - intent: not_accept_apology
+#       - intent: swearing
+#       - intent: threaten_complaint
+#       - intent: not_arrive_threaten_complaint
+#       - intent: not_process_threaten_complaint
+#       - intent: is_ok_urge
+#       - intent: when_to_contact
+#       - intent: wait_for_a_moment
+#       - intent: ask_reply_way
+#       - intent: online
+#       - intent: check_client_name_phone_address
+#       - intent: cancel_complain
+#       - intent: has_no_express_id
+#       - intent: apologize
+#       - intent: ask_express_id
+#       - intent: is_ok_thanks
+#       - intent: is_sender
+#       - intent: query_register_or_not
+#       - intent: is_receiver
+#       - intent: tip_off
+#       - intent: check_weight
+#       - intent: did_not_contact_customer
+#       - intent: service_code
+#       - intent: hurry
+#       - intent: join_in
+#       - intent: ask_send_on_time
+#     - action: action_form_count_rollback
+#     - action: collect_express_id_form
+#     - active_loop: collect_express_id_form

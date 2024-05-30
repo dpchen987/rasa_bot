@@ -21,7 +21,6 @@ nlu:
       - 可以寄[书](entity_item)吗
       - [手机](entity_item)能不能发
       - 可以发[蜂蜜](entity_item)吗
-      - 可以发[香烟](entity_item)出去吗
       - 可以发[电视机](entity_item)吗
       - 可以寄[酒](entity_item)吗
       - [刀](entity_item)可以发吗
@@ -44,7 +43,6 @@ nlu:
       - 可以寄[面粉](entity_item)吗
       - 可以寄[小乌龟](entity_item)吗
       - 可以寄[雪糕](entity_item)吗
-      - 可以寄[烟](entity_item)吗
       - [发胶](entity_item)能邮寄吗
       - [户口本](entity_item)能发圆通吗
       - [活鸡](entity_item)可以寄吗
@@ -59,7 +57,6 @@ nlu:
       - [西红柿](entity_item)能不能发
       - [鞋](entity_item)可以寄吗
       - [电池](entity_item)能不能发
-      - 可以发[香烟](entity_item)嘛
       - 可以寄[皮蛋](entity_item)吗
       - 可以寄[电脑](entity_item)吗
       - [发膜布](entity_item)可以寄吗
@@ -1063,5 +1060,10 @@ nlu:
       - 怎么没有发票
       - 这个发票都不写税号的吗
       - 直接申请开票
+      - 怎么电子开发票
+      - 可以电子开发票吗
+      - 亲，我给别人买的没电子开发票
+      - 请电子开发票
+      - 有电子开发票吗
 
 

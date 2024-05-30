@@ -1,35 +1,230 @@
 version: "3.1"
 
 rules:
-
-# 单轮问答
-- rule: respond to FAQs
-  steps:
-  - intent: faq
-  - action: utter_faq
-  - action: action_faq
-
 # 客服通话文本处理
-- rule: respond to servicer
-  steps:
-  - or:
-    - intent: predict_call_end
-    - intent: input_servicer
-    - intent: phone_number_required
-    - intent: incorrect_language
-    - intent: item_price_required
-    - intent: delivery_address_required
-  - action: action_input_servicer
+# - rule: respond to servicer
+#   steps:
+#   - or:
+#     - intent: predict_call_end
+#     - intent: input_servicer
+#     - intent: phone_number_required
+#     - intent: incorrect_language
+#     - intent: item_price_required
+#     - intent: delivery_address_required
+#   - action: action_input_servicer
 
 # 客服通话文本处理2
-- rule: respond to servicer 2
-  condition:
-    - active_loop: collect_express_id_form
+# - rule: respond to servicer 2
+#   condition:
+#     - active_loop: collect_express_id_form
+#   steps:
+#   - or:
+#     - intent: predict_call_end
+#     - intent: input_servicer
+#     - intent: phone_number_required
+#   - action: action_input_servicer
+#   - action: collect_express_id_form
+#   - active_loop: collect_express_id_form
+
+# 单轮问答FAQ
+# - rule: respond to FAQs
+#   steps:
+#   - intent: faq
+#   - action: utter_faq
+  # - action: action_faq
+
+- rule: response to faq_how_refund
+  steps:
+  - intent: faq_how_refund
+  - action: utter_faq_how_refund
+  # - action: action_faq
+- rule: response to faq_is_artificial
+  steps:
+  - intent: faq_is_artificial
+  - action: utter_faq_is_artificial
+  # - action: action_faq
+- rule: response to faq_complaint_seller
+  steps:
+  - intent: faq_complaint_seller
+  - action: utter_faq_complaint_seller
+  # - action: action_faq
+- rule: response to faq_seller_un_refund
+  steps:
+  - intent: faq_seller_un_refund
+  - action: utter_faq_seller_un_refund
+  # - action: action_faq
+# - rule: response to faq_online_wait
+#   steps:
+#   - intent: faq_online_wait
+#   - action: utter_faq_online_wait
+  # - action: action_faq
+- rule: response to faq_ask_cod
+  steps:
+  - intent: faq_ask_cod
+  - action: utter_faq_ask_cod
+  # - action: action_faq
+- rule: response to faq_ask_send_arrive_pay
+  steps:
+  - intent: faq_ask_send_arrive_pay
+  - action: utter_faq_ask_send_arrive_pay
+  # - action: action_faq
+- rule: response to faq_ask_seller_contact_way
+  steps:
+  - intent: faq_ask_seller_contact_way
+  - action: utter_faq_ask_seller_contact_way
+  # - action: action_faq
+- rule: response to faq_express_standard
+  steps:
+  - intent: faq_express_standard
+  - action: utter_faq_express_standard
+  # - action: action_faq
+# 大件运费标准
+- rule: response to large_express_standard
+  steps:
+  - intent: large_express_standard
+  - action: utter_large_express_standard
+# 运费问题
+- rule: response to fees_issue
+  steps:
+  - intent: fees_issue
+  - action: utter_fees_issue
+# 香烟邮寄
+- rule: response to consult_cigarette_good
+  steps:
+  - intent: consult_cigarette_good
+  - action: utter_consult_cigarette_good
+
+# 易损品邮寄问题
+# - rule: response to consult_vulnerable_good
+#   steps:
+#   - intent: consult_vulnerable_good
+#   - action: utter_consult_vulnerable_good
+
+# 违禁品问题
+# - rule: response to consult_prohibite_goods
+#   steps:
+#   - intent: consult_prohibite_goods
+#   - action: utter_consult_prohibite_goods
+
+# - rule: response to faq_require_remark
+#   steps:
+#   - intent: faq_require_remark
+#   - action: utter_faq_require_remark
+  # - action: action_faq
+- rule: response to faq_ask_waybill_fee_insure
+  steps:
+  - intent: faq_ask_waybill_fee_insure
+  - action: utter_faq_ask_waybill_fee_insure
+  # - action: action_faq
+- rule: response to faq_ask_exist_fee_insure
+  steps:
+  - intent: faq_ask_exist_fee_insure
+  - action: utter_faq_ask_exist_fee_insure
+  # - action: action_faq
+# - rule: response to faq_require_compensate
+#   steps:
+#   - intent: faq_require_compensate
+#   - action: utter_faq_require_compensate
+  # - action: action_faq
+# - rule: response to faq_ask_taking_home
+#   steps:
+#   - intent: faq_ask_taking_home
+#   - action: utter_faq_ask_taking_home
+  # - action: action_faq
+# - rule: response to faq_ask_complaint_phone
+#   steps:
+#   - intent: faq_ask_complaint_phone
+#   - action: utter_faq_ask_complaint_phone
+  # - action: action_faq
+- rule: response to faq_ask_sign_fail_reason
+  steps:
+  - intent: faq_ask_sign_fail_reason
+  - action: utter_faq_ask_sign_fail_reason
+  # - action: action_faq
+- rule: response to faq_change_goods
+  steps:
+  - intent: faq_change_goods
+  - action: utter_faq_change_goods
+  # - action: action_faq
+- rule: response to faq_ask_package_content
+  steps:
+  - intent: faq_ask_package_content
+  - action: utter_faq_ask_package_content
+  # - action: action_faq
+# - rule: response to faq_click_received_wrong
+#   steps:
+#   - intent: faq_click_received_wrong
+#   - action: utter_faq_click_received_wrong
+  # - action: action_faq
+- rule: response to faq_consult_real_name_system
+  steps:
+  - intent: faq_consult_real_name_system
+  - action: utter_faq_consult_real_name_system
+  # - action: action_faq
+# - rule: response to faq_consult_how_to_real_name_system
+#   steps:
+#   - intent: faq_consult_how_to_real_name_system
+#   - action: utter_faq_consult_how_to_real_name_system
+  # - action: action_faq
+# - rule: response to faq_consult_how_to_insured_value
+#   steps:
+#   - intent: faq_consult_how_to_insured_value
+#   - action: utter_faq_consult_how_to_insured_value
+  # - action: action_faq
+# - rule: response to faq_consult_insured_value_fee
+#   steps:
+#   - intent: faq_consult_insured_value_fee
+#   - action: utter_faq_consult_insured_value_fee
+  # - action: action_faq
+# 保价服务咨询
+- rule: consult_insured
   steps:
   - or:
-    - intent: predict_call_end
-    - intent: input_servicer
-    - intent: phone_number_required
-  - action: action_input_servicer
-  - action: collect_express_id_form
-  - active_loop: collect_express_id_form
+    - intent: faq_consult_how_to_insured_value
+    - intent: faq_consult_insured_value_fee
+  - action: utter_faq_consult_insured
+- rule: response to faq_consult_insured_value_claim
+  steps:
+  - intent: faq_consult_insured_value_claim
+  - action: utter_faq_consult_insured_value_claim
+  # - action: action_faq
+- rule: response to faq_consult_value_claim
+  steps:
+  - intent: faq_consult_value_claim
+  - action: utter_faq_consult_value_claim
+  # - action: action_faq
+# - rule: response to faq_consult_electronic_invoice
+#   steps:
+#   - intent: faq_consult_electronic_invoice
+#   - action: utter_faq_consult_electronic_invoice
+  # - action: action_faq
+- rule: response to faq_consult_return_freight
+  steps:
+  - intent: faq_consult_return_freight
+  - action: utter_faq_consult_return_freight
+  # - action: action_faq
+- rule: response to faq_consult_package
+  steps:
+  - intent: faq_consult_package
+  - action: utter_faq_consult_package
+  # - action: action_faq
+# - rule: response to faq_consult_send_item_door_pickup
+#   steps:
+#   - intent: faq_consult_send_item_door_pickup
+#   - action: utter_faq_consult_send_item_door_pickup
+  # - action: action_faq
+# - rule: response to faq_consult_how_to_send_item
+#   steps:
+#   - intent: faq_consult_how_to_send_item
+#   - action: utter_faq_consult_how_to_send_item
+  # - action: action_faq
+# - rule: response to faq_consult_want_send_item
+#   steps:
+#   - intent: faq_consult_want_send_item
+#   - action: utter_faq_consult_want_send_item
+  # - action: action_faq
+# - rule: response to faq_consult_is_or_not_send_item
+#   steps:
+#   - intent: faq_consult_is_or_not_send_item
+#   - action: utter_faq_consult_is_or_not_send_item
+  # - action: action_faq

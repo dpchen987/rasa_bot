@@ -2,7 +2,7 @@ version: "3.1"
 
 
 nlu:
-- intent: faq/ask_package_content
+- intent: faq_ask_package_content
   examples: |
     - 可以查一下寄件包裹内物品的数量吗？
     - 你好，这是什么件呀

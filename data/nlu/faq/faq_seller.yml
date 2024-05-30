@@ -2,7 +2,7 @@ version: "3.1"
 
 nlu:
 
-- intent: faq/complaint_seller
+- intent: faq_complaint_seller
   examples: |
     - 投诉商家
     - 我要投诉商家
@@ -91,7 +91,7 @@ nlu:
     - 我现在要投诉商家
     - 怎么投诉商家和物流
 
-- intent: faq/seller_un_refund
+- intent: faq_seller_un_refund
   examples: |
     - 商家不给退款
     - 已经退回去了，为什么不退款

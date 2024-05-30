@@ -1,7 +1,7 @@
 version: "3.1"
 
 nlu:
-- intent: faq/how_refund
+- intent: faq_how_refund
   examples: |
     - 退款申请
     - 我想退款

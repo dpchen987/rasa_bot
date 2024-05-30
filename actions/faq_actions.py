@@ -16,7 +16,7 @@ class ActionGoBack(Action):
                   tracker: Tracker,
                   domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         # 
-        from pprint import pprint
+        # from pprint import pprint
         # pprint("tracker.slots")
         # pprint(tracker.slots)
         # pprint("tracker.events")
