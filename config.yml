@@ -13,13 +13,14 @@ pipeline:
 - name: DIETClassifier
   entity_recognition: False
   constrain_similarities: True
-  epochs: 12
+  epochs: 32
 #  hidden_layers_sizes: [256,128]
 #  text: [256, 128] # 默认[]
   embedding_dimension: 128 # 默认20
   number_of_transformer_layers: 2  # 默认2
   transformer_size: 128 # 默认256
-  connection_density: 0.2 # 默认0.2
+  learning_rate: 0.0005 # 默认0.001
+  connection_density: 0.5 # 默认0.2
 # - name: SpacyNLP
 #   model: zh_core_web_sm  # 注意，不是短杆"-"连接
 # - name: SpacyEntityExtractor
@@ -30,19 +31,19 @@ pipeline:
   use_lookup_tables: True
   use_regexes: True
 - name: "EntitySynonymMapper"
-- name: ResponseSelector
-  constrain_similarities: True
-  epochs: 15
-  retrieval_intent: faq
+# - name: ResponseSelector
+#   constrain_similarities: True
+#   epochs: 15
+#   retrieval_intent: faq
 - name: FallbackClassifier
-  threshold: 0.22
+  threshold: 0.1
   ambiguity_threshold: 0.05
-  threshold_faq: 0.5
-  ambiguity_threshold_faq: 0.3
+  threshold_faq: 0.2
+  ambiguity_threshold_faq: 0.1
 
 policies:
-- name: AugmentedMemoizationPolicy
+# - name: AugmentedMemoizationPolicy
 - name: RulePolicy
   core_fallback_threshold: 0.2
-  core_fallback_action_name: action_default_fallback
+  core_fallback_action_name: action_listen
 assistant_id: yto-call-assistant-v0.1-20240226
