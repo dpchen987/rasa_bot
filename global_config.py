@@ -1,16 +1,31 @@
 # -*- coding:utf-8 -*-
 
-import logging
 import random
-
-logging.basicConfig(filename='../actions.log',
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    level=logging.WARNING)
 
 # web url
 # WEB_URL = "http://wdgj-chatbot-inter.yto56.com.cn:18990/"        # 生产环境
 # WEB_URL = "http://10.7.36.141:18991/"                            # 生产环境，可视化版本
 WEB_URL = "http://10.130.10.210:18990/"                          # 测试环境
+# rasa source configure
+CORPUS_DICT_PATH = 'corpus_dict.json'
+RESERVED_SLOTS_LIST = ["slot_express_id", "slot_name", "slot_phone", "slot_user_type", "slot_item",
+                       "slot_from_address", "slot_normal_address", "slot_invoice_type", "slot_express_id_piece",
+                       "slot_phone_piece", "slot_gender", "slot_big_category", "slot_small_category", "slot_work_type", 
+                       "slot_item_price", "slot_delivery_address"]
+FAQ = "faq"
+BACK_END_TALK_URL = {
+  "back_end_url_pro": "http://10.7.40.153:16012/script/robot/chatBotServer",
+  "back_end_url_tst": "http://10.130.11.74:9001/script/robot/chatBotServer",
+  "back_end_url": "http://10.130.11.74:9001/script/robot/chatBotServer"
+}
+NO_SCRIPT_INTENT = ['angry','ask_damages','cancel_to_send','change_address_or_not','check_sign_info',
+                    'delivery_address_required','faq_consult_how_to_send_item','faq_consult_send_item_door_pickup',
+                    'faq_consult_want_send_item','grumble_logistics_net_courier','has_sent_or_not','hurry',
+                    'incorrect_language','inform','input_servicer','is_ok','is_ok_thanks','is_ok_urge','is_receiver','is_sender',
+                    'item_price_required','no_use','not_accept_apology','not_arrive_threaten_complaint',
+                    'not_process_threaten_complaint','phone_number_required','predict_call_end','pretend_sent',
+                    'reject_reason','threaten_complaint','useless_intent']
+PREDICTION_LOOP_TIMEOUT = 0.3
 
 intent_map = dict()
 # 催中转
