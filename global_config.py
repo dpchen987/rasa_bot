@@ -11,7 +11,8 @@ CORPUS_DICT_PATH = 'corpus_dict.json'
 RESERVED_SLOTS_LIST = ["slot_express_id", "slot_name", "slot_phone", "slot_user_type", "slot_item",
                        "slot_from_address", "slot_normal_address", "slot_invoice_type", "slot_express_id_piece",
                        "slot_phone_piece", "slot_gender", "slot_big_category", "slot_small_category", "slot_work_type", 
-                       "slot_item_price", "slot_delivery_address"]
+                       "slot_item_price", "slot_delivery_address", "slot_hello", "slot_nice_to_serve", "slot_can_i_help",
+                       "slot_expose_abnormal", "slot_thanks"]
 FAQ = "faq"
 BACK_END_TALK_URL = {
   "back_end_url_pro": "http://10.7.40.153:16012/script/robot/chatBotServer",

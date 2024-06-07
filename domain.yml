@@ -145,6 +145,7 @@ intents:
   - predict_call_end
   - phone_number_required
   - incorrect_language
+  - guide_upgrade_intention
   - useless_intent
   - item_price_required
   - delivery_address_required
@@ -162,10 +163,14 @@ intents:
   - urge_to_pickup_express
   - pickup_time
   - urge_to_delivery
-  # - pickup_time
-  # - pickup_time
-  # - pickup_time
-  # - pickup_time
+  # Quality inspection intention
+  - response_untimely
+  - interrupt_speech
+  - understand_insufficiently
+  - perfunctory_attitude
+  - customer_be_threatened
+  - upgrade_intention
+  - customer_praise
 
 entities:
   - user_messages:
@@ -769,7 +774,36 @@ slots:
     mappings:
       - type: custom
 
+  # 质检槽位
+  slot_hello:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
 
+  slot_nice_to_serve:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  slot_can_i_help:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  slot_expose_abnormal:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+  slot_thanks:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
 
 forms:
   collect_express_id_form:

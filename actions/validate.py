@@ -28,23 +28,17 @@ repat_money = re.compile(r"(?<![点:月块\d零一幺妖二两三四五六七八
 xing = '王张李刘陈杨黄周胡赵吴徐孙朱宋郭罗林曹马高何梁郑韩谢唐董夏傅冯许袁薛姚于彭肖曾谭卢苏贾余毛汪邓戴江丁蔡叶程闫钟廖田任姜范方潘杜魏沈熊金陆郝孔白崔吕邱秦蒋石史顾侯邵孟邹段钱汤黎常尹武乔贺赖龚庞樊殷施翟倪严牛陶俞章鲁葛韦毕聂焦向柳邢骆岳齐梅庄涂祁耿詹关费纪靳童欧甄裴屈鲍覃霍司柯阮房'
 
 numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
+hello_pat = re.compile(r"[您你]好")
+nice_to_serve_pat = re.compile(r"[很高兴]+.{,3}[您你].{,2}服务")
+can_i_help_pat = re.compile(r"[有什么]+.{,8}帮.?[助到您的吗]*")
+expose_abnormal_pat0 = re.compile(r"网点.{,5}有.{,5}问题|(?:圆通|快递站?|网点|驿站).{,5}(?:瘫痪|爆仓|整顿)|扣押.{,2}[快包][件递裹]|[快包][件递裹].{,3}扣押|(?:业务员|快递员?|网点).{,5}罢工|老板.{,5}跑路|(?:圆通|你们公司).{,5}(?:破产|倒闭)")
+expose_abnormal_pat1 = re.compile(r"网点[^没不哪什么]{,5}异常|网点[^没不哪什么]{,5}有[^什么]{,5}问题|(?:圆通|快递站?|网点|驿站)[^没不哪]{,5}(?:瘫痪|爆仓|整顿|调整)|[快包][件递裹][^没不]{,3}扣押|(?:业务员|快递员?|网点)[^没不]{,5}罢工|老板[^没不怎]{,5}跑路")
+thanks_pat = re.compile(r"[谢感]谢|谢[了啦]")
+yes_pat = re.compile(r"对|是的")
 # 对机器人识别的槽位进行验证(比如运单号、电话等槽位)
 class ValidatePredefinedSlots(ValidationAction):
     def __init__(self):
         self.check_url = global_config.WEB_URL+'wdgj-chatbot-server/waybillInfo/checkWaybillNo'
-
-    def is_first_in(self, tracker: Tracker) -> bool:
-        """判断用户输入的第一句是通过metadata传入的词槽"""
-
-        # 从跟踪器tracker中获取首句标志槽位
-        slot_first_sentence_used = int(tracker.get_slot('slot_first_sentence_used'))
-        current_tracker = tracker.current_state()
-        # 根据metadata不为空判断是首句。slot_first_sentence_used=1表示前面已经回复过faq
-        if len(current_tracker['events']) > 0 and current_tracker['events'][0].get('name') is not None and \
-                current_tracker['events'][0]['name'] == 'session_started_metadata' and slot_first_sentence_used == 0:
-            return True
-
-        return False
 
     async def extract_slot_user_messages(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
@@ -56,7 +50,10 @@ class ValidatePredefinedSlots(ValidationAction):
         message_text = tracker.latest_message['text']
         user_message = {'intent': tracker.get_intent_of_latest_message(), 'text':message_text, 'usr_type': 1 if message_text.startswith('语言模型') else 0}
         # logger.info(tracker.latest_message)
-
+        # from pprint import pprint
+        # pprint(tracker.slots)
+        # pprint(tracker.events)
+        # pprint(tracker.current_state())
         if not user_messages:
             user_message['sender_id'] = tracker.sender_id
             user_message['express_id_piece'] = False
@@ -74,6 +71,100 @@ class ValidatePredefinedSlots(ValidationAction):
             if len(user_messages) > 4:
                 logger.info(f'{user_messages=}')
         return {'slot_user_messages': user_messages}
+
+    async def extract_slot_hello(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        # logger.info("--- extract slot hello --->")
+        # import pprint
+        # pprint.pprint(f'{slot_hello=}')
+        slot_hello = tracker.get_slot('slot_hello')
+        if not slot_hello:
+            message_text = tracker.latest_message['text']
+            if message_text.startswith('语言模型'):
+                cs_sentences = [evt['text'] for evt in tracker.events if evt['event']=='user' and evt['text'].startswith('语言模型')]
+                if len(cs_sentences) < 4:
+                    hello_mat = hello_pat.search(message_text)
+                    if hello_mat:
+                        return {'slot_hello': hello_mat.group()}
+
+    async def extract_slot_nice_to_serve(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        # logger.info("--- extract slot nice_to_serve --->")
+        # import pprint
+        # pprint.pprint(f'{slot_nice_to_serve=}')
+        slot_nice_to_serve = tracker.get_slot('slot_nice_to_serve')
+        if not slot_nice_to_serve:
+            message_text = tracker.latest_message['text']
+            if message_text.startswith('语言模型'):
+                cs_sentences = [evt['text'] for evt in tracker.events if evt['event']=='user' and evt['text'].startswith('语言模型')]
+                if len(cs_sentences) < 4:
+                    nice_to_serve_mat = nice_to_serve_pat.search(message_text)
+                    if nice_to_serve_mat:
+                        return {'slot_nice_to_serve': nice_to_serve_mat.group()}
+
+    async def extract_slot_can_i_help(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        # logger.info("--- extract slot can_i_help --->")
+        # import pprint
+        # pprint.pprint(f'{slot_can_i_help=}')
+        slot_can_i_help = tracker.get_slot('slot_can_i_help')
+        if not slot_can_i_help:
+            message_text = tracker.latest_message['text']
+            if message_text.startswith('语言模型'):
+                cs_sentences = [evt['text'] for evt in tracker.events if evt['event']=='user' and evt['text'].startswith('语言模型')]
+                if len(cs_sentences) < 4:
+                    can_i_help_mat = can_i_help_pat.search(message_text)
+                    if can_i_help_mat:
+                        return {'slot_can_i_help': can_i_help_mat.group()}
+
+    async def extract_slot_expose_abnormal(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        # logger.info("--- extract slot expose_abnormal --->")
+        # import pprint
+        # pprint.pprint(f'{slot_expose_abnormal=}')
+        slot_expose_abnormal = tracker.get_slot('slot_expose_abnormal')
+        if not slot_expose_abnormal:
+            message_text = tracker.latest_message['text']
+            if message_text.startswith('语言模型'):
+                expose_abnormal_mat = expose_abnormal_pat1.search(message_text)
+                if expose_abnormal_mat:
+                    return {'slot_expose_abnormal': f"客服：{expose_abnormal_mat.group()}"}
+                yes_mat = yes_pat.search(message_text)
+                if yes_mat:
+                    check_num = 0
+                    for evt in reversed(tracker.events):
+                        # pprint.pprint(f'{evt=}')
+                        if evt['event']=='user' and evt['text'].startswith('语言模型'):
+                            check_num += 1
+                        elif evt['event']=='user'and not evt['text'].startswith('语言模型'):
+                            check_num += 1
+                            expose_abnormal_mat0 = expose_abnormal_pat0.search(evt['text'])
+                            if expose_abnormal_mat0:
+                                return {'slot_expose_abnormal': f"客户：{expose_abnormal_mat0.group()} 客服：{yes_mat.group()}"}
+                        if check_num >= 3: break
+
+    async def extract_slot_thanks(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        # 用户输入信息
+        # logger.info("--- extract slot thanks --->")
+        # import pprint
+        # pprint.pprint(f'{slot_thanks=}')
+        slot_thanks = tracker.get_slot('slot_thanks')
+        if not slot_thanks:
+            message_text = tracker.latest_message['text']
+            if not message_text.startswith('语言模型'):
+                thanks_mat = thanks_pat.search(message_text)
+                if thanks_mat:
+                    return {'slot_thanks': thanks_mat.group()}
 
     async def extract_slot_gender(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
