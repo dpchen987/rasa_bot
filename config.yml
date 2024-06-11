@@ -1,41 +1,54 @@
 recipe: default.v1
 language: zh
 pipeline:
+# - name: rasa.nlu.tokenizers.plant_tokenizer.JiebaTokenizer
 - name: JiebaTokenizer
 #  token_pattern: '[^A-Z^a-z^0-9^\u4e00-\u9fa5]'
 #  #自定义词典
 #  dictionary_path: "path/to/custom/dictionary/dir"
 #  #不切分intent
 #  "intent_tokenization_flag": False
-# - name: LanguageModelFeaturizer
-#   model_name: bert
-#   model_weights: bert/roberta-yto-cls-v3
-- name: "CountVectorsFeaturizer"
-  "analyzer": "word"
-  "min_df": 2
-  "max_df": 1000
-  "min_ngram": 1
-  "max_ngram": 2
-  # Set the out-of-vocabulary token
-  "OOV_token": "_oov_"
-  # Whether to use a shared vocab
-  "use_shared_vocab": False
+- name: LanguageModelFeaturizer
+  model_name: bert
+  model_weights: bert/roberta-yto-cls-v3
+# - name: "CountVectorsFeaturizer"
+#   "analyzer": "word"
+#   "min_df": 2
+#   "max_df": 1000
+#   "min_ngram": 1
+#   "max_ngram": 3
+#   # Set the out-of-vocabulary token
+#   "OOV_token": "_oov_"
+#   # Whether to use a shared vocab
+#   "use_shared_vocab": False
 # - name: LogisticRegressionClassifier
-#   max_iter: 100
+#   max_iter: 200
 #   solver: lbfgs
 #   tol: 0.0005
 #   random_state: 42
 #   ranking_length: 3
-- name: rasa.nlu.classifiers.mlp_plus_classifier.MLP_Classifier
-  C: 0.8
-  tol: 0.0005
-  max_iter: 1000
-  ranking_length: 3
+# - name: rasa.nlu.classifiers.logistic_regplus_classifier.LogisticRegressionClassifier
+#   max_iter: 200
+#   solver: lbfgs
+#   tol: 0.0005
+#   random_state: 42
+#   ranking_length: 3
+# - name: rasa.nlu.classifiers.mlp_plus_classifier.MLP_Classifier
+#   C: 0.8
+#   tol: 0.0005
+#   max_iter: 1000
+#   ranking_length: 3
+- name: rasa.nlu.classifiers.mlp_classifier.MLP_Classifier
+  # C: 0.8
+  # tol: 0.0005
+  # max_iter: 1000
+  # ranking_length: 3
 # - name: rasa.nlu.classifiers.linearsvc_plus_classifier.LinearSVCClassifier
 #   C: 1
 #   tol: 0.0005
 #   max_iter: 1000
 #   ranking_length: 3
+
 # - name: DIETClassifier
 #   entity_recognition: False
 #   constrain_similarities: True

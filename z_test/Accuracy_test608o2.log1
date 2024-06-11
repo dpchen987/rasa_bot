@@ -1,0 +1,419 @@
+网点电话多少？ consult_station_info 您好，请稍等我正在查询中，稍后发短信到您的手机上，请注意查收。
+业务员电话有吗？ consult_expressman_phone 您好，请稍等我正在查询中，稍后发短信到您的手机上，请注意查收。
+我打哪个电话？ consult_station_info 您好，请稍等我正在查询中，稍后发短信到您的手机上，请注意查收。
+网点电话打不通 unable_to_contact_net_station 您好，抱歉给您带来不好的体验，您描述一下快件问题，我优先给您对接处理，请您耐心等待。
+业务员不接电话 unable_to_contact_courier 您好，抱歉给您带来不好的体验，您描述一下快件问题，我优先给您对接处理，请您耐心等待。
+我联系不到网点 consult_station_info 您好，请稍等我正在查询中，稍后发短信到您的手机上，请注意查收。
+我联系不到业务员 unable_to_contact_courier 您好，抱歉给您带来不好的体验，您描述一下快件问题，我优先给您对接处理，请您耐心等待。
+这个物流怎么不动了 logistics_not_updated 时效外：先生/女士您好，此件目前已到达**，很抱歉物流目前是停滞中，我们对接售后优先核实处理，请您耐心等待。
+时效内：先生/女士您好，您反馈的单号预计**时间到达，请耐心等待，快件到达后第一时间给您安排派送。
+这个快递什么时候到 check_arrive_datetime 时效外：先生/女士您好，此件目前已到达**，很抱歉物流目前是停滞中，我们对接售后优先核实处理，请您耐心等待。
+时效内：先生/女士您好，您反馈的单号预计**时间到达，请耐心等待，快件到达后第一时间给您安排派送。
+这个快递太慢了 urge 时效外：先生/女士您好，此件目前已到达**，很抱歉物流目前是停滞中，我们对接售后优先核实处理，请您耐心等待。
+时效内：先生/女士您好，您反馈的单号预计**时间到达，请耐心等待，快件到达后第一时间给您安排派送。
+这个我很着急帮我催下 urge 时效外：先生/女士您好，此件目前已到达**，很抱歉物流目前是停滞中，我们对接售后优先核实处理，请您耐心等待。
+时效内：先生/女士您好，您反馈的单号预计**时间到达，请耐心等待，快件到达后第一时间给您安排派送。
+我急要的这个快递 affirm
+我没收到怎么签收了 pretend_signed 您好，先生/女士，很抱歉给您带来不便，关于您反馈快件签收未收到的问题，客服登记反馈去核实并查找您的包裹，有结果第一时间同步给您，请您耐心等待。
+谁签收了我的快递 pretend_signed 您好，先生/女士，很抱歉给您带来不便，关于您反馈快件签收未收到的问题，客服登记反馈去核实并查找您的包裹，有结果第一时间同步给您，请您耐心等待。
+你们业务员私自签收我的包裹 pretend_signed 您好，先生/女士，很抱歉给您带来不便，关于您反馈快件签收未收到的问题，客服登记反馈去核实并查找您的包裹，有结果第一时间同步给您，请您耐心等待。
+我要改地址 change_address 您好，先生/女士，正常情况下改地址/电话/拦截需要发件人联系发件公司或揽收业务员进行修改地址/电话/拦截，给您带来不便，希望您能理解。
+我不在这个地址了我要改下地址 change_address 您好，先生/女士，正常情况下改地址/电话/拦截需要发件人联系发件公司或揽收业务员进行修改地址/电话/拦截，给您带来不便，希望您能理解。
+你给我改下地址我要改电话 change_address 您好，先生/女士，正常情况下改地址/电话/拦截需要发件人联系发件公司或揽收业务员进行修改地址/电话/拦截，给您带来不便，希望您能理解。
+我要拦截快件 return 您好，先生/女士，拒收快件需要收件人联系业务员/网点/驿站进行拒收，客服无法直接安排，请您谅解。
+我怎么联系发件网点 consult_send_station_info 您好，先生/女士，如您是发件人联系不上发件网点 ，客服帮您查询一下号码，稍后用短信发给您，请您注意查收，谢谢。
+这个快递怎么发错了 send_wrong_address 您好，先生/女士，非常抱歉给您添麻烦了，查询快件中途有错发的情况，我们尽快核实反馈，将您的快件按照正确地址邮寄。
+这个怎么发到**地了 check_client_name_phone_address 非常抱歉，客户信息属于个人隐私，我们是没有权限查看的哦 ，请您谅解！
+这个地址不是我的 address_is_wrong 这边跟您确认一下，是物流给您发错地方了，还是您收件地址写错了呢？
+这个快递怎么发**了 check_express_status 时效外：先生/女士您好，此件目前已到达**，很抱歉物流目前是停滞中，我们对接售后优先核实处理，请您耐心等待。
+时效内：先生/女士您好，您反馈的单号预计**时间到达，请耐心等待，快件到达后第一时间给您安排派送。
+你们业务员乱收费 fees_issue 您好，先生/女士，抱歉给您带来不便，您所反馈的费用问题，客服会如实登记下来，通知处理专员核实情况给您回复。
+你们这个费用 fees_issue 您好，先生/女士，抱歉给您带来不便，您所反馈的费用问题，客服会如实登记下来，通知处理专员核实情况给您回复。
+业务员不取件 urge_to_pickup_express 您好，先生/女士，非常抱歉给您添麻烦了，您反馈取件员未上门取件问题客服登记反馈处理，请您耐心等待。
+业务员拒绝取件 urge_to_pickup_express 您好，先生/女士，非常抱歉给您添麻烦了，您反馈取件员未上门取件问题客服登记反馈处理，请您耐心等待。
+业务员说他今天取不了件 urge_to_pickup_express 您好，先生/女士，非常抱歉给您添麻烦了，您反馈取件员未上门取件问题客服登记反馈处理，请您耐心等待。
+下单几天了没取件 urge_to_pickup_express 您好，先生/女士，非常抱歉给您添麻烦了，您反馈取件员未上门取件问题客服登记反馈处理，请您耐心等待。
+昨天就下单的没取件 urge_to_pickup_express 您好，先生/女士，非常抱歉给您添麻烦了，您反馈取件员未上门取件问题客服登记反馈处理，请您耐心等待。
+你们下单后多久取件 pickup_time 您好，先生/女士，给您带来不便深表歉意，正常情况下取件时效：17点之前下单，当天取件；17点之后下单，次日上门取件，业务员也会提前联系您，请您耐心等待。
+你们什么时候取件 pickup_time 您好，先生/女士，给您带来不便深表歉意，正常情况下取件时效：17点之前下单，当天取件；17点之后下单，次日上门取件，业务员也会提前联系您，请您耐心等待。
+晚上下单能取件吗 pickup_time 您好，先生/女士，给您带来不便深表歉意，正常情况下取件时效：17点之前下单，当天取件；17点之后下单，次日上门取件，业务员也会提前联系您，请您耐心等待。
+我没收到取件码 ask_code 您好，先生/女士，非常抱歉给您添麻烦了，此件已经到达代收点/丰巢柜，您反馈没有收到取件码的问题，客服登记反馈给处理专员。如果您非常着急建议您到快递柜直接点击忘记取件码，按照提示操作会重新发送给您。
+我的快递到了怎么不发送取件码 ask_code 您好，先生/女士，非常抱歉给您添麻烦了，此件已经到达代收点/丰巢柜，您反馈没有收到取件码的问题，客服登记反馈给处理专员。如果您非常着急建议您到快递柜直接点击忘记取件码，按照提示操作会重新发送给您。
+我要拒收这个快递 return 您好，先生/女士，拒收快件需要收件人联系业务员/网点/驿站进行拒收，客服无法直接安排，请您谅解。
+我不要了这个件 return 您好，先生/女士，拒收快件需要收件人联系业务员/网点/驿站进行拒收，客服无法直接安排，请您谅解。
+你给我拒收 return 您好，先生/女士，拒收快件需要收件人联系业务员/网点/驿站进行拒收，客服无法直接安排，请您谅解。
+你查下我这个号码名下的单号 has_no_express_id 您好，建议您对接寄件人确认一下单号再来电圆通，您提供的信息无法查询单号，请您谅解。
+您也可以通过圆通微信公众号/小程序使用手机号码登录查询您的快递单号或者登陆圆通官网首页—使用“手机号码查询”输入验证码登陆，查询近期的收和发的快递单号。
+用我手机号码给我查物流 has_no_express_id 您好，建议您对接寄件人确认一下单号再来电圆通，您提供的信息无法查询单号，请您谅解。
+您也可以通过圆通微信公众号/小程序使用手机号码登录查询您的快递单号或者登陆圆通官网首页—使用“手机号码查询”输入验证码登陆，查询近期的收和发的快递单号。
+我没有单号 has_no_express_id 您好，建议您对接寄件人确认一下单号再来电圆通，您提供的信息无法查询单号，请您谅解。
+您也可以通过圆通微信公众号/小程序使用手机号码登录查询您的快递单号或者登陆圆通官网首页—使用“手机号码查询”输入验证码登陆，查询近期的收和发的快递单号。
+我不知道单号 has_no_express_id 您好，建议您对接寄件人确认一下单号再来电圆通，您提供的信息无法查询单号，请您谅解。
+您也可以通过圆通微信公众号/小程序使用手机号码登录查询您的快递单号或者登陆圆通官网首页—使用“手机号码查询”输入验证码登陆，查询近期的收和发的快递单号。
+我的姓名和手机号码不能查吗 has_no_express_id 您好，建议您对接寄件人确认一下单号再来电圆通，您提供的信息无法查询单号，请您谅解。
+您也可以通过圆通微信公众号/小程序使用手机号码登录查询您的快递单号或者登陆圆通官网首页—使用“手机号码查询”输入验证码登陆，查询近期的收和发的快递单号。
+怎么加盟 join_in 建议您联系加盟电话：021-69777777-6873进行咨询或者登录圆通官网进入圆通速递-特许经营-加盟圆通板块进行在线申请。（工作时间：每周一至周五 08：30-17：30）
+妈妈驿站怎么加盟 join_in_station 您好！请您提供想加盟驿站所在位置的xx省xx市xx区xx街道xx路xx号（越详细越好），我登记下来，会有工作人员主动与您联系沟通。（登记 业务咨询-驿站业务咨询）
+怎么加盟你们家的驿站 join_in_station 您好！请您提供想加盟驿站所在位置的xx省xx市xx区xx街道xx路xx号（越详细越好），我登记下来，会有工作人员主动与您联系沟通。（登记 业务咨询-驿站业务咨询）
+圆通驿站怎么加盟 join_in_station 您好！请您提供想加盟驿站所在位置的xx省xx市xx区xx街道xx路xx号（越详细越好），我登记下来，会有工作人员主动与您联系沟通。（登记 业务咨询-驿站业务咨询）
+我是**记者，想跟你了解一下 media_inquiry 您好！关于您反馈的问题请您留下相关信息，我们公司对外服务部门会直接联系您给予回复，谢谢您的工作配合！（注：需留下来电媒体名称、姓名、证件号及联系电话、禁止任何单位或个人私自接受媒体采访，杜绝主动告知客户企业内部相关信息情况，同时将来访情况记录清楚立即反馈给现场管理人员，如客户不愿意提供信息，可让客户直接联系总部媒体邮箱：00002020@yto.net.cn。）
+我是媒体的，我想采访下你们 media_inquiry 您好！关于您反馈的问题请您留下相关信息，我们公司对外服务部门会直接联系您给予回复，谢谢您的工作配合！（注：需留下来电媒体名称、姓名、证件号及联系电话、禁止任何单位或个人私自接受媒体采访，杜绝主动告知客户企业内部相关信息情况，同时将来访情况记录清楚立即反馈给现场管理人员，如客户不愿意提供信息，可让客户直接联系总部媒体邮箱：00002020@yto.net.cn。）
+我要投诉业务员态度不好 complaint_service 您好，先生/女士，针对服务问题我司后续会加强管理及培训，给您带来不好的体验，这边先给您真诚的致歉，还请您谅解，同时欢迎您后续随时监督我们；
+你们态度太差了 complaint_service 您好，先生/女士，针对服务问题我司后续会加强管理及培训，给您带来不好的体验，这边先给您真诚的致歉，还请您谅解，同时欢迎您后续随时监督我们；
+客服态度不好 complaint_service 您好，先生/女士，针对服务问题我司后续会加强管理及培训，给您带来不好的体验，这边先给您真诚的致歉，还请您谅解，同时欢迎您后续随时监督我们；
+邮局能管你们吗 express_supervision_inquiry 您好，先生/女士，物流公司属于邮管局统一管辖，您的快件问题属于圆通处理，请您谅解，我们肯定会优先妥善处理您的诉求。
+谁管你们圆通的 express_supervision_inquiry 您好，先生/女士，物流公司属于邮管局统一管辖，您的快件问题属于圆通处理，请您谅解，我们肯定会优先妥善处理您的诉求。
+到哪可以投诉圆通 express_supervision_inquiry 您好，先生/女士，物流公司属于邮管局统一管辖，您的快件问题属于圆通处理，请您谅解，我们肯定会优先妥善处理您的诉求。
+我是法院的，想查一下快递信息 police_inquiry 关于各省区中心地方公安调证事情，统一流程如下：
+一、调证方先发协查至上海网安总队（必须）
+二、接收材料
+1、总部线下：上海市青浦区新协路28号，联系人：朱箭，联系电话：13761248683
+2、邮寄快递：上海市青浦区新协路28号，联系人：朱箭，联系电话：13761248683
+3、电子邮箱：diaozheng@yto.net.cn（公安直接发），只发邮件，不去上海网安总队备案的，不接受调证，网安总队外协窗口电话：021-22025340
+三、所需材料
+1、受案登记表
+2、立案决定书
+3、调证通知书
+4、调取证据清单
+5、两位民警警官证正反面复印件
+调证工作联系人：朱箭，联系电话：13761248683
+我是警察，想看一个快递的信息 police_inquiry 关于各省区中心地方公安调证事情，统一流程如下：
+一、调证方先发协查至上海网安总队（必须）
+二、接收材料
+1、总部线下：上海市青浦区新协路28号，联系人：朱箭，联系电话：13761248683
+2、邮寄快递：上海市青浦区新协路28号，联系人：朱箭，联系电话：13761248683
+3、电子邮箱：diaozheng@yto.net.cn（公安直接发），只发邮件，不去上海网安总队备案的，不接受调证，网安总队外协窗口电话：021-22025340
+三、所需材料
+1、受案登记表
+2、立案决定书
+3、调证通知书
+4、调取证据清单
+5、两位民警警官证正反面复印件
+调证工作联系人：朱箭，联系电话：13761248683
+公安，要调取**号码名下的单号情况 has_no_express_id 您好，建议您对接寄件人确认一下单号再来电圆通，您提供的信息无法查询单号，请您谅解。
+您也可以通过圆通微信公众号/小程序使用手机号码登录查询您的快递单号或者登陆圆通官网首页—使用“手机号码查询”输入验证码登陆，查询近期的收和发的快递单号。
+淘宝号码多少？ other_merchant_number 淘宝：9510211   拼多多：021-53395288
+抖音：950515    快手：400-101-5454
+中通：95311     申通：95543 
+韵达：95546     顺丰：95338 
+EMS/邮政：11183 百世快递：95320 
+德邦：95353     京东快递：950616 
+安能：95344     极兔：952300
+拼多多怎么联系 other_merchant_number 淘宝：9510211   拼多多：021-53395288
+抖音：950515    快手：400-101-5454
+中通：95311     申通：95543 
+韵达：95546     顺丰：95338 
+EMS/邮政：11183 百世快递：95320 
+德邦：95353     京东快递：950616 
+安能：95344     极兔：952300
+抖音号码多少？ other_merchant_number 淘宝：9510211   拼多多：021-53395288
+抖音：950515    快手：400-101-5454
+中通：95311     申通：95543 
+韵达：95546     顺丰：95338 
+EMS/邮政：11183 百世快递：95320 
+德邦：95353     京东快递：950616 
+安能：95344     极兔：952300
+快手怎么联系 other_merchant_number 淘宝：9510211   拼多多：021-53395288
+抖音：950515    快手：400-101-5454
+中通：95311     申通：95543 
+韵达：95546     顺丰：95338 
+EMS/邮政：11183 百世快递：95320 
+德邦：95353     京东快递：950616 
+安能：95344     极兔：952300
+中通号码多少？ phone_number_required
+韵达怎么联系 ask_reply_way 正常情况下，一个工作日内会有专员给您回电的
+顺丰号码多少？ other_merchant_number 淘宝：9510211   拼多多：021-53395288
+抖音：950515    快手：400-101-5454
+中通：95311     申通：95543 
+韵达：95546     顺丰：95338 
+EMS/邮政：11183 百世快递：95320 
+德邦：95353     京东快递：950616 
+安能：95344     极兔：952300
+邮政怎么联系 ask_reply_way 正常情况下，一个工作日内会有专员给您回电的
+ems号码多少？ consult_expressman_phone 您好，请稍等我正在查询中，稍后发短信到您的手机上，请注意查收。
+百世怎么联系 ask_reply_way 正常情况下，一个工作日内会有专员给您回电的
+德邦号码多少？ consult_post_info 您好，请稍等我正在查询中，稍后发短信到您的手机上，请注意查收。
+京东怎么联系 other_merchant_number 淘宝：9510211   拼多多：021-53395288
+抖音：950515    快手：400-101-5454
+中通：95311     申通：95543 
+韵达：95546     顺丰：95338 
+EMS/邮政：11183 百世快递：95320 
+德邦：95353     京东快递：950616 
+安能：95344     极兔：952300
+安能怎么联系 ask_reply_way 正常情况下，一个工作日内会有专员给您回电的
+极兔号码多少？ consult_expressman_phone 您好，请稍等我正在查询中，稍后发短信到您的手机上，请注意查收。
+你们怎么不送货上门的 ask_home_delivery 您好，先生/女士，圆通始终遵循按照客户需求进行派送服务，针对您反馈的问题，客服登记反馈给处理专员，尽快按照您的面单地址重新派送，后续我们也会加强管理，确保您在圆通获得最佳物流体验。
+快递凭什么给我放驿站 specify_method_not_him_want_address 您好，先生/女士，圆通始终遵循按照客户需求进行派送服务，针对您反馈的问题，客服登记反馈给处理专员，尽快按照您的面单地址重新派送，后续我们也会加强管理，确保您在圆通获得最佳物流体验。
+你们没有送货上门服务吗 ask_home_delivery 您好，先生/女士，圆通始终遵循按照客户需求进行派送服务，针对您反馈的问题，客服登记反馈给处理专员，尽快按照您的面单地址重新派送，后续我们也会加强管理，确保您在圆通获得最佳物流体验。
+收到都坏了 package_damage 您好，先生/女士，非常抱歉给您带来了不好的体验，请您提供下收到时的外包装情况和内件情况，客服登记反馈去核实，有结果第一时间同步给您，请您耐心等待。
+收到里面东西少了 package_lack 您好，先生/女士，非常抱歉给您带来了不好的体验，请您提供下收到时的外包装情况和内件情况，客服登记反馈去核实，有结果第一时间同步给您，请您耐心等待。
+香烟能寄吗 consult_cigarette_good 香烟是限寄物品,每人每天可以邮寄两条烟。
+烟可以寄吗 consult_cigarette_good 香烟是限寄物品,每人每天可以邮寄两条烟。
+你们公司能寄烟吗 consult_cigarette_good 香烟是限寄物品,每人每天可以邮寄两条烟。
+我要开票 consult_invoice 先生/女士，现付发票由发件公司提供、到付发票由派送公司提供，发票以当地网点公司现有发票为准！需要您联系网点开取。
+我要开发票 consult_invoice 先生/女士，现付发票由发件公司提供、到付发票由派送公司提供，发票以当地网点公司现有发票为准！需要您联系网点开取。
+发票怎么开 consult_invoice 先生/女士，现付发票由发件公司提供、到付发票由派送公司提供，发票以当地网点公司现有发票为准！需要您联系网点开取。
+体积怎么收费的 large_express_standard 您好，先生/女士，三边总和≥90cm按照体积收费
+轻泡件体积重量的计算方式：长（cm）*宽（cm）*高（cm）/体积重量系数8000
+航空件轻泡件体积重量的计算方式：长（cm）*宽（cm）*高（cm）/体积重量系数6000
+大件怎么收费的 large_express_standard 您好，先生/女士，三边总和≥90cm按照体积收费
+轻泡件体积重量的计算方式：长（cm）*宽（cm）*高（cm）/体积重量系数8000
+航空件轻泡件体积重量的计算方式：长（cm）*宽（cm）*高（cm）/体积重量系数6000
+包装要钱吗 faq_consult_package 您好，先生/女士，圆通免费提供圆通快递袋和文件袋，其他打包材料需要收取相应费用，正常纸箱包装收取3-5元费用。
+文件袋收费吗 faq_consult_package 您好，先生/女士，圆通免费提供圆通快递袋和文件袋，其他打包材料需要收取相应费用，正常纸箱包装收取3-5元费用。
+纸箱打包要收钱吗 faq_consult_package 您好，先生/女士，圆通免费提供圆通快递袋和文件袋，其他打包材料需要收取相应费用，正常纸箱包装收取3-5元费用。
+保价怎么保 faq_consult_how_to_insured_value 保价费最低为1元。
+    1、普货保
+      单票价值≦1000元（含），保价费为1元。       单票价值≦2000元（含），保价费为2元。
+      2000-1万元（含），保价费为保价金额的3‰。   1万元-3万元（含），保价费为保价金额的5‰。
+    2、文件保
+      单票价值0-500元（含），保价费为1元。       单票价值500-1000元（含），保价费为2元。
+    3、贵重物品保价
+      30000-150000 元（含），保价费为保价金额的8‰
+    不承保物品：
+      邮政、航空等各相关法律法规禁寄品；中国大陆境内无修复或定损技术能力的精密货品；
+      易碎品：玻璃类、陶瓷类、石膏类，石材类，大型雕刻类以及不易妥善包装的物品；3C类中含易碎屏幕（超过15.6寸）的产品；
+      无法核实其真实价值的货物（如：二手物品、有价证券、文件、证件、发票、票据等）
+    注：单票快件最高声明价值不超过3万元；快件声明价值以实际货物价值为准；
+你们有保价服务吗 faq_consult_how_to_insured_value 保价费最低为1元。
+    1、普货保
+      单票价值≦1000元（含），保价费为1元。       单票价值≦2000元（含），保价费为2元。
+      2000-1万元（含），保价费为保价金额的3‰。   1万元-3万元（含），保价费为保价金额的5‰。
+    2、文件保
+      单票价值0-500元（含），保价费为1元。       单票价值500-1000元（含），保价费为2元。
+    3、贵重物品保价
+      30000-150000 元（含），保价费为保价金额的8‰
+    不承保物品：
+      邮政、航空等各相关法律法规禁寄品；中国大陆境内无修复或定损技术能力的精密货品；
+      易碎品：玻璃类、陶瓷类、石膏类，石材类，大型雕刻类以及不易妥善包装的物品；3C类中含易碎屏幕（超过15.6寸）的产品；
+      无法核实其真实价值的货物（如：二手物品、有价证券、文件、证件、发票、票据等）
+    注：单票快件最高声明价值不超过3万元；快件声明价值以实际货物价值为准；
+妈的 swearing 尊敬的XX先生/女士，我非常理解您的心情，也在尽最大的努力为您处理问题，希望我们能够相互尊重、文明用语，一味的辱骂并不是解决问题的办法，希望我们能尽快回到快件问题上来，感谢您的配合，谢谢！
+操 swearing 尊敬的XX先生/女士，我非常理解您的心情，也在尽最大的努力为您处理问题，希望我们能够相互尊重、文明用语，一味的辱骂并不是解决问题的办法，希望我们能尽快回到快件问题上来，感谢您的配合，谢谢！
+你死了吗 swearing 尊敬的XX先生/女士，我非常理解您的心情，也在尽最大的努力为您处理问题，希望我们能够相互尊重、文明用语，一味的辱骂并不是解决问题的办法，希望我们能尽快回到快件问题上来，感谢您的配合，谢谢！
+妓女 swearing 尊敬的XX先生/女士，我非常理解您的心情，也在尽最大的努力为您处理问题，希望我们能够相互尊重、文明用语，一味的辱骂并不是解决问题的办法，希望我们能尽快回到快件问题上来，感谢您的配合，谢谢！
+别按静音； response_untimely
+不要按静音； response_untimely
+你不要按静音； response_untimely
+你在听我说话吗？ response_untimely
+你在听我讲话吗？ response_untimely
+你有没有在听我说话？ response_untimely
+你有没有在听我讲话？ response_untimely
+你有没有在听？ response_untimely
+我说的什么你听见了吗？ response_untimely
+你能听见我说话吧？ response_untimely
+你能听见我讲话吧？ response_untimely
+你能听到我说话吧？ response_untimely
+你能听到我讲话吧？ response_untimely
+问你话呢！ response_untimely
+我跟你说话呢！ response_untimely
+你人呢 response_untimely
+还在听吗 response_untimely
+还在吗 response_untimely
+有人吗 response_untimely
+说话呀 response_untimely
+讲话呀 response_untimely
+我还没说完呢，你先不要说话； interrupt_speech
+我没说完，你先不要说话； interrupt_speech
+我还没说完，你先别说话； interrupt_speech
+你什么态度啊，我还在说话，你就插我话； interrupt_speech
+你什么态度啊，我还在讲话，你就插话； interrupt_speech
+你不要打断我说话； interrupt_speech
+不要打断我讲话； interrupt_speech
+你别打断我说话； interrupt_speech
+别打断我讲话； interrupt_speech
+你能听我说吗？ interrupt_speech
+你能先听我说吗？ interrupt_speech
+你能先听我讲完吗？ interrupt_speech
+你能不能让我把话说完？ interrupt_speech
+到底是你说还是我说啊？ interrupt_speech
+别人说话的时候你能不能倾听一下。 interrupt_speech
+别人讲话的时候你能不能好好听一下。 interrupt_speech
+别人讲话的时候你能不能认真听一听。 interrupt_speech
+你听我说完 interrupt_speech
+你听我讲完 interrupt_speech
+你不要插话 interrupt_speech
+你不要插嘴 interrupt_speech
+你先不要插话 interrupt_speech
+你先不要插嘴 interrupt_speech
+你别插话 interrupt_speech
+你别插嘴 interrupt_speech
+你先别插话 interrupt_speech
+你先别插嘴行吗 interrupt_speech
+你新来的吗； understand_insufficiently
+你是新人吗； understand_insufficiently
+你是个新人吗； understand_insufficiently
+你理解能力有问题，我是先生不是女士； understand_insufficiently
+你理解能力有问题吧； understand_insufficiently
+你是不是理解能力有问题 understand_insufficiently
+你是不是理解有问题 understand_insufficiently
+你有没有理解我的问题 understand_insufficiently
+你没有理解我的问题 understand_insufficiently
+你没理解我的问题 understand_insufficiently
+你有没有理解我的意思 understand_insufficiently
+你没有理解我的意思 understand_insufficiently
+你没理解我的意思 understand_insufficiently
+你没有搞懂我的意思 understand_insufficiently
+你没搞懂我的意思 understand_insufficiently
+你没搞清楚我的意思 understand_insufficiently
+你没弄清楚我的意思 understand_insufficiently
+你先弄清楚我的意思吧 understand_insufficiently
+你没明白我的意思 understand_insufficiently
+你回答的不是我问的问题； understand_insufficiently
+你说的不是我问的问题； understand_insufficiently
+你讲的不是我说的问题； understand_insufficiently
+到底是什么情况你能不能说清楚点？ understand_insufficiently
+到底是什么情况你能不能说明白一点？ understand_insufficiently
+你能再说清楚点吗？ understand_insufficiently
+你能再说明白一点吗？ understand_insufficiently
+什么情况你能不能讲清楚点？ understand_insufficiently
+什么情况你能不能讲明白一点？ understand_insufficiently
+我不清楚你说什么意思 understand_insufficiently
+我听不懂你的意思 understand_insufficiently
+我不懂你的意思 understand_insufficiently
+我刚不是说过了吗 understand_insufficiently
+我不是刚说过了吗 understand_insufficiently
+我说了几遍了 understand_insufficiently
+我都说几遍了 understand_insufficiently
+我都说几百遍了 understand_insufficiently
+你能听明白吗 understand_insufficiently
+你听懂了吗 understand_insufficiently
+你到底清不清楚 understand_insufficiently
+你到底懂不懂 understand_insufficiently
+你懂不懂 understand_insufficiently
+你到底知不知道 understand_insufficiently
+你培训了吗就上岗了 understand_insufficiently
+你培训了吗就上班了 understand_insufficiently
+你是不是没培训就上岗了 understand_insufficiently
+你是不是没培训就上班了 understand_insufficiently
+你是不是没培训过 understand_insufficiently
+你没培训过吗 understand_insufficiently
+你们做客服都不培训的吗 understand_insufficiently
+你们客服的都不培训的吗 understand_insufficiently
+你们圆通客服的都不培训的吗 understand_insufficiently
+你们圆通客服就这个水平吗 understand_insufficiently
+你们圆通客服就这水平？ understand_insufficiently
+我反馈的问题你登记好没 understand_insufficiently
+我反馈的问题你登记了吗 understand_insufficiently
+我说的问题你登记了吗 understand_insufficiently
+我投诉的问题你登记了吗 understand_insufficiently
+我投诉的问题你记住了吗 understand_insufficiently
+你什么态度 complaint_service 您好，先生/女士，针对服务问题我司后续会加强管理及培训，给您带来不好的体验，这边先给您真诚的致歉，还请您谅解，同时欢迎您后续随时监督我们；
+你就这态度 perfunctory_attitude
+你就这服务态度 perfunctory_attitude
+你们圆通就这服务态度 perfunctory_attitude
+你怎么有气无力的样子？ perfunctory_attitude
+你是不是没睡醒？ perfunctory_attitude
+你是没睡醒吗 perfunctory_attitude
+你没睡醒吗 perfunctory_attitude
+你能不能态度好一点？ perfunctory_attitude
+你态度能不能好一点？ perfunctory_attitude
+到底你是客服还是我是客服啊？ perfunctory_attitude
+是你要为我解决问题，不是我为你解决问题。 perfunctory_attitude
+你是复读机吗？ perfunctory_attitude
+你是个复读机吗？ perfunctory_attitude
+你是机器人吗？ faq_is_artificial 这里是圆通客服， 请问有什么可以帮您？
+你是个机器人吗？ perfunctory_attitude
+给我网点电话干嘛 perfunctory_attitude
+给我快递员电话干嘛 perfunctory_attitude
+你们业务员恐吓我说要弄死我 customer_be_threatened
+你们快递员说要弄死我 customer_be_threatened
+你们业务员说有我家地址，让我晚上不要出门 customer_be_threatened
+你们快递员说有我家地址，要我晚上不要出门 customer_be_threatened
+快递员要来我家揍我 customer_be_threatened
+你们业务员说要来我家揍我 customer_be_threatened
+你们业务员打我 customer_be_threatened
+你们快递员打我 customer_be_threatened
+你们快递员骂我 customer_be_threatened
+我要自杀 customer_be_threatened
+你们业务员强暴 customer_be_threatened
+业务员强奸 customer_be_threatened
+你们业务员调戏 customer_be_threatened
+业务员抱我 customer_be_threatened
+你们业务员摸我 customer_be_threatened
+你们业务员偷窥我 customer_be_threatened
+你们快递员强暴 customer_be_threatened
+快递员强奸 customer_be_threatened
+你们快递员调戏我 customer_be_threatened
+快递员抱我 customer_be_threatened
+你们快递员摸我 customer_be_threatened
+你们圆通快递员偷窥我 customer_be_threatened
+新闻曝光你们 upgrade_intention
+报社曝光你们 upgrade_intention
+媒体曝光你们 upgrade_intention
+栏目组曝光你们 upgrade_intention
+栏目组举报你们 upgrade_intention
+发微博曝光你们 upgrade_intention
+发微博举报你们 upgrade_intention
+发朋友圈曝光你们 upgrade_intention
+发朋友圈举报你们 upgrade_intention
+找记者曝光你们圆通快递 upgrade_intention
+到邮政投诉你们 upgrade_intention
+到邮政举报你们 upgrade_intention
+到邮管局投诉你们 upgrade_intention
+到邮管局举报你们 upgrade_intention
+315投诉你们 upgrade_intention
+打315投诉你们 upgrade_intention
+315举报你们公司 upgrade_intention
+12315投诉你们 upgrade_intention
+打12315投诉你们 upgrade_intention
+12315举报你们公司 upgrade_intention
+12305投诉你们 upgrade_intention
+打12305投诉你们 upgrade_intention
+12305举报你们公司 upgrade_intention
+升级投诉 upgrade_intention
+再不处理好就升级投诉 upgrade_intention
+再不处理我就升级投诉了 upgrade_intention
+快递管理部门投诉你们 upgrade_intention
+快递管理部门举报你们 upgrade_intention
+不然报警处理 upgrade_intention
+不然就报警处理 upgrade_intention
+起诉你们公司 upgrade_intention
+不然我就报案了 upgrade_intention
+再不处理我就报案了 upgrade_intention
+我已经报案了，你们等着吧 upgrade_intention
+不然我就报警了 upgrade_intention
+再不处理我就报警了 upgrade_intention
+我已经报警了，你们等着吧 upgrade_intention
+不然就到法院告你们 upgrade_intention
+不然就到法院起诉你们 upgrade_intention
+服务态度真好 customer_praise
+你服务的真好 customer_praise
+服务态度好 customer_praise
+你服务态度好 customer_praise
+辛苦了 customer_praise
+你真棒 customer_praise
+给你点赞 customer_praise
+给你点个赞 customer_praise
+辛苦你了 customer_praise
+劳烦你了 angry
+你服务不错 customer_praise
+你有耐心 customer_praise
+感谢你的耐心 customer_praise
+对你态度满意 customer_praise
+服务太热情了 customer_praise
+你这个客服不错 customer_praise
+我要表扬你 customer_praise
+我通过什么方式表扬你 customer_praise
+我要给你好评 customer_praise
+一定给你好评 customer_praise
+必须给你好评 customer_praise
+我想给你个好评 customer_praise
+
+- name: rasa.nlu.tokenizers.plant_tokenizer.JiebaTokenizer
+name: "CountVectorsFeaturizer"
+  "analyzer": "word"
+  "min_df": 2
+  "max_df": 1000
+  "min_ngram": 1
+  "max_ngram": 3
+  # Set the out-of-vocabulary token
+  "OOV_token": "_oov_"
+  # Whether to use a shared vocab
+  "use_shared_vocab": False
+
+  name: rasa.nlu.classifiers.linearsvc_plus_classifier.LinearSVCClassifier
+  C: 1
+  tol: 0.0005
+  max_iter: 1000
+  ranking_length: 3
