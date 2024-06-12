@@ -29,8 +29,10 @@ rules:
 
 - rule: tip_off
   steps:
+  - or:
     - intent: tip_off
-    - action: utter_angry_appease_threaten_complaint
+    - intent: upgrade_intention
+  - action: utter_angry_appease_threaten_complaint
 
 # 要区分收件人和发件人
 - rule: check_weight
