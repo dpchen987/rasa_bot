@@ -23,7 +23,9 @@ yt_rep_pat = re.compile(r"[yY] {,3}7")
 incrt_lang_pat = re.compile(r"[你他][妈]|神经|变态|[傻呆妈][逼bB蛋]|妈.{,4}[逼的]|[有毛]病|我[操靠草日]|[操日].{,3}[你他妈]|[滚猪狗贱瞎聋傻嫖]|什么玩意|人渣|不要脸|狗日|算什么东西|闭嘴|没.{,3}脑子|智障|废话|更年期|你大爷|[瞎胡]扯|"
                             r"无[聊语]|恶心|[气去]死|倒霉|md|没.{,3}[眼耳脑]|[眼耳脑听].{,3}[坏病问题]|嘴.{,3}干净|[真太好]烦|活该")
 guide_upgrade_pat = re.compile(r"邮.{,3}[政局]|123[104]5|消.{,5}协|市民热线|监管部门|媒体|报道|举报|曝光|第三方.{,5}投诉|(?:其他|别的).{,2}(?:渠道|地方|方式).{,3}投诉")
-customer_praise_pat = re.compile(r"(?:服务|态度)[^不哪]{,3}好|(?:服务|态度).{,3}不错|(?:渠道|地方|方式).{,3}投诉")
+upgrade_intention_pat = re.compile(r"邮.{,3}[政局]|123[104]5|315|消.{,5}协|市民热线|监管部门|媒体|报道|举报|曝光|第三方.{,5}投诉|(?:其他|别的).{,2}(?:渠道|地方|方式).{,3}投诉"
+                                   r"新闻|记者|报社|栏目组|微博|朋友圈|起诉|升级|管理部门|报[案警]|法院")
+customer_praise_pat = re.compile(r"(?:服务|态度)[^不哪]{,3}(?:好|热情)(?![吗不个])|辛苦|你[^没]{,3}有耐心|(?:服务|态度|你|客服).{,3}不错|对你[^不]{,3}满意|(?:我|怎么|方[式法]|途径)[^不]{,3}表扬你|给你?.{,3}(?:好评|赞)")
                             
 # 目前rasa使用的IO，目的是对外界输入进行预处理
 class WdgjIO(InputChannel):
@@ -145,6 +147,9 @@ class WdgjIO(InputChannel):
                     if last_message['intent_name'] == 'guide_upgrade_intention' and not guide_upgrade_pat.search(last_message['text']):
                         logger.info(f"guide_upgrade_skip: {request.json}")
                         last_message['intent_name'] = 'guide_upgrade_skip'
+                    if last_message['intent_name'] == 'upgrade_intention' and not upgrade_intention_pat.search(last_message['text']):
+                        logger.info(f"upgrade_intention_skip: {request.json}")
+                        last_message['intent_name'] = 'upgrade_intention_skip'
                     if last_message['intent_name'] == 'customer_praise' and not customer_praise_pat.search(last_message['text']):
                         logger.info(f"customer_praise_skip: {request.json}")
                         last_message['intent_name'] = 'customer_praise_skip'
