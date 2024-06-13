@@ -20,8 +20,11 @@ from .logging import logger
 x_ge_y_pat = re.compile(r"[1-6一二两三四五六]个[\d 零令林一幺妖二两三四五六七八九]")
 numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
 yt_rep_pat = re.compile(r"[yY] {,3}7")
-incrt_lang_pat = re.compile(r"[你他][妈]|神经|变态|[傻呆妈][逼bB蛋]|妈.{,4}[逼的]|[有毛]病|我[操靠草日]|[操日].{,3}[你他妈]|[死滚猪狗贱瞎聋傻嫖]|什么玩意|人渣|不要脸|狗日|算什么东西|闭嘴|没.{,3}脑子|智障|废话|更年期|你大爷|[瞎胡]扯|"
-                            r"邮[政局]|123[104]5|消.{,5}协|市民热线|媒体|报道|举报|曝光|无[聊语]|恶心|气死|倒霉|md|没.{,3}[眼耳脑]|脑.{,3}[坏病问题]|[真太好]烦|活该")
+incrt_lang_pat = re.compile(r"[你他][妈]|神经|变态|[傻呆妈][逼bB蛋]|妈.{,4}[逼的]|[有毛]病|我[操靠草日]|[操日].{,3}[你他妈]|[滚猪狗贱瞎聋傻嫖]|什么玩意|人渣|不要脸|狗日|算什么东西|闭嘴|没.{,3}脑子|智障|废话|更年期|你大爷|[瞎胡]扯|"
+                            r"无[聊语]|恶心|[气去]死|倒霉|md|没.{,3}[眼耳脑]|[眼耳脑听].{,3}[坏病问题]|嘴.{,3}干净|[真太好]烦|活该")
+guide_upgrade_pat = re.compile(r"邮.{,3}[政局]|123[104]5|消.{,5}协|市民热线|监管部门|媒体|报道|举报|曝光|第三方.{,5}投诉|(?:其他|别的).{,2}(?:渠道|地方|方式).{,3}投诉")
+customer_praise_pat = re.compile(r"(?:服务|态度)[^不哪]{,3}好|(?:服务|态度).{,3}不错|(?:渠道|地方|方式).{,3}投诉")
+                            
 # 目前rasa使用的IO，目的是对外界输入进行预处理
 class WdgjIO(InputChannel):
     def name(self) -> Text:
@@ -139,6 +142,12 @@ class WdgjIO(InputChannel):
                     if last_message['intent_name'] == 'incorrect_language' and not incrt_lang_pat.search(last_message['text']):
                         logger.info(f"incorrect_lang_skip: {request.json}")
                         last_message['intent_name'] = 'incorrect_lang_skip'
+                    if last_message['intent_name'] == 'guide_upgrade_intention' and not guide_upgrade_pat.search(last_message['text']):
+                        logger.info(f"guide_upgrade_skip: {request.json}")
+                        last_message['intent_name'] = 'guide_upgrade_skip'
+                    if last_message['intent_name'] == 'customer_praise' and not customer_praise_pat.search(last_message['text']):
+                        logger.info(f"customer_praise_skip: {request.json}")
+                        last_message['intent_name'] = 'customer_praise_skip'
             except Exception as e:
                 logger.exception(f"exception: {request.json} {e}")
             logger.info(f"response: {collector.messages}, time: {time.time() - start_time:.2f}")    
