@@ -28,6 +28,10 @@ NO_SCRIPT_INTENT = ['angry','ask_damages','cancel_to_send','change_address_or_no
                     'reject_reason','threaten_complaint','useless_intent']
 PREDICTION_LOOP_TIMEOUT = 0.3
 
+CUSTUMER_INTENT_LS = []
+SERVICER_INTENT_LS = ["input_servicer","predict_call_end","phone_number_required","item_price_required","delivery_address_required",
+                      "incorrect_language","guide_upgrade_intention",]
+
 intent_map = dict()
 # 催中转
 intent_map['urge'] = 'urge'
