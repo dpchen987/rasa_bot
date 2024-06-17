@@ -92,6 +92,14 @@ class FallbackClassifier(GraphComponent, IntentClassifier):
             # print(message.data)
             text_inp = message.get('text')
             intent_name = message.data[INTENT].get(INTENT_NAME_KEY)
+            # 升级投诉和引导升级投诉修正
+            if text_inp.startswith("语言模型") and intent_name in ['upgrade_intention']:
+                rasa_logger.info(f"wrong_classifier {message.get('message_id')}: {text_inp} {intent_name}")
+                CUSTUMER_INTENT_DT = {'confidence': 1, 'name': 'guide_upgrade_intention'}
+                message.data[INTENT] = CUSTUMER_INTENT_DT
+                message.data.setdefault(INTENT_RANKING_KEY, [])
+                message.data[INTENT_RANKING_KEY].insert(0, CUSTUMER_INTENT_DT)
+                continue
             # 客服和客户意图混淆检测
             if text_inp.startswith("语言模型") and intent_name not in SERVICER_INTENT_LS:
                 rasa_logger.info(f"wrong_classifier {message.get('message_id')}: {text_inp} {intent_name}")
