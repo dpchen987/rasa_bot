@@ -440,75 +440,75 @@ class ActionDefaultFallbackConsultSendItem(Action):
         dispatcher.utter_message(response='utter_ask_for_express_id')
         
         return
-        current_state = tracker.current_state()
-        events = current_state['events']
-        # from pprint import pprint
-        # pprint(events)
-        # 判断当前对话是否存在填槽
-        active_loop = current_state['active_loop']
-        if 'name' not in active_loop:
-            return []
-        _event = []
+        # current_state = tracker.current_state()
+        # events = current_state['events']
+        # # from pprint import pprint
+        # # pprint(events)
+        # # 判断当前对话是否存在填槽
+        # active_loop = current_state['active_loop']
+        # if 'name' not in active_loop:
+        #     return []
+        # _event = []
+        # # express_id_piece = tracker.get_slot('slot_express_id_piece')
+        # # express_id = tracker.get_slot('slot_express_id')
         # express_id_piece = tracker.get_slot('slot_express_id_piece')
         # express_id = tracker.get_slot('slot_express_id')
-        express_id_piece = tracker.get_slot('slot_express_id_piece')
-        express_id = tracker.get_slot('slot_express_id')
-        user_messages = tracker.get_slot('slot_user_messages')
-        phone_collect = tracker.get_slot('slot_phone_collect')
-        if express_id_piece:
-            _event.append(SlotSet('slot_express_id_piece', express_id_piece))
-        if express_id:
-            _event.append(SlotSet('slot_express_id', express_id))
-        if user_messages:
-            _event.append(SlotSet('slot_user_messages', user_messages))
-        if phone_collect:
-            _event.append(SlotSet('slot_phone_collect', phone_collect))
+        # user_messages = tracker.get_slot('slot_user_messages')
+        # phone_collect = tracker.get_slot('slot_phone_collect')
+        # if express_id_piece:
+        #     _event.append(SlotSet('slot_express_id_piece', express_id_piece))
+        # if express_id:
+        #     _event.append(SlotSet('slot_express_id', express_id))
+        # if user_messages:
+        #     _event.append(SlotSet('slot_user_messages', user_messages))
+        # if phone_collect:
+        #     _event.append(SlotSet('slot_phone_collect', phone_collect))
 
-        save_slots = ['slot_name', 'slot_user_type', 'slot_big_category', 'slot_small_category', 'slot_work_type', 'slot_item_price']
-        for slot in save_slots:
-            slot_value = tracker.get_slot(slot)
-            if slot_value: 
-                _event.append(SlotSet(slot, slot_value))
-        # 计算出填槽失败次数和最近轮次机器人的回复
-        failure_count, action_name_list = self._count_slot_failure_num(events)
+        # save_slots = ['slot_name', 'slot_user_type', 'slot_big_category', 'slot_small_category', 'slot_work_type', 'slot_item_price']
+        # for slot in save_slots:
+        #     slot_value = tracker.get_slot(slot)
+        #     if slot_value: 
+        #         _event.append(SlotSet(slot, slot_value))
+        # # 计算出填槽失败次数和最近轮次机器人的回复
+        # failure_count, action_name_list = self._count_slot_failure_num(events)
 
-        action_name_list = list(reversed(action_name_list))
+        # action_name_list = list(reversed(action_name_list))
 
-        # 填槽失败达到次数的情况抛出对于日志
-        logging.debug(f"action_form_count_rollback unknown number:'{failure_count}'")
+        # # 填槽失败达到次数的情况抛出对于日志
+        # logging.debug(f"action_form_count_rollback unknown number:'{failure_count}'")
 
-        # 获取预先设置的运单号填槽失败最大次数槽位
-        slot_express_id_form_count = tracker.slots.get("slot_express_id_form_max_count", 0)
-        slot_express_id_form_count += 1
-        print('slot_express_id_form_max_count', slot_express_id_form_count)
-        # 设置一个值max_count用来存储上述槽位值，主要是用于防止上述槽位没有配置的情况
-        max_count = 5
+        # # 获取预先设置的运单号填槽失败最大次数槽位
+        # slot_express_id_form_count = tracker.slots.get("slot_express_id_form_max_count", 0)
+        # slot_express_id_form_count += 1
+        # print('slot_express_id_form_max_count', slot_express_id_form_count)
+        # # 设置一个值max_count用来存储上述槽位值，主要是用于防止上述槽位没有配置的情况
+        # max_count = 5
 
-        if slot_express_id_form_count == 3:
-        # elif express_id_piece and not express_id and slot_express_id_form_count < max_count:
-        #     # 获取最近的text，防止重复输出
-        #     last_bot_text = ''
-        #     for evt in reversed(events):
-        #         if evt['event'] == 'user': break
-        #         if evt['event'] == 'bot':
-        #             last_bot_text = evt['text']
-        #             break
-        #     if last_bot_text != f'运单号：{express_id_piece}_':
-        #         # 在收集运单号的过程中
-        #         dispatcher.utter_message(text= f'运单号：{express_id_piece}_')
-        # if slot_express_id_form_count:
-        #     max_count = slot_express_id_form_count
-        # 当填槽失败次数达到填槽失败最大次数，则指定话术名称传递到调度台dispatcher以供机器人输出
-        if False and slot_express_id_form_count >= max_count:
-            # dispatcher.utter_message(text='请继续说您的运单号')
-            # 最后返回一个会话重启事件，以将会话重置
-            return [SessionStarted()]
-        else:
-            _event.append(SlotSet('slot_express_id_form_max_count', slot_express_id_form_count))
-            # 如果填槽失败次数在最大次数范围内，则将机器人的回复逐一传递到调度台dispatcher以供机器人输出
-            # for action_name in action_name_list:
-            #     dispatcher.utter_message(response=action_name)
-            # 最后返回一个“用户回退事件”，该事件的目的是忽略外界的这一轮的输入
-            # return []
-            return [UserUtteranceReverted()] + _event
+        # if slot_express_id_form_count == 3:
+        # # elif express_id_piece and not express_id and slot_express_id_form_count < max_count:
+        # #     # 获取最近的text，防止重复输出
+        # #     last_bot_text = ''
+        # #     for evt in reversed(events):
+        # #         if evt['event'] == 'user': break
+        # #         if evt['event'] == 'bot':
+        # #             last_bot_text = evt['text']
+        # #             break
+        # #     if last_bot_text != f'运单号：{express_id_piece}_':
+        # #         # 在收集运单号的过程中
+        # #         dispatcher.utter_message(text= f'运单号：{express_id_piece}_')
+        # # if slot_express_id_form_count:
+        # #     max_count = slot_express_id_form_count
+        # # 当填槽失败次数达到填槽失败最大次数，则指定话术名称传递到调度台dispatcher以供机器人输出
+        # if False and slot_express_id_form_count >= max_count:
+        #     # dispatcher.utter_message(text='请继续说您的运单号')
+        #     # 最后返回一个会话重启事件，以将会话重置
+        #     return [SessionStarted()]
+        # else:
+        #     _event.append(SlotSet('slot_express_id_form_max_count', slot_express_id_form_count))
+        #     # 如果填槽失败次数在最大次数范围内，则将机器人的回复逐一传递到调度台dispatcher以供机器人输出
+        #     # for action_name in action_name_list:
+        #     #     dispatcher.utter_message(response=action_name)
+        #     # 最后返回一个“用户回退事件”，该事件的目的是忽略外界的这一轮的输入
+        #     # return []
+        #     return [UserUtteranceReverted()] + _event
 
