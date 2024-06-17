@@ -4,7 +4,7 @@ from rasa_sdk.events import SlotSet
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-import global_config
+import deploy_config
 
 
 # 该动作将登记标记槽位“slot_confirm_key”和要好评话术标记槽位“slot_ask_comments_key”分别赋值，以供后续流程判断使用
@@ -40,9 +40,9 @@ class ActionGetSlotIsReceiverKey(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        # 从跟踪器tracker中获取核心意图槽位，并将该值映射到global_config标准核心意图
+        # 从跟踪器tracker中获取核心意图槽位，并将该值映射到deploy_config标准核心意图
         slot_core_intent = tracker.get_slot('slot_core_intent')
-        slot_core_intent = global_config.intent_map.get(slot_core_intent)
+        slot_core_intent = deploy_config.intent_map.get(slot_core_intent)
         if slot_core_intent is None:
             return [SlotSet("slot_is_receiver_key", 'no_intent')]
         if slot_core_intent == "check_weight":

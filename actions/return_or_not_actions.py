@@ -8,7 +8,7 @@ import logging
 
 import sys
 sys.path.append("..")
-import global_config
+import deploy_config
 
 
 # 该动作根据后端接口查询是否退回成功
@@ -17,7 +17,7 @@ class ActionReturnOrNot(Action):
         return "action_return_or_not"
 
     def __init__(self):
-        self.url = global_config.WEB_URL+'wdgj-chatbot-server/intention/utter/queryReturnIsSuccess'
+        self.url = deploy_config.WEB_URL+'wdgj-chatbot-server/intention/utter/queryReturnIsSuccess'
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -38,7 +38,7 @@ class ActionReturnOrNot(Action):
         response = json.loads(requests.request("POST", self.url, headers=headers, data=payload).text)
 
         # 对后端返回的数据内容格式进行判断，进而返回对应的状态值，后续会根据状态值进行判断并返回对应的值
-        status = global_config.resp_has_exception(response)
+        status = deploy_config.resp_has_exception(response)
         dispatcher.utter_message(json_message={"story": "return_or_not", "api_exception": status})
 
         if status == 2 or status == 3:

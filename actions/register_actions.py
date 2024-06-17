@@ -9,7 +9,7 @@ from rasa_sdk.executor import CollectingDispatcher
 
 import sys
 sys.path.append("..")
-from global_config import WEB_URL, intent_map, intent_list
+from deploy_config import WEB_URL, intent_map, intent_list
 
 
 class ActionRegister(Action):

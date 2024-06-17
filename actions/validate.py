@@ -12,7 +12,7 @@ from .logging import logger
 from .service_intent_map import *
 import sys
 sys.path.append("..")
-import global_config
+import deploy_config
 
 gender_pat = re.compile(r"先生|小姐|女士")
 express_id_pat1 = re.compile("(?<![A-Za-z])g\\d{9,13}")
@@ -38,7 +38,7 @@ yes_pat = re.compile(r"对|是的")
 # 对机器人识别的槽位进行验证(比如运单号、电话等槽位)
 class ValidatePredefinedSlots(ValidationAction):
     def __init__(self):
-        self.check_url = global_config.WEB_URL+'wdgj-chatbot-server/waybillInfo/checkWaybillNo'
+        self.check_url = deploy_config.WEB_URL+'wdgj-chatbot-server/waybillInfo/checkWaybillNo'
 
     async def extract_slot_user_messages(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
@@ -49,10 +49,10 @@ class ValidatePredefinedSlots(ValidationAction):
         user_messages = eval(user_messages)
         message_text = tracker.latest_message['text']
         user_message = {'intent': tracker.get_intent_of_latest_message(), 'text':message_text, 'usr_type': 1 if message_text.startswith('语言模型') else 0}
-        # logger.info(tracker.latest_message)
-        # from pprint import pprint
+        logger.info(tracker.latest_message)
+        from pprint import pprint
         # pprint(tracker.slots)
-        # pprint(tracker.events)
+        pprint(tracker.events)
         # pprint(tracker.current_state())
         if not user_messages:
             user_message['sender_id'] = tracker.sender_id

@@ -9,7 +9,7 @@ import logging
 
 import sys
 sys.path.append("..")
-import global_config
+import deploy_config
 
 
 # 对需要计数的意图进行计数，并将计数结果赋值给每个意图对于的计数槽位，以用于流程分支判断

@@ -10,7 +10,7 @@ import logging
 
 import sys
 sys.path.append("..")
-import global_config
+import deploy_config
 
 # 该动作调用后端接口来查询有无历史工单
 class ActionGetHistoryWorkorder(Action):
@@ -20,7 +20,7 @@ class ActionGetHistoryWorkorder(Action):
         return "action_check_workorder"
 
     def __init__(self):
-        self.url = global_config.WEB_URL+'wdgj-chatbot-server/waybillInfo/checkUnFinshWork'
+        self.url = deploy_config.WEB_URL+'wdgj-chatbot-server/waybillInfo/checkUnFinshWork'
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,

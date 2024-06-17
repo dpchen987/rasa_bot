@@ -3,7 +3,7 @@ from rasa_sdk.events import SlotSet
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 
-from global_config import intent_map
+from deploy_config import intent_map
 
 
 # 该动作针对后续不需要登记的意图，利用辅助词槽进行标记

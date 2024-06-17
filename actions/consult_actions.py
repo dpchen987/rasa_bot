@@ -16,7 +16,7 @@ import sys
 from utils.prohibit_goods import prohibit_goods
 
 sys.path.append("..")
-import global_config
+import deploy_config
 
 '''
   咨询相关action
@@ -35,7 +35,7 @@ class ActionConsultExpressmanPhone(Action):
         return "action_consult_expressman_phone"
 
     def __init__(self):
-        self.url = global_config.WEB_URL+'wdgj-chatbot-server/consult/expressman'
+        self.url = deploy_config.WEB_URL+'wdgj-chatbot-server/consult/expressman'
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -93,7 +93,7 @@ class ActionConsultSendItem(Action):
         return "action_consult_send_item"
 
     def __init__(self):
-        self.url = global_config.WEB_URL+'wdgj-chatbot-server/consult/sendingItems'
+        self.url = deploy_config.WEB_URL+'wdgj-chatbot-server/consult/sendingItems'
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -164,7 +164,7 @@ class ActionConsultReceiveStationInfo(Action):
         return "action_consult_receive_station_info"
 
     def __init__(self):
-        self.url = global_config.WEB_URL+'wdgj-chatbot-server/consult/orgInfo'
+        self.url = deploy_config.WEB_URL+'wdgj-chatbot-server/consult/orgInfo'
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -247,7 +247,7 @@ class ActionConsultSendStationInfo(Action):
         return "action_consult_send_station_info"
 
     def __init__(self):
-        self.url = global_config.WEB_URL+'wdgj-chatbot-server/consult/sendingOrgInfo'
+        self.url = deploy_config.WEB_URL+'wdgj-chatbot-server/consult/sendingOrgInfo'
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -329,7 +329,7 @@ class ActionConsultPostInfo(Action):
         return "action_consult_post_info"
 
     def __init__(self):
-        self.url = global_config.WEB_URL + 'wdgj-chatbot-server/consult/yiInfo'
+        self.url = deploy_config.WEB_URL + 'wdgj-chatbot-server/consult/yiInfo'
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -429,8 +429,18 @@ class ActionDefaultFallbackConsultSendItem(Action):
     def run(
             self, dispatcher, tracker: Tracker, domain: Dict[Text, Any]
     ) -> List[Dict[Text, Any]]:
-        current_state = tracker.current_state()
+        # 判断是否已有单号
+        express_id = tracker.get_slot('slot_express_id')
+        if express_id: return
+        # 判断是否问过单号
+        for evt in reversed(tracker.events):
+            if evt['event'] == 'action' and evt['name'] == 'utter_ask_for_express_id':
+                return
 
+        dispatcher.utter_message(response='utter_ask_for_express_id')
+        
+        return
+        current_state = tracker.current_state()
         events = current_state['events']
         # from pprint import pprint
         # pprint(events)
@@ -475,7 +485,6 @@ class ActionDefaultFallbackConsultSendItem(Action):
         max_count = 5
 
         if slot_express_id_form_count == 3:
-            dispatcher.utter_message(text='麻烦您提供一下YT+13位数字的圆通运单号，我帮您看一下')
         # elif express_id_piece and not express_id and slot_express_id_form_count < max_count:
         #     # 获取最近的text，防止重复输出
         #     last_bot_text = ''

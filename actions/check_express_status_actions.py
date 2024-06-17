@@ -16,7 +16,7 @@ from datetime import datetime
 
 import sys
 sys.path.append("..")
-import global_config
+import deploy_config
 
 # 该动作调用后端接口来进行查件
 class CheckExpressStatusAction(Action):
@@ -26,7 +26,7 @@ class CheckExpressStatusAction(Action):
         return "action_check_express_status"
 
     def __init__(self):
-        self.url = global_config.WEB_URL + 'wdgj-chatbot-server/intention/utter/queryUrgeTraceNew'
+        self.url = deploy_config.WEB_URL + 'wdgj-chatbot-server/intention/utter/queryUrgeTraceNew'
 
     # 判断后端返回的信息是否是物流信息
     def is_logistics_track(self, str):
@@ -57,7 +57,7 @@ class CheckExpressStatusAction(Action):
         response = json.loads(requests.request("POST", self.url, headers=headers, data=payload).text)
 
         # 对后端返回的数据内容格式进行判断，进而返回对应的状态值，后续会根据状态值进行判断并返回对应的值
-        status = global_config.resp_has_exception(response)
+        status = deploy_config.resp_has_exception(response)
         # 对该流程进行分类，供自动登记工单中的大小类自动识别使用
         dispatcher.utter_message(json_message={"story": "check_express_status", "api_exception": status})
 

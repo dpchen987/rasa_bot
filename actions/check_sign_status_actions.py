@@ -9,7 +9,7 @@ import logging
 
 import sys
 sys.path.append("..")
-import global_config
+import deploy_config
 
 # 该动作调用后端接口来查询签收状态
 class ActionCheckSignStatus(Action):
@@ -18,7 +18,7 @@ class ActionCheckSignStatus(Action):
         return "action_check_sign_status"
 
     def __init__(self):
-        self.url = global_config.WEB_URL+'wdgj-chatbot-server/waybillInfo/queryIsSign'
+        self.url = deploy_config.WEB_URL+'wdgj-chatbot-server/waybillInfo/queryIsSign'
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,

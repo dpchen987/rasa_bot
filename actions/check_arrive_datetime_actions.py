@@ -11,7 +11,7 @@ import logging
 
 import sys
 sys.path.append("..")
-import global_config
+import deploy_config
 
 # 该动作调用后端接口来判断预计到达时间
 class ActionCheckArriveDatetime(Action):
@@ -21,7 +21,7 @@ class ActionCheckArriveDatetime(Action):
         return "action_check_arrive_datetime"
 
     def __init__(self):
-        self.url = global_config.WEB_URL+'wdgj-chatbot-server/intention/utter/queryPreArriveTimeNew'
+        self.url = deploy_config.WEB_URL+'wdgj-chatbot-server/intention/utter/queryPreArriveTimeNew'
 
     # 判断后端返回的信息是否是物流信息
     def is_logistics_track(self, str):
@@ -42,7 +42,7 @@ class ActionCheckArriveDatetime(Action):
         # 如果之前已经触发过某个流程，现在切换到预计达到时间
         slot_core_intent = tracker.get_slot('slot_core_intent')
         slot_phone = tracker.get_slot('slot_phone')
-        if global_config.intent_map.get(slot_core_intent) is not None and global_config.intent_map.get(slot_core_intent) != 'check_arrive_datetime':
+        if deploy_config.intent_map.get(slot_core_intent) is not None and deploy_config.intent_map.get(slot_core_intent) != 'check_arrive_datetime':
             # 从其他流程切换到预计到达时间，直接走登记，没有电话则抛出要电话话术，有电话则抛出正在登记、已经登记好了、引导结束等话术并重置会话
             if slot_phone is not None:
                 dispatcher.utter_message(response='utter_register_is_signing')
@@ -75,7 +75,7 @@ class ActionCheckArriveDatetime(Action):
         response = json.loads(requests.request("POST", self.url, headers=headers, data=payload).text)
 
         # 对后端返回的数据内容格式进行判断，进而返回对应的状态值，后续会根据状态值进行判断并返回对应的值
-        status = global_config.resp_has_exception(response)
+        status = deploy_config.resp_has_exception(response)
         # 对该流程进行分类，供自动登记工单中的大小类自动识别使用
         dispatcher.utter_message(json_message={"story": "check_arrive_datetime", "api_exception": status})
 
