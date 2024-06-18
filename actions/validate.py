@@ -84,7 +84,7 @@ class ValidatePredefinedSlots(ValidationAction):
         if not slot_hello:
             message_text = tracker.latest_message['text']
             if message_text.startswith('语言模型'):
-                cs_sentences = [evt['text'] for evt in tracker.events if evt['event']=='user' and evt['text'].startswith('语言模型')]
+                cs_sentences = [evt['text'] for evt in tracker.events if evt['event']=='user' and not evt['text'].startswith('语言模型')]
                 if len(cs_sentences) < 4:
                     hello_mat = hello_pat.search(message_text)
                     if hello_mat:
@@ -101,7 +101,7 @@ class ValidatePredefinedSlots(ValidationAction):
         if not slot_nice_to_serve:
             message_text = tracker.latest_message['text']
             if message_text.startswith('语言模型'):
-                cs_sentences = [evt['text'] for evt in tracker.events if evt['event']=='user' and evt['text'].startswith('语言模型')]
+                cs_sentences = [evt['text'] for evt in tracker.events if evt['event']=='user' and not evt['text'].startswith('语言模型')]
                 if len(cs_sentences) < 4:
                     nice_to_serve_mat = nice_to_serve_pat.search(message_text)
                     if nice_to_serve_mat:
@@ -118,7 +118,7 @@ class ValidatePredefinedSlots(ValidationAction):
         if not slot_can_i_help:
             message_text = tracker.latest_message['text']
             if message_text.startswith('语言模型'):
-                cs_sentences = [evt['text'] for evt in tracker.events if evt['event']=='user' and evt['text'].startswith('语言模型')]
+                cs_sentences = [evt['text'] for evt in tracker.events if evt['event']=='user' and not evt['text'].startswith('语言模型')]
                 if len(cs_sentences) < 4:
                     can_i_help_mat = can_i_help_pat.search(message_text)
                     if can_i_help_mat:
