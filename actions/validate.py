@@ -33,7 +33,8 @@ nice_to_serve_pat = re.compile(r"[很高兴]+.{,3}[您你].{,2}服务")
 can_i_help_pat = re.compile(r"[有什么]+.{,8}帮.?[助到您的吗]*")
 expose_abnormal_pat0 = re.compile(r"网点.{,5}有.{,5}问题|(?:圆通|快递站?|网点|驿站).{,5}(?:瘫痪|爆仓|整顿)|扣押.{,2}[快包][件递裹]|[快包][件递裹].{,3}扣押|(?:业务员|快递员?|网点).{,5}罢工|老板.{,5}跑路|(?:圆通|你们公司).{,5}(?:破产|倒闭)")
 expose_abnormal_pat1 = re.compile(r"网点[^没不哪什么]{,5}异常|网点[^没不哪什么]{,5}有[^什么]{,5}问题|(?:圆通|快递站?|网点|驿站)[^没不哪]{,5}(?:瘫痪|爆仓|整顿|调整)|[快包][件递裹][^没不]{,3}扣押|(?:业务员|快递员?|网点)[^没不]{,5}罢工|老板[^没不怎]{,5}跑路")
-thanks_pat = re.compile(r"[谢感]谢|谢[了啦]")
+# thanks_pat = re.compile(r"[谢感]谢|谢[了啦]")
+thanks_pat = re.compile(r"(?:服务|态度)[^不哪]{,3}(?:好|热情)(?![吗不个])|你[^没]{,3}耐心|[多感谢]谢你[^没]{,3}耐心|(?:服务|态度|你|客服).{,3}不错|对你[^不]{,3}满意|你[^不]{,3}负责")
 yes_pat = re.compile(r"对|是的")
 # 对机器人识别的槽位进行验证(比如运单号、电话等槽位)
 class ValidatePredefinedSlots(ValidationAction):
@@ -49,10 +50,10 @@ class ValidatePredefinedSlots(ValidationAction):
         user_messages = eval(user_messages)
         message_text = tracker.latest_message['text']
         user_message = {'intent': tracker.get_intent_of_latest_message(), 'text':message_text, 'usr_type': 1 if message_text.startswith('语言模型') else 0}
-        logger.info(tracker.latest_message)
+        # logger.info(tracker.latest_message)
         from pprint import pprint
-        # pprint(tracker.slots)
-        pprint(tracker.events)
+        pprint(tracker.slots)
+        # pprint(tracker.events)
         # pprint(tracker.current_state())
         if not user_messages:
             user_message['sender_id'] = tracker.sender_id

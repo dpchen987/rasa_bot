@@ -431,15 +431,65 @@ class ActionDefaultFallbackConsultSendItem(Action):
     ) -> List[Dict[Text, Any]]:
         # 判断是否已有单号
         express_id = tracker.get_slot('slot_express_id')
-        if express_id: return
-        # 判断是否问过单号
-        for evt in reversed(tracker.events):
-            if evt['event'] == 'action' and evt['name'] == 'utter_ask_for_express_id':
-                return
-
-        dispatcher.utter_message(response='utter_ask_for_express_id')
-        
+        ask_express_id = tracker.get_slot('slot_ask_express_id')
+        if not ask_express_id and not express_id:
+            # 如果没单号也没问过单号，就问单号
+            dispatcher.utter_message(response='utter_ask_for_express_id')
+            return [SlotSet('slot_ask_express_id', 'yes')]
+        else:
+            intent_latest = tracker.get_intent_of_latest_message()
+            if intent_latest == 'check_client_name_phone_address':
+                dispatcher.utter_message(response='utter_check_client_name_phone_address')
+            elif intent_latest == 'pretend_signed':
+                dispatcher.utter_message(response='utter_signed_but_not_received')
+            elif intent_latest == 'consult_send_station_info':
+                dispatcher.utter_message(response='utter_net_telephone_inquiry')
+            elif intent_latest in ['consult_expressman_phone', 'consult_station_info', 'consult_post_info', ]:
+                dispatcher.utter_message(response='utter_telephone_inquiry')
+            elif intent_latest in ['complaint', 'complaint_customer_service' ]:
+                dispatcher.utter_message(response='utter_apologize_reply')
+                dispatcher.utter_message(response='utter_complaint_reply_6')
+            elif intent_latest == 'complaint_service':
+                dispatcher.utter_message(response='utter_complaint_staff')
+            elif intent_latest == 'complaint_service':
+                dispatcher.utter_message(response='utter_complaint_staff')
+            elif intent_latest in ['ask_home_delivery', 'specify_method_not_him_want_address', 'specify_method_not_courier_station', 'request_sent_to_delivery_cabinet']:
+                dispatcher.utter_message(response='utter_ask_home_delivery')
+            elif intent_latest in ['check_arrive_datetime', 'check_express_status', 'no_logistics_info', 'logistics_not_updated', 'if_has_lost', 'ask_send_on_time', 'urge_to_delivery', 'urge_to_send_goods', 'urge', 'consult_exception_reason', ]:
+                dispatcher.utter_message(response='utter_urge_appease_reply')
+            elif intent_latest in ['change_address', 'write_wrong_address', 'if_can_change_address',]:
+                dispatcher.utter_message(response='utter_change_address_reply')
+            elif intent_latest in ['package_damage', 'package_lack']:
+                dispatcher.utter_message(response='utter_damage_lack')
+            elif intent_latest in ['tip_off', 'upgrade_intention']:
+                dispatcher.utter_message(response='utter_angry_appease_threaten_complaint')
+            elif intent_latest == 'unable_to_contact_net_station':
+                dispatcher.utter_message(response='utter_unable_to_contact_net_station')
+            elif intent_latest == 'package_lost':
+                dispatcher.utter_message(response='utter_register_reply_6')
+            elif intent_latest == 'unable_to_contact_courier':
+                dispatcher.utter_message(response='utter_unable_to_contact_courier')
+            elif intent_latest == 'ask_code':
+                dispatcher.utter_message(response='utter_no_pickup_code')
+            elif intent_latest == 'has_not_received':
+                dispatcher.utter_message(response='utter_has_not_received')
+            elif intent_latest == 'urge_to_pickup_express':
+                dispatcher.utter_message(response='utter_urge_to_pickup_express')
+            elif intent_latest == 'address_is_wrong':
+                dispatcher.utter_message(response='utter_write_wrong_or_send_wrong_11')
+            elif intent_latest == 'send_wrong_address':
+                dispatcher.utter_message(response='utter_send_wrong_address')
+            elif intent_latest == 'return':
+                dispatcher.utter_message(response='utter_return_reply')
+            elif intent_latest == 'check_weight':
+                dispatcher.utter_message(response='utter_check_weight')
+            
         return
+        # if express_id: return
+        # # 判断是否问过单号
+        # for evt in reversed(tracker.events):
+        #     if evt['event'] == 'action' and evt['name'] == 'utter_ask_for_express_id':
+        #         return
         # current_state = tracker.current_state()
         # events = current_state['events']
         # # from pprint import pprint
