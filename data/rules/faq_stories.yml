@@ -7,10 +7,10 @@ rules:
 #  steps:
 #    - intent: online
 
-- rule: check_client_name_phone_address
-  steps:
-    - intent: check_client_name_phone_address
-    - action: utter_check_client_name_phone_address
+# - rule: check_client_name_phone_address
+#   steps:
+#     - intent: check_client_name_phone_address
+#     - action: utter_check_client_name_phone_address
 
 - rule: cancel_complain
   steps:
@@ -27,19 +27,19 @@ rules:
     - intent: query_register_or_not
     - action: utter_query_register_or_not
 
-- rule: tip_off
-  steps:
-  - or:
-    - intent: tip_off
-    - intent: upgrade_intention
-  - action: utter_angry_appease_threaten_complaint
+# - rule: tip_off
+#   steps:
+#   - or:
+#     - intent: tip_off
+#     - intent: upgrade_intention
+#   - action: utter_angry_appease_threaten_complaint
 
 # 要区分收件人和发件人
-- rule: check_weight
-  steps:
-    - intent: check_weight
-    - action: action_set_slot_core_intent   # 对查重量意图进行标记
-    - action: utter_check_weight
+# - rule: check_weight
+#   steps:
+#     - intent: check_weight
+#     - action: action_set_slot_core_intent   # 对查重量意图进行标记
+#     - action: utter_check_weight
 
 # 没有给用户回电
 - rule: did_not_contact_customer
@@ -49,16 +49,16 @@ rules:
     - action: utter_urge_to_process_again
 
 # 联系不上快递员
-- rule: unable_to_contact_courier
-  steps:
-    - intent: unable_to_contact_courier
-    - action: utter_unable_to_contact_courier
+# - rule: unable_to_contact_courier
+#   steps:
+#     - intent: unable_to_contact_courier
+#     - action: utter_unable_to_contact_courier
 
 # 联系不上网点
-- rule: unable_to_contact_net_station
-  steps:
-    - intent: unable_to_contact_net_station
-    - action: utter_unable_to_contact_net_station
+# - rule: unable_to_contact_net_station
+#   steps:
+#     - intent: unable_to_contact_net_station
+#     - action: utter_unable_to_contact_net_station
 
 # 服务码
 - rule: service_code

@@ -160,3 +160,67 @@ rules:
 #     - action: action_form_count_rollback
 #     - action: collect_express_id_form
 #     - active_loop: collect_express_id_form
+
+
+# 询问单号
+- rule: express id slot filling count
+  condition:
+    - slot_was_set:
+        - slot_ask_express_id: null
+    - slot_was_set:
+        - slot_express_id: null
+  steps:
+    - or:
+      - intent: change_address
+      - intent: write_wrong_address
+      - intent: if_can_change_address
+      - intent: address_is_wrong
+      - intent: check_arrive_datetime
+      - intent: check_sign_info
+      - intent: reject_reason
+      - intent: change_address_or_not
+      - intent: check_express_status
+      - intent: has_sent_or_not
+      - intent: pretend_sent
+      - intent: if_has_lost
+      - intent: no_logistics_info
+      - intent: urge
+      - intent: ask_send_on_time
+      - intent: logistics_not_updated
+      - intent: send_wrong_address
+      - intent: urge_to_send_goods
+      - intent: has_not_received
+      - intent: specify_method_not_courier_station
+      - intent: request_sent_to_delivery_cabinet
+      - intent: specify_method_not_him_want_address
+      - intent: pretend_signed
+      - intent: unable_to_contact_net_station
+      - intent: unable_to_contact_courier
+      - intent: consult_exception_reason
+      - intent: cancel_to_send
+      - intent: complaint
+      - intent: complaint_service
+      - intent: complaint_customer_service
+      - intent: ask_code
+      - intent: ask_damages
+      - intent: return
+      - intent: consult_expressman_phone
+      - intent: consult_station_info
+      - intent: consult_send_station_info
+      - intent: consult_post_info
+      - intent: consult_send_item
+      - intent: package_damage
+      - intent: package_lack
+      - intent: package_lost
+      - intent: ask_home_delivery
+      - intent: grumble_logistics_net_courier
+      - intent: threaten_complaint
+      - intent: not_arrive_threaten_complaint
+      - intent: not_process_threaten_complaint
+      - intent: check_client_name_phone_address
+      - intent: check_weight
+      - intent: hurry
+      - intent: urge_to_pickup_express
+      - intent: urge_to_delivery
+      - intent: upgrade_intention
+    - action: action_form_count_rollback

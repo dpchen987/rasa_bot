@@ -9,49 +9,49 @@ rules:
   - action: utter_angry_appease_swearing_1
 
 #  用户只说「地址错了」，需要先澄清是用户写错地址了，还是快递发错地方了
-- rule: clarify which situation
-  steps:
-  - intent: address_is_wrong
-  - action: utter_write_wrong_or_send_wrong_11
+# - rule: clarify which situation
+#   steps:
+#   - intent: address_is_wrong
+#   - action: utter_write_wrong_or_send_wrong_11
 
 # 修改地址
-- rule: change address
-  steps:
-  - or:
-    - intent: change_address
-    - intent: write_wrong_address
-    - intent: if_can_change_address
-  - action: utter_change_address_reply
+# - rule: change address
+#   steps:
+#   - or:
+#     - intent: change_address
+#     - intent: write_wrong_address
+#     - intent: if_can_change_address
+#   - action: utter_change_address_reply
 
 # 投诉
-- rule: omplaint without reason
-  steps:
-  - or:
-    - intent: complaint
-    - intent: complaint_customer_service
-  - action: utter_apologize_reply
-  - action: utter_complaint_reply_6
+# - rule: omplaint without reason
+#   steps:
+#   - or:
+#     - intent: complaint
+#     - intent: complaint_customer_service
+#   - action: utter_apologize_reply
+#   - action: utter_complaint_reply_6
 
 # 投诉员工
-- rule: complaint staff
-  steps:
-  - intent: complaint_service
-  - action: utter_complaint_staff
+# - rule: complaint staff
+#   steps:
+#   - intent: complaint_service
+#   - action: utter_complaint_staff
 
 # 询问联系方式
-- rule: telephone inquiry
-  steps:
-  - or:
-    - intent: consult_expressman_phone
-    - intent: consult_station_info
-    - intent: consult_post_info
-  - action: utter_telephone_inquiry
+# - rule: telephone inquiry
+#   steps:
+#   - or:
+#     - intent: consult_expressman_phone
+#     - intent: consult_station_info
+#     - intent: consult_post_info
+#   - action: utter_telephone_inquiry
 
 # 咨询网点电话
-- rule: telephone inquiry
-  steps:
-  - intent: consult_send_station_info
-  - action: utter_net_telephone_inquiry
+# - rule: telephone inquiry
+#   steps:
+#   - intent: consult_send_station_info
+#   - action: utter_net_telephone_inquiry
 
 #咨询-发票
 - rule: consult_invoice
@@ -60,14 +60,14 @@ rules:
   - action: utter_consult_invoice_1
 
 #送货上门
-- rule: ask_home_delivery
-  steps:
-  - or:
-    - intent: ask_home_delivery
-    - intent: specify_method_not_him_want_address
-    - intent: specify_method_not_courier_station
-    - intent: request_sent_to_delivery_cabinet
-  - action: utter_ask_home_delivery
+# - rule: ask_home_delivery
+#   steps:
+#   - or:
+#     - intent: ask_home_delivery
+#     - intent: specify_method_not_him_want_address
+#     - intent: specify_method_not_courier_station
+#     - intent: request_sent_to_delivery_cabinet
+#   - action: utter_ask_home_delivery
 
 # 回复方式
 # - rule: ask_reply_way
@@ -92,55 +92,55 @@ rules:
   - action: utter_has_no_express_id
 
 # 没有取件码
-- rule: no_pickup_code
-  steps:
-    - intent: ask_code
-    - action: utter_no_pickup_code
+# - rule: no_pickup_code
+#   steps:
+#     - intent: ask_code
+#     - action: utter_no_pickup_code
 
 # 催件：揽收，中转，异常
-- rule: urge_to_send_goods
-  steps:
-  - or:
-    - intent: check_arrive_datetime
-    - intent: check_express_status
-    - intent: no_logistics_info
-    - intent: logistics_not_updated
-    - intent: if_has_lost
-    - intent: ask_send_on_time
-    - intent: urge_to_delivery
-    - intent: urge_to_send_goods
-    - intent: urge
-    - intent: consult_exception_reason
-  - action: utter_urge_appease_reply
+# - rule: urge_to_send_goods
+#   steps:
+#   - or:
+#     - intent: check_arrive_datetime
+#     - intent: check_express_status
+#     - intent: no_logistics_info
+#     - intent: logistics_not_updated
+#     - intent: if_has_lost
+#     - intent: ask_send_on_time
+#     - intent: urge_to_delivery
+#     - intent: urge_to_send_goods
+#     - intent: urge
+#     - intent: consult_exception_reason
+#   - action: utter_urge_appease_reply
 
 # 快件损坏、短少
-- rule: damage lack
-  steps:
-  - or:
-    - intent: package_damage
-    - intent: package_lack
-  - action: utter_damage_lack
+# - rule: damage lack
+#   steps:
+#   - or:
+#     - intent: package_damage
+#     - intent: package_lack
+#   - action: utter_damage_lack
 # 快递丢失，
-- rule: package lost
-  steps:
-    - intent: package_lost
-    - action: utter_register_reply_6
+# - rule: package lost
+#   steps:
+#     - intent: package_lost
+#     - action: utter_register_reply_6
 # 拒收，退回
-- rule: return
-  steps:
-    - intent: return
-    - action: utter_return_reply
+# - rule: return
+#   steps:
+#     - intent: return
+#     - action: utter_return_reply
 
 # 签收未收到，虚假签收
-- rule: signed but not received
-  steps:
-    - intent: pretend_signed
-    - action: utter_signed_but_not_received
+# - rule: signed but not received
+#   steps:
+#     - intent: pretend_signed
+#     - action: utter_signed_but_not_received
 # 长时间未收到
-- rule: has_not_received
-  steps:
-    - intent: has_not_received
-    - action: utter_has_not_received
+# - rule: has_not_received
+#   steps:
+#     - intent: has_not_received
+#     - action: utter_has_not_received
 
 
 # 出默认话术
@@ -158,17 +158,17 @@ rules:
     - intent: byebye
     - action: utter_end
 # 催取件
-- rule: urge_to pickup_express
-  steps:
-    - intent: urge_to_pickup_express
-    - action: utter_urge_to_pickup_express
+# - rule: urge_to pickup_express
+#   steps:
+#     - intent: urge_to_pickup_express
+#     - action: utter_urge_to_pickup_express
 # 取件时间
 - rule: pickup_time
   steps:
     - intent: pickup_time
     - action: utter_pickup_time
 # 发错
-- rule: send_wrong_address
-  steps:
-    - intent: send_wrong_address
-    - action: utter_send_wrong_address
+# - rule: send_wrong_address
+#   steps:
+#     - intent: send_wrong_address
+#     - action: utter_send_wrong_address
