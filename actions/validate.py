@@ -51,8 +51,8 @@ class ValidatePredefinedSlots(ValidationAction):
         message_text = tracker.latest_message['text']
         user_message = {'intent': tracker.get_intent_of_latest_message(), 'text':message_text, 'usr_type': 1 if message_text.startswith('语言模型') else 0}
         # logger.info(tracker.latest_message)
-        from pprint import pprint
-        pprint(tracker.slots)
+        # from pprint import pprint
+        # pprint(tracker.slots)
         # pprint(tracker.events)
         # pprint(tracker.current_state())
         if not user_messages:
