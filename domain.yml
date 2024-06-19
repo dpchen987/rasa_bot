@@ -227,6 +227,12 @@ slots:
         entity: express_id
       - type: custom
 
+  slot_ask_express_id:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
   slot_phone_piece:
     type: text
     influence_conversation: false

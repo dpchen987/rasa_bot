@@ -6,7 +6,7 @@ import random
 WEB_URL = "http://10.130.10.210:18990/"                          # 测试环境
 # robot online script 
 BACK_END_TALK_URL = {
-  "back_end_url_pro": "http://10.7.40.153:16012/script/robot/chatBotServer",
+  "back_end_url_pro": "http://online-chatbot-inter.yto56.com.cn:16012/script/robot/chatBotServer",
   "back_end_url_tst": "http://10.130.11.74:9001/script/robot/chatBotServer",
   "back_end_url": "http://10.130.11.74:9001/script/robot/chatBotServer"
 }
