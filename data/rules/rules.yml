@@ -164,11 +164,6 @@ rules:
 
 # 询问单号
 - rule: express id slot filling count
-  condition:
-    - slot_was_set:
-        - slot_ask_express_id: null
-    - slot_was_set:
-        - slot_express_id: null
   steps:
     - or:
       - intent: change_address
@@ -208,7 +203,6 @@ rules:
       - intent: consult_station_info
       - intent: consult_send_station_info
       - intent: consult_post_info
-      - intent: consult_send_item
       - intent: package_damage
       - intent: package_lack
       - intent: package_lost
@@ -223,4 +217,5 @@ rules:
       - intent: urge_to_pickup_express
       - intent: urge_to_delivery
       - intent: upgrade_intention
+      - intent: tip_off
     - action: action_form_count_rollback
