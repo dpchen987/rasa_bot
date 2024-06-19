@@ -8,15 +8,14 @@ RESERVED_SLOTS_LIST = ["slot_express_id", "slot_name", "slot_phone", "slot_user_
                        "slot_item_price", "slot_delivery_address", "slot_hello", "slot_nice_to_serve", "slot_can_i_help",
                        "slot_expose_abnormal", "slot_thanks"]
 FAQ = "faq"
-NO_SCRIPT_INTENT = ['angry','ask_damages','cancel_to_send','change_address_or_not','check_sign_info',
-                    'delivery_address_required','faq_consult_how_to_send_item','faq_consult_send_item_door_pickup',
-                    'faq_consult_want_send_item','grumble_logistics_net_courier','has_sent_or_not','hurry',
-                    'incorrect_language','inform','input_servicer','is_ok','is_ok_thanks','is_ok_urge','is_receiver','is_sender',
-                    'item_price_required','no_use','not_accept_apology','not_arrive_threaten_complaint',
-                    'not_process_threaten_complaint','phone_number_required','predict_call_end','pretend_sent',
-                    'reject_reason','threaten_complaint','useless_intent']
+NO_SCRIPT_INTENT = ['angry','consult_send_item','customer_be_threatened','customer_praise','delivery_address_required',
+                    'faq_consult_how_to_send_item','faq_consult_send_item_door_pickup','faq_consult_want_send_item','guide_upgrade_intention',
+                    'incorrect_language','inform','input_servicer','interrupt_speech','is_ok','is_ok_thanks','is_ok_urge','is_receiver',
+                    'is_sender','item_price_required','no_use','not_accept_apology','perfunctory_attitude','phone_number_required',
+                    'predict_call_end','response_untimely','tip_off','understand_insufficiently','useless_intent',]
 PREDICTION_LOOP_TIMEOUT = 0.3
 
 CUSTUMER_INTENT_LS = []
 SERVICER_INTENT_LS = ["input_servicer","predict_call_end","phone_number_required","item_price_required","delivery_address_required",
                       "incorrect_language","guide_upgrade_intention",]
+
