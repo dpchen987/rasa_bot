@@ -27,7 +27,8 @@ customer_be_threatened_pat = re.compile(r"恐吓.{,3}我|威胁.{,3}我|[搞弄]
 upgrade_intention_pat = re.compile(r"邮.{,3}[政局]|123[104]5|315|消.{,5}协|市民热线|监管部门|媒体|报道|举报|曝光|第三方.{,5}投诉|(?:其他|别的).{,2}(?:渠道|地方|方式).{,3}投诉|"
                                    r"新闻|记者|报社|栏目组|微博|朋友圈|起诉|升级|管理部门|报[案警]|法院")
 customer_praise_pat = re.compile(r"(?:我|怎么|方[式法]|途径)[^不]{,3}表扬你|给你?.{,3}(?:好评|赞)|(?:我|怎么|方[式法]|途径)[^不]{,3}好评|表扬你|好评")
-# response_untimely_pat = re.compile(r"[不别].{,3}静音|在.{,5}吗|有没有.{,3}听|能不能.{,3}听|听.{,5}了[吗没么嘛]|[能有]听.{,6}[吧么嘛]|[问跟]你{,3}[话]|人呢|说话[呀啊]|不说话|回[话答]||||")
+response_untimely_pat = re.compile(r"[不别].{,3}静音|在.{,5}吗|有没有.{,3}听|能不能.{,3}听|听.{,5}了[吗没么嘛]|[能有]听.{,6}[吧么嘛吗]|[问跟]你{,3}[呢说话]|人.{,3}呢|[说讲].{,2}[话呀啊]|不[说讲].{,2}话|[怎什么啥咋].{,3}不.{,2}[说讲话答]|"
+                                   r"回[话答复]|客服.{,3}[呢在哪]|[有没].{,2}人.{,3}[吗么嘛不吧]|在.{,3}[啥什吗么嘛不吧]|在不在")
 interrupt_speech_pat = re.compile(r"(?:不要|别).{,2}[说讲插抢].{,2}[话嘴]|(?:不要|别).{,2}打断|[插抢]我.{,2}话|你.{,2}[插抢]话|我.{,2}没.{,2}[说讲]完|能.{,2}[让听]我.{,2}[说讲].{,2}[吗么嘛]|[让听]我.{,3}[说讲]|[你我]说还是.{,2}[你我]说|"
                                   r"能不能.{,5}[听]|我.{,5}[说讲]完.{,2}了[吗么嘛]|闭嘴")
 understand_insufficiently_pat = re.compile(r"你.{,3}新[人来]|(?:理解|能力).{,5}问题|[你我].{,3}[没不].{,3}(?:理解|懂|明白|[搞弄]清|清楚|明确)|(?:理解|懂|明白|[搞弄]清|清楚|知道).{,5}[吗么嘛不吧]|理解?[不没]理解|清楚?不清楚|知道?不知道|懂[不没]懂|[没不].{,3}(?:理解|懂|明白|[搞弄]清|清楚)|"
@@ -146,21 +147,35 @@ class WdgjIO(InputChannel):
                                 call_time=start_time,
                             )
                         )
-                # 不合规回复check
+                # 不合规回复check and skip
                 if collector.messages and collector.messages[-1].get('last_message'):
                     last_message = collector.messages[-1].get('last_message')
+                    # # 客服意图
                     if last_message['intent_name'] == 'incorrect_language' and not incrt_lang_pat.search(last_message['text']):
                         logger.info(f"incorrect_lang_skip: {request.json}")
                         last_message['intent_name'] = 'incorrect_lang_skip'
                     if last_message['intent_name'] == 'guide_upgrade_intention' and not guide_upgrade_pat.search(last_message['text']):
                         logger.info(f"guide_upgrade_skip: {request.json}")
                         last_message['intent_name'] = 'guide_upgrade_skip'
-                    if last_message['intent_name'] == 'upgrade_intention' and not upgrade_intention_pat.search(last_message['text']):
-                        logger.info(f"upgrade_intention_skip: {request.json}")
-                        last_message['intent_name'] = 'upgrade_intention_skip'
+                    # 客户意图
+                    if last_message['intent_name'] == 'response_untimely' and not response_untimely_pat.search(last_message['text']):
+                        logger.info(f"response_untimely_skip: {request.json}")
+                        last_message['intent_name'] = 'response_untimely_skip'
+                    if last_message['intent_name'] == 'interrupt_speech' and not interrupt_speech_pat.search(last_message['text']):
+                        logger.info(f"interrupt_speech_skip: {request.json}")
+                        last_message['intent_name'] = 'interrupt_speech_skip'
+                    if last_message['intent_name'] == 'understand_insufficiently' and not understand_insufficiently_pat.search(last_message['text']):
+                        logger.info(f"understand_insufficiently_skip: {request.json}")
+                        last_message['intent_name'] = 'understand_insufficiently_skip'
+                    if last_message['intent_name'] == 'perfunctory_attitude' and not perfunctory_attitude_pat.search(last_message['text']):
+                        logger.info(f"perfunctory_attitude_skip: {request.json}")
+                        last_message['intent_name'] = 'perfunctory_attitude_skip'
                     if last_message['intent_name'] == 'customer_be_threatened' and not customer_be_threatened_pat.search(last_message['text']):
                         logger.info(f"customer_be_threatened_skip: {request.json}")
                         last_message['intent_name'] = 'customer_be_threatened_skip'
+                    if last_message['intent_name'] == 'upgrade_intention' and not upgrade_intention_pat.search(last_message['text']):
+                        logger.info(f"upgrade_intention_skip: {request.json}")
+                        last_message['intent_name'] = 'upgrade_intention_skip'
                     if last_message['intent_name'] == 'customer_praise' and not customer_praise_pat.search(last_message['text']):
                         logger.info(f"customer_praise_skip: {request.json}")
                         last_message['intent_name'] = 'customer_praise_skip'
