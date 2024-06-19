@@ -48,9 +48,7 @@ nlu:
     - 你好小圆
     - 圆通客服你好
     - 你好姐
-    - 你好helliphellip
     - 在的你好
-    - high
     - 你好你好你好
     - hello呀
     - 您好小姐姐
@@ -62,6 +60,7 @@ nlu:
     - 您好快递客服
     - 晚上好打搅了哦
     - 你好刚才断线了 
+    - 你不用打你好 
 
 - intent: online
   examples: |
