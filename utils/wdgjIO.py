@@ -1,4 +1,4 @@
-import re
+import re, os
 import asyncio
 import structlog
 import inspect
@@ -64,7 +64,7 @@ class WdgjIO(InputChannel):
             metadata = request.json.get("metadata")
             collector = CollectingOutputChannel()
 
-            logger.info(f"query: {request.json}")
+            logger.info(f"query: {request.json} pid:{os.getpid()}")
             # logger.info(f"query={text} {metadata=}")
             # logger.info(json.dumps(copy.deepcopy(metadata), ensure_ascii=False, indent=4))
             start_time = time.time()
