@@ -13,7 +13,14 @@ NO_SCRIPT_INTENT = ['angry','consult_send_item','customer_be_threatened','custom
                     'incorrect_language','inform','input_servicer','interrupt_speech','is_ok','is_ok_thanks','is_ok_urge','is_receiver',
                     'is_sender','item_price_required','no_use','not_accept_apology','perfunctory_attitude','phone_number_required',
                     'predict_call_end','response_untimely','tip_off','understand_insufficiently','useless_intent',]
+# loop超时设置
 PREDICTION_LOOP_TIMEOUT = 0.3
+# fetch lock iteration time
+WAIT_TIME_IN_SECONDS = 0.1
+# fetch lock timeout
+ACQUIRE_LIMIT_TIME = 0.8
+# handle_message skip time
+HANDLE_SKIP_TIME = 0.8
 
 CUSTUMER_INTENT_LS = []
 SERVICER_INTENT_LS = ["input_servicer","predict_call_end","phone_number_required","item_price_required","delivery_address_required",
