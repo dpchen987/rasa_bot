@@ -231,9 +231,10 @@ class ValidatePredefinedSlots(ValidationAction):
         # from pprint import pprint
         # pprint(tracker.slots)
         intent_latest = tracker.get_intent_of_latest_message()
-        if intent_latest in ['is_receiver', 'home_delivery', 'ask_home_delivery','check_arrive_datetime', 'has_not_received','has_not_received_yet','urge_to_get_express', ]:
+        if intent_latest in ['is_receiver', 'ask_home_delivery','has_not_received', 'specify_method_not_courier_station', 
+                             'request_sent_to_delivery_cabinet', 'specify_method_not_him_want_address']:
             return {'slot_user_type': '收件人'}
-        if intent_latest in ['is_sender', 'urge_to_send_goods', 'faq/consult_send_item_door_pickup']:
+        if intent_latest in ['is_sender', 'urge_to_send_goods', 'cancel_to_send', 'urge_to_pickup_express']:
             return {'slot_user_type': '发件人'}
 
         user_type = tracker.get_slot('slot_user_type')
