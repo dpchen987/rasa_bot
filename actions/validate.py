@@ -13,7 +13,10 @@ from .service_intent_map import *
 import sys
 sys.path.append("..")
 import deploy_config
+from global_config import CUSTUMER_INTENT_LS, SERVICER_INTENT_LS
 
+# 预定义
+servicer_text_prefix = '语言模型'
 gender_pat = re.compile(r"先生|小姐|女士")
 express_id_pat1 = re.compile("(?<![A-Za-z])g\\d{9,13}")
 express_id_pat2 = re.compile("(?<![A-Za-z])ytd?\\d{12,14}")
@@ -145,7 +148,7 @@ class ValidatePredefinedSlots(ValidationAction):
                     # pprint.pprint(f'{evt=}')
                     if evt['event']=='user' and evt['text'].startswith('语言模型'):
                         check_num += 1
-                    elif evt['event']=='user'and not evt['text'].startswith('语言模型'):
+                    elif evt['event']=='user' and not evt['text'].startswith('语言模型'):
                         check_num += 1
                         expose_abnormal_mat0 = expose_abnormal_pat0.search(evt['text'])
                         if expose_abnormal_mat0:
@@ -174,9 +177,8 @@ class ValidatePredefinedSlots(ValidationAction):
         # logger.info("--- extract slot gender --->")
         # import pprint
         # pprint.pprint(tracker.latest_message)
-        intent_latest = tracker.get_intent_of_latest_message()
-        if intent_latest in ['predict_call_end', 'input_servicer', 'phone_number_required','incorrect_language', 'item_price_required', 'delivery_address_required']:
-            message_text = tracker.latest_message['text']
+        message_text = tracker.latest_message['text']
+        if message_text.startswith(servicer_text_prefix):
             if '女士' in message_text or '小姐' in message_text:
                 logger.info(f"sender_id:{tracker.sender_id} {message_text} slot_gender: 女士")
                 return {'slot_gender': '女士'}
@@ -445,9 +447,15 @@ class ValidatePredefinedSlots(ValidationAction):
     async def extract_slot_express_id_piece(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
+        # 判断是否为客服问电话或价格
         # 判断是否为客服的话
-        intent_latest = tracker.get_intent_of_latest_message()
-        if intent_latest in ['predict_call_end', 'input_servicer', 'phone_number_required']: return
+        message_text = tracker.latest_message['text']
+        if message_text.startswith(servicer_text_prefix): 
+            if tracker.get_intent_of_latest_message() in ['item_price_required', 'phone_number_required'] and tracker.get_slot('slot_express_id_piece'): 
+                logger.info(f'sender_id:{tracker.sender_id} {answer_text}, mutex intent clear')
+                return {"slot_express_id_piece": "clear"}
+            else: return
+        
         # 从metadata抽取运单号
         # if tracker.get_slot('slot_phone_collect'): return
         # logger.info("--- extract slot express_id piece --->")
@@ -458,7 +466,8 @@ class ValidatePredefinedSlots(ValidationAction):
         current_state = tracker.current_state()
         active_loop = current_state['active_loop']
 
-        answer_text = tracker.latest_message['text']
+        answer_text = message_text
+        intent_latest = tracker.get_intent_of_latest_message()
         # logger.info('tem_piece before:', tem)
         exp_numbers_mth = exp_numbers.search(answer_text)
         exp_pc_mth = repat_numbers.search(answer_text)
@@ -474,6 +483,12 @@ class ValidatePredefinedSlots(ValidationAction):
             logger.info(f'sender_id:{tracker.sender_id} piece prefix:, {tem}')
             return {"slot_express_id_piece": tem}
         if exp_pc_mth:
+            # 判断前几轮是否有客服问电话或价格
+            cs_intents = [evt.get('parse_data').get('intent').get('name') for evt in tracker.events if evt['event']=='user' and evt['text'].startswith('语言模型')]
+            # 没有express_peice或peice不以y开头，不识别peice
+            if (not express_id_piece or not express_id_piece.startswith('y')) and ('item_price_required' in cs_intents[-3:] or 'phone_number_required' in cs_intents[-5:]): 
+                logger.info(f'sender_id:{tracker.sender_id} {answer_text}, mutex intent skip')
+                return
             exp_pc_txt = exp_pc_mth.group()
             for k in exp_pc_txt:
                 if k in numbers_dict:
@@ -490,13 +505,25 @@ class ValidatePredefinedSlots(ValidationAction):
             express_id_piece = express_id_piece + exp_pc_txt if express_id_piece else exp_pc_txt
             # _event.append(SlotSet('slot_express_id_piece_piece', express_id_piece))
             tem = express_id_piece if len(express_id_piece) <= 15 else "clear"
-        if tem and (express_id_piece.startswith("yt") or 'name' in active_loop):
+        if tem and (express_id_piece.startswith("yt") or not tracker.get_slot("slot_express_id")):
             logger.info(f'sender_id:{tracker.sender_id} piece end:, {tem}')
             return {"slot_express_id_piece": tem}
         if tem and intent_latest in ['inform', 'service_code']:
             logger.info(f'sender_id:{tracker.sender_id} piece end:, {tem}')
             return {"slot_express_id_piece": tem}
-
+        # 如果间隔多个轮次没有数字出现，此槽位清零
+        if express_id_piece:
+            last_slot_cnt = 1
+            for evt in reversed(tracker.events):
+                if evt['event']=='slot' and evt['name'] =='slot_express_id_piece':
+                    break
+                elif evt['event']=='user' and not evt['text'].startswith(servicer_text_prefix):
+                    last_slot_cnt += 1
+                    if last_slot_cnt >= 5: break
+            if (len(express_id_piece) <= 2 and last_slot_cnt >=3) or last_slot_cnt >= 5:
+                logger.info(f'sender_id:{tracker.sender_id} {answer_text}, slot_cnt {last_slot_cnt} clear')
+                return {"slot_express_id_piece": "clear"}  
+        
     # 验证槽位
     def validate_slot_express_id_piece(
             self,
@@ -526,8 +553,10 @@ class ValidatePredefinedSlots(ValidationAction):
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
         # 判断是否为客服的话
+        message_text = tracker.latest_message['text']
+        if message_text.startswith(servicer_text_prefix): return
         intent_latest = tracker.get_intent_of_latest_message()
-        if intent_latest in ['predict_call_end', 'input_servicer', 'phone_number_required']: return
+        # if intent_latest in ['predict_call_end', 'input_servicer', 'phone_number_required']: return
         # 从metadata抽取运单号
         # 从跟踪器的metadata中获取运单号实体
         if not tracker.get_slot('slot_phone_collect'): return
@@ -649,6 +678,9 @@ class ValidatePredefinedSlots(ValidationAction):
     ) -> Dict[Text, Any]:
         # 从metadata抽取运单号
         # logger.info("--- extract slot phone --->")
+        message_text = tracker.latest_message['text']
+        if message_text.startswith(servicer_text_prefix): return
+        # 前面客服是否问了手机号
         if not tracker.get_slot('slot_phone_collect'): return
         meta_phone = tracker.latest_message.get("metadata").get("phone")
         if meta_phone:
