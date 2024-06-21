@@ -72,7 +72,7 @@ class ValidatePredefinedSlots(ValidationAction):
             if len(user_messages) > 4:
                 logger.info(f'{user_messages=}')
         return {'slot_user_messages': user_messages}
-
+    # 质检槽位
     async def extract_slot_hello(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
@@ -166,7 +166,7 @@ class ValidatePredefinedSlots(ValidationAction):
                 thanks_mat = thanks_pat.search(message_text)
                 if thanks_mat:
                     return {'slot_thanks': thanks_mat.group()}
-
+    # 辅助填表槽位
     async def extract_slot_gender(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
@@ -237,19 +237,19 @@ class ValidatePredefinedSlots(ValidationAction):
         if intent_latest in ['is_sender', 'urge_to_send_goods', 'cancel_to_send', 'urge_to_pickup_express']:
             return {'slot_user_type': '发件人'}
 
-        user_type = tracker.get_slot('slot_user_type')
+        # user_type = tracker.get_slot('slot_user_type')
         # print('user_type',user_type)
         # if True:
-        if not user_type:
-            intent_ranking = tracker.latest_message['intent_ranking']
-            # pprint(tracker.latest_message['intent_ranking'])
-            if len(intent_ranking) > 3:
-                for intent_dt in intent_ranking[:3]:
-                    # pprint(intent_dt)
-                    if intent_dt['name'] in ['is_receiver', 'home_delivery', 'ask_home_delivery']:
-                        return {'slot_user_type': '收件人'}
-                    if intent_dt['name'] in ['is_sender', 'urge_to_send_goods']:
-                        return {'slot_user_type': '发件人'}
+        # if not user_type:
+        #     intent_ranking = tracker.latest_message['intent_ranking']
+        #     # pprint(tracker.latest_message['intent_ranking'])
+        #     if len(intent_ranking) > 3:
+        #         for intent_dt in intent_ranking[:3]:
+        #             # pprint(intent_dt)
+        #             if intent_dt['name'] in ['is_receiver', 'home_delivery', 'ask_home_delivery']:
+        #                 return {'slot_user_type': '收件人'}
+        #             if intent_dt['name'] in ['is_sender', 'urge_to_send_goods']:
+        #                 return {'slot_user_type': '发件人'}
         # home_delivery
         # faq/consult_send_item_door_pickup
         # urge_to_send_goods
