@@ -454,7 +454,7 @@ class ValidatePredefinedSlots(ValidationAction):
         message_text = tracker.latest_message['text']
         if message_text.startswith(servicer_text_prefix): 
             if tracker.get_intent_of_latest_message() in ['item_price_required', 'phone_number_required'] and tracker.get_slot('slot_express_id_piece'): 
-                logger.info(f'sender_id:{tracker.sender_id} {answer_text}, mutex intent clear')
+                logger.info(f'sender_id:{tracker.sender_id} {message_text}, mutex intent clear')
                 return {"slot_express_id_piece": "clear"}
             else: return
         
