@@ -35,9 +35,11 @@ hello_pat = re.compile(r"[您你]好")
 nice_to_serve_pat = re.compile(r"[很高兴]+.{,3}[您你].{,2}服务")
 can_i_help_pat = re.compile(r"[有什么]+.{,8}帮.?[助到您的吗]*")
 expose_abnormal_pat0 = re.compile(r"[网站]点.{,5}有.{,5}问题|(?:圆通|快递站?|[网站]点|驿站).{,5}(?:瘫痪|爆仓|整顿)|扣押.{,2}[快包][件递裹]|[快包][件递裹].{,3}扣押|(?:业务员|快递员?|[网站]点).{,5}罢工|老板.{,5}跑路|(?:圆通|你们公司).{,5}(?:破产|倒闭)")
-expose_abnormal_pat1 = re.compile(r"[网站]点[^没不哪什么]{,5}异常|[网站]点[^没不哪什么]{,5}有[^什么]{,5}问题|(?:圆通|快递站?|[网站]点|驿站)[^没不哪]{,7}(?:瘫痪|爆仓|整顿|调整)|已经[^没不哪]{,3}(?:瘫痪|爆仓)|[快包][件递裹][^没不]{,3}扣押|(?:业务员|快递|[网站]点|驿站)[^没不]{,5}罢工|老板[^没不怎]{,5}跑路")
+expose_abnormal_pat1 = re.compile(r"[网站]点[^没不哪什么,，个]{,5}异常(?![么嘛吗])|[网站]点[^没不哪什么，,个]{,5}有[^什么]{,5}问题(?![么嘛吗])|(?:圆通|快递站?|[网站]点|驿站)[^没不哪]{,7}(?:瘫痪|爆仓|整顿|调整)|已经[^没不哪]{,3}(?:瘫痪|爆仓)|[快包][件递裹][^没不]{,3}扣押|(?:业务员|快递|[网站]点|驿站)[^没不]{,5}罢工|老板[^没不怎]{,5}跑路")
+expose_abnormal_pat1_skip = re.compile(r"没|签收|派送|帮|反馈|还|其他|上报|可以了")
 # thanks_pat = re.compile(r"[谢感]谢|谢[了啦]")
-thanks_pat = re.compile(r"(?<![能])(?:服务|态度)[^能不哪]{,3}(?:好|热情)(?![吗不个一点])|你[^没]{,3}耐心|[多感谢]谢你[^没]{,3}耐心|(?:服务|态度|你|客服).{,3}不错|对你[^不]{,3}满意|你[^不]{,3}负责")
+thanks_pat = re.compile(r"(?<![能])(?:服务|态度)[^能不哪]{,3}(?:好|热情)(?![吗不个一点])|你[^没]{,3}耐心|[多感谢]谢你[^没]{,3}耐心|(?:服务|态度|你|客服).{,3}不错|对你[^不]{,3}满意|你[^得要不]{,3}[挺真很蛮][是的]?负责")
+thanks_skip_pat = re.compile(r"你们|他|快递员|业务员")
 yes_pat = re.compile(r"对|是的")
 # 对机器人识别的槽位进行验证(比如运单号、电话等槽位)
 class ValidatePredefinedSlots(ValidationAction):
@@ -139,7 +141,7 @@ class ValidatePredefinedSlots(ValidationAction):
         message_text = tracker.latest_message['text']
         if message_text.startswith('语言模型'):
             expose_abnormal_mat = expose_abnormal_pat1.search(message_text)
-            if expose_abnormal_mat:
+            if expose_abnormal_mat and not expose_abnormal_pat1_skip.search(message_text):
                 return {'slot_expose_abnormal': f"客服：{expose_abnormal_mat.group()}"}
             yes_mat = yes_pat.search(message_text)
             if yes_mat:
@@ -167,7 +169,7 @@ class ValidatePredefinedSlots(ValidationAction):
             message_text = tracker.latest_message['text']
             if not message_text.startswith('语言模型'):
                 thanks_mat = thanks_pat.search(message_text)
-                if thanks_mat:
+                if thanks_mat and not thanks_skip_pat.search(message_text):
                     return {'slot_thanks': thanks_mat.group()}
     # 辅助填表槽位
     async def extract_slot_gender(
