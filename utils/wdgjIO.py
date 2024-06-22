@@ -23,6 +23,7 @@ yt_rep_pat = re.compile(r"[yY] {,3}7")
 incrt_lang_pat = re.compile(r"[你他][妈]|神经|变态|[傻呆妈][逼bB蛋]|妈.{,4}[逼的]|[有毛]病|我[操靠草日]|[操日].{,3}[你他妈]|[滚猪狗贱瞎聋傻嫖]|什么玩意|人渣|不要脸|狗日|算什么东西|闭嘴|没.{,3}脑子|智障|废话|更年期|你大爷|[瞎胡]扯|"
                             r"无[聊语]|恶心|[气去]死|倒霉|md|没.{,3}[眼耳脑]|[眼耳脑听].{,3}[坏病问题]|[眼耳脑].{,3}干.{,3}用|嘴.{,3}干净|[真太好]烦|活该|正常.{,3}[都可能].{,4}理解|[说讲]人话|问候.{,3}全家|大爷.{,7}资格")
 guide_upgrade_pat = re.compile(r"邮.{,3}[政局]|123[104]5|消.{,5}协|市民热线|监管部门|媒体|报道|举报|曝光|第三方.{,5}投诉|(?:其他|别的).{,2}(?:渠道|地方|方式).{,3}投诉|升级|第三方")
+guide_upgrade_skip_pat = re.compile(r"不是.{,5}(?:我|圆通)|[您你][^可]{,3}[这快递][^可]{,3}邮政的|(?:我|这边).{,3}[给帮][你您]|[给帮][你您].{,3}(?:升级|投诉)")
 customer_be_threatened_pat = re.compile(r"恐吓.{,3}我|威胁.{,3}我|[搞弄].{,3}我|[要叫让说].{,3}晚上.{,3}[不别].{,3}[出门]|[揍打骂抱摸]我|自杀|强[奸暴]|偷窥|调戏")
 upgrade_intention_pat = re.compile(r"邮.{,3}[政局]|123[104]5|315|消.{,5}协|市民热线|监管部门|媒体|报道|举报|曝光|第三方.{,5}投诉|(?:其他|别的).{,2}(?:渠道|地方|方式).{,3}投诉|"
                                    r"新闻|记者|报社|栏目组|微博|朋友圈|起诉|升级|管理部门|报[案警]|法院")
@@ -155,7 +156,7 @@ class WdgjIO(InputChannel):
                     if last_message['intent_name'] == 'incorrect_language' and not incrt_lang_pat.search(last_message['text']):
                         logger.info(f"incorrect_lang_skip: {request.json}")
                         last_message['intent_name'] = 'incorrect_lang_skip'
-                    if last_message['intent_name'] == 'guide_upgrade_intention' and not guide_upgrade_pat.search(last_message['text']):
+                    if last_message['intent_name'] == 'guide_upgrade_intention' and (not guide_upgrade_pat.search(last_message['text']) or guide_upgrade_skip_pat.search(last_message['text'])):
                         logger.info(f"guide_upgrade_skip: {request.json}")
                         last_message['intent_name'] = 'guide_upgrade_skip'
                     # 客户意图
