@@ -453,7 +453,7 @@ class ValidatePredefinedSlots(ValidationAction):
         # 判断是否为客服的话
         message_text = tracker.latest_message['text']
         if message_text.startswith(servicer_text_prefix): 
-            if tracker.get_intent_of_latest_message() in ['item_price_required', 'phone_number_required'] and tracker.get_slot('slot_express_id_piece'): 
+            if tracker.get_intent_of_latest_message() in ['item_price_required'] and tracker.get_slot('slot_express_id_piece'): 
                 logger.info(f'sender_id:{tracker.sender_id} {message_text}, mutex intent clear')
                 return {"slot_express_id_piece": "clear"}
             else: return
@@ -488,7 +488,7 @@ class ValidatePredefinedSlots(ValidationAction):
             # 判断前几轮是否有客服问电话或价格
             cs_intents = [evt.get('parse_data').get('intent').get('name') for evt in tracker.events if evt['event']=='user' and evt['text'].startswith('语言模型')]
             # 没有express_peice或peice不以y开头，不识别peice
-            if (not express_id_piece or not express_id_piece.startswith('y')) and ('item_price_required' in cs_intents[-3:] or 'phone_number_required' in cs_intents[-5:]): 
+            if (not express_id_piece or not express_id_piece.startswith('y')) and ('item_price_required' in cs_intents[-2:]): 
                 logger.info(f'sender_id:{tracker.sender_id} {answer_text}, mutex intent skip')
                 return
             exp_pc_txt = exp_pc_mth.group()
@@ -522,6 +522,7 @@ class ValidatePredefinedSlots(ValidationAction):
                 elif evt['event']=='user' and not evt['text'].startswith(servicer_text_prefix):
                     last_slot_cnt += 1
                     if last_slot_cnt >= 5: break
+            # print('last_slot_cnt', last_slot_cnt)
             if (len(express_id_piece) <= 2 and last_slot_cnt >=3) or last_slot_cnt >= 5:
                 logger.info(f'sender_id:{tracker.sender_id} {answer_text}, slot_cnt {last_slot_cnt} clear')
                 return {"slot_express_id_piece": "clear"}  
