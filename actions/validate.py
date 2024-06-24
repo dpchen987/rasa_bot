@@ -338,7 +338,7 @@ class ValidatePredefinedSlots(ValidationAction):
         phone_collect = tracker.get_slot('slot_phone_collect')
         # logger.info(type(phone_collect))
         # if phone_collect: logger.info(type(intent_latest))
-        if phone_collect and intent_latest in ['check_express_status','check_arrive_datetime','signed_but_bot_received','home_delivery']:
+        if phone_collect and intent_latest in ['check_express_status','check_arrive_datetime','signed_but_bot_received','home_delivery', 'item_price_required']:
             logger.info('slot_phone_collect clear')
             return {'slot_phone_collect': ''}
         if phone_collect and 'yt' in text_latest:
@@ -573,7 +573,11 @@ class ValidatePredefinedSlots(ValidationAction):
     ) -> Dict[Text, Any]:
         # 判断是否为客服的话
         message_text = tracker.latest_message['text']
-        if message_text.startswith(servicer_text_prefix): return
+        if message_text.startswith(servicer_text_prefix): 
+            if tracker.get_intent_of_latest_message() in ['item_price_required'] and tracker.get_slot('slot_phone_piece'): 
+                logger.info(f'sender_id:{tracker.sender_id} {message_text}, mutex intent clear')
+                return {"slot_phone_piece": "clear"}
+            else: return
         intent_latest = tracker.get_intent_of_latest_message()
         # if intent_latest in ['predict_call_end', 'input_servicer', 'phone_number_required']: return
         # 从metadata抽取运单号
@@ -621,6 +625,19 @@ class ValidatePredefinedSlots(ValidationAction):
         if tem and intent_latest in ['inform', 'service_code']:
             logger.info(f'sender_id:{tracker.sender_id} phone_piece end:, {tem}')
             return {"slot_phone_piece": tem}
+        # 如果间隔多个轮次没有数字出现，此槽位清零
+        if phone_piece:
+            last_slot_cnt = 1
+            for evt in reversed(tracker.events):
+                if evt['event']=='slot' and evt['name'] =='slot_phone_piece':
+                    break
+                elif evt['event']=='user' and not evt['text'].startswith(servicer_text_prefix):
+                    last_slot_cnt += 1
+                    if last_slot_cnt >= 4: break
+            # print('last_slot_cnt', last_slot_cnt)
+            if (len(phone_piece) <= 2 and last_slot_cnt >=2) or last_slot_cnt >= 4:
+                logger.info(f'sender_id:{tracker.sender_id} {answer_text}, slot_cnt {last_slot_cnt} clear')
+                return {"slot_phone_piece": "clear"}  
 
     # 验证槽位
     def validate_slot_phone_piece(
