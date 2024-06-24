@@ -196,6 +196,22 @@ class ValidatePredefinedSlots(ValidationAction):
         # import pprint
         # pprint.pprint(tracker.latest_message)
         intent_latest = tracker.get_intent_of_latest_message()
+        # 从客服识别
+        if intent_latest in SERVICER_INTENT_LS:
+            entities = tracker.latest_message['entities']
+            name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and ent['value'][-1] not in '啊什么呃呢吧了姓名是怎吗啥呀你我女士先生']
+            # if name and name[0].startswith('姓') and name[-1] in '啊什么呢吧了姓名吗啥呀':
+            #     logger.info(f"---invalid name : {name}")
+            #     return {'slot_name': None}
+            if name and name[0].startswith('姓'):
+                logger.info(f"sender_id:{tracker.sender_id} PERSON1: {name}")
+                return {'slot_name': name[-1]}
+
+            name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and len(ent['value']) == 3 and ent['value'][0] in xing]
+            if name: 
+                logger.info(f"sender_id:{tracker.sender_id} PERSON2: {name}")
+                return {'slot_name': name[-1]}
+        # 从客户识别
         if intent_latest in ['inform', ]:
             entities = tracker.latest_message['entities']
             name = [ent['value'] for ent in entities if ent['entity'] == 'PERSON' and ent['value'][-1] not in '啊什么呃呢吧了姓名是怎吗啥呀你我女士先生']
@@ -393,7 +409,7 @@ class ValidatePredefinedSlots(ValidationAction):
             domain: DomainDict,
     ) -> Dict[Text, Any]:
         """Validate slot phone."""
-        # logger.info(f"--- validate slot name ：{slot_value}--->")
+        logger.info(f"--- validate slot name ：{slot_value}--->")
         slot_gender = tracker.get_slot('slot_gender')
         gender = slot_gender if slot_gender else ''
         slot_name = str(slot_value)
