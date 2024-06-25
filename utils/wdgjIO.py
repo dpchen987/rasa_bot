@@ -40,7 +40,13 @@ understand_insufficiently_skip_pat = re.compile(r"听.{,3}[到见清楚]|你们|
 perfunctory_attitude_pat = re.compile(r"你.{,5}[什么就这啥].{,5}态度|有气无力|没睡[觉醒]|你.{,5}态度.{,3}[能可].{,3}好|[能可].{,5}态度.{,3}好|[你我].{,3}是.{,3}客服|不是我.{,3}你.{,3}解决|是你.{,13}不是我|你.{,3}复读机|你.{,3}机器人|给.{,10}干[啥什嘛]|"
                                       r"[你少别].{,7}敷衍|[你少别].{,7}抬杠|你.{,7}过分|你.{,7}消极|开.{,5}玩笑|你.{,3}是.{,3}客服|你.{,5}态度.{,3}[不好恶劣太差垃圾有点些问题]|好好[说讲]话|[能会].{,5}[说讲]话|[说讲]话.{,5}[能会][不吗么嘛]")
 perfunctory_attitude_skip_pat = re.compile(r"听.{,3}[到见清楚]|你们|他|快递|业务员|客服|[网站签收派送转]|登记|反馈|其他|上报")
-                            
+# 无用输入list
+USELESS_INPUT_TEXTS = ['我们', '你们', '他们', '什么', '是吧', '这个','那个', '然后', '因为', '你说', '晚安', '那你', '没了', '就是', '好了', '对吧', '我的', '但是', '请稍后', '知道吧', '请不要挂机', '请稍后再拨', '4位数字分机号', '您拨打的用户正忙', '您好，请不要挂机', '4位数字分机号在', '您拨叫的用户正忙', '您拨的是本地手机', 
+                       '快件查询，请按二', '投诉，建议请按三', '欢迎致电圆通速递', '人工下单，请按一', '您的呼叫正在接通中', '正在接通中，请稍后', '您拨打的电话已关机', '您拨打的用户已关机', '输入错误，请重新输入', '输入分机号以井号结束', '您拨打的电话正在通话中', '回拨，请按一以井号结束', '您拨叫的用户暂时无人接听', '您拨打的电话暂时无法接通', 
+                       '您的呼叫正在接通中，请稍后', '请输入分机号，按井号键结束', '您好，您拨打的电话正在通话中', '寄快递找圆通，欢迎致电圆通速递', '请输入4位数字分机号，以井号键结束', '快件查询，请按二投诉，建议请按三', 'read out later', 'try again later', 'dial again later', '您拨打的用户正在通话中，请稍后再拨', '请输入4位数字分机号，已井号键结束', 
+                       '来电信息，将以短信的形式通知他，再见', '您拨打的号码暂时无人接听，请稍后再拨', '4位数字分机号在收件人姓名或地址后面查看', 'the number you have died is busy', 'the number you have dialed is busy', 'the subscriber you dialed is no answer']
+USELESS_SERVICER_TEXTS = ['我们', '你们', '他们', '什么', '是吧', '这个','那个', '然后', '因为', '你说', '晚安', '那你', '没了', '就是', '好了', '对吧', '我的', '但是', '可以', '好的', '好的好的', '谢谢', '再见', '稍等', '你是', '好吧', '没有', '拜拜', '圆通的', '不用了', '这个是', '等一下', '看一下', '我看一下', '我看一下啊', 
+                          '稍等一下', '稍等啊', '稍等一下啊', '明白明白', '好，再见', '好，拜拜', '好再见', '好拜拜', '你好，圆通快递', '感谢来电再见', '感谢来电，再见', '好，再见啊', '']
 # 目前rasa使用的IO，目的是对外界输入进行预处理
 class WdgjIO(InputChannel):
     def name(self) -> Text:
@@ -79,9 +85,16 @@ class WdgjIO(InputChannel):
             try:
                 # servicer: 开头的是客服的语料
                 if text.startswith('servicer'):
+                    # raw_text = text.strip().replace('servicer', '').lstrip(":：,.?，。？").rstrip(",.?，。")
+                    pre_text = text.replace('servicer', '').strip().lstrip(":：,.?，。？啊嗯哎呀喂哦呃饿").rstrip(",.?，。嗯喂哦")
+                    if not pre_text or (len(set(pre_text) - {'？', '?'}) <= 1 and pre_text[0] in '啊嗯谁哎行喂一不对好您为哦说是我有都回那他在三你就人呜唉和七呃哇没爱') or pre_text in USELESS_SERVICER_TEXTS:
+                        # 直接返回useless_intent意图
+                        useless_input_response = [{'recipient_id': sender_id, 'story': 'useless_input_response', 'api_exception': 0, 'last_message': {'confidence': 1.0,'exact_hit': False,
+                                                'input_channel': 'callassist','intent_name': 'input_servicer', 'slots': {},'text': text}}]
+                        return response.json(useless_input_response)
                     if not metadata: metadata = {}
                     metadata['servicer'] = text.replace('servicer', '').strip(":：")
-                    text = '语言模型，' + metadata['servicer']
+                    text = '语言模型，' + pre_text
                     await on_new_message(
                         UserMessage(
                             text,
@@ -93,19 +106,27 @@ class WdgjIO(InputChannel):
                         )
                     )
                 # 对"....."之类的无语意图不做处理
-                elif len(set(text) - {'。', '…', '.', '？', '?'}) == 0:
-                    await on_new_message(
-                        UserMessage(
-                            text,
-                            collector,
-                            sender_id,
-                            input_channel=input_channel,
-                            metadata=metadata,
-                            call_time=start_time,
-                        )
-                    )
+                # elif len(set(text) - {'。', '…', '.', '？', '?'}) == 0:
+                #     await on_new_message(
+                #         UserMessage(
+                #             text,
+                #             collector,
+                #             sender_id,
+                #             input_channel=input_channel,
+                #             metadata=metadata,
+                #             call_time=start_time,
+                #         )
+                #     )
                 else:
-                    # 
+                    # 数据预处理
+                    pre_text = text.strip().lstrip(",.?，。？啊嗯哎呀喂哦呃饿").rstrip(",.?，。嗯喂哦")
+                    if not pre_text or (len(set(pre_text) - {'？', '?'}) <= 1 and pre_text[0] in '啊嗯谁哎行喂一不对好您为哦说是我有都回那他在三你就人呜唉和七呃哇没爱') or pre_text in USELESS_INPUT_TEXTS:
+                        # 直接返回useless_intent意图
+                        useless_input_response = [{'recipient_id': sender_id,'story': 'useless_input_response', 'api_exception': 0, 'last_message': {'confidence': 1.0,'exact_hit': False,
+                                                'input_channel': 'callassist','intent_name': 'useless_intent', 'slots': {},'text': text}}]
+                        return response.json(useless_input_response)
+                    text = pre_text
+                    # 运单号开头修正
                     yt_rep = yt_rep_pat.findall(text)
                     if yt_rep:
                         for pat in yt_rep:
@@ -155,7 +176,7 @@ class WdgjIO(InputChannel):
                 # 不合规回复check and skip
                 if collector.messages and collector.messages[-1].get('last_message'):
                     last_message = collector.messages[-1].get('last_message')
-                    # # 客服意图
+                    # 客服意图
                     if last_message['intent_name'] == 'incorrect_language' and not incrt_lang_pat.search(last_message['text']):
                         logger.info(f"incorrect_lang_skip: {request.json}")
                         last_message['intent_name'] = 'incorrect_lang_skip'
