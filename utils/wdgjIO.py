@@ -91,6 +91,7 @@ class WdgjIO(InputChannel):
                         # 直接返回useless_intent意图
                         useless_input_response = [{'recipient_id': sender_id, 'story': 'useless_input_response', 'api_exception': 0, 'last_message': {'confidence': 1.0,'exact_hit': False,
                                                 'input_channel': 'callassist','intent_name': 'input_servicer', 'slots': {},'text': text}}]
+                        logger.info(f"response: {useless_input_response}, time: {time.time() - start_time:.2f}")
                         return response.json(useless_input_response)
                     if not metadata: metadata = {}
                     metadata['servicer'] = text.replace('servicer', '').strip(":：")
@@ -124,6 +125,7 @@ class WdgjIO(InputChannel):
                         # 直接返回useless_intent意图
                         useless_input_response = [{'recipient_id': sender_id,'story': 'useless_input_response', 'api_exception': 0, 'last_message': {'confidence': 1.0,'exact_hit': False,
                                                 'input_channel': 'callassist','intent_name': 'useless_intent', 'slots': {},'text': text}}]
+                        logger.info(f"response: {useless_input_response}, time: {time.time() - start_time:.2f}")
                         return response.json(useless_input_response)
                     text = pre_text
                     # 运单号开头修正
