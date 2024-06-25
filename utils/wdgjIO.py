@@ -20,17 +20,20 @@ from .logging import logger
 x_ge_y_pat = re.compile(r"[1-6一二两三四五六]个[\d 零令林一幺妖二两三四五六七八九]")
 numbers_dict = {" ": "", "零": "0", "令": "0", "林": "0", "一": "1", "幺": "1", "妖": "1",  "二": "2", "两": "2", "三": "3", "四": "4","五": "5", "六": "6", "七": "7", "八": "8", "九": "9"}   
 yt_rep_pat = re.compile(r"[yY] {,3}7")
-incrt_lang_pat = re.compile(r"[你他][妈]|神经|变态|[傻呆妈][逼bB蛋]|妈.{,4}[逼的]|[有毛]病|我[操靠草日]|[操日].{,3}[你他妈]|[滚猪狗贱瞎聋傻嫖]|什么玩意|人渣|不要脸|狗日|算什么东西|闭嘴|没.{,3}脑子|智障|废话|更年期|你大爷|[瞎胡]扯|"
+incrt_lang_pat = re.compile(r"[你他][妈]|神经|变态|[傻呆妈][逼bB蛋]|妈.{,4}[逼的]|[有毛]病|我[操靠草日]|[操日].{,3}[你他妈]|[滚猪狗贱瞎聋傻嫖]|什么玩意|人渣|不要脸|狗[日屁东]|狗一样|算什么东西|闭嘴|没.{,3}脑子|智障|废话|更年期|你大爷|[瞎胡]扯|"
                             r"无[聊语]|恶心|[气去]死|倒霉|md|没.{,3}[眼耳脑]|[眼耳脑听].{,3}[坏病问题]|[眼耳脑].{,3}干.{,3}用|嘴.{,3}干净|[真太好]烦|活该|正常.{,3}[都可能].{,4}理解|[说讲]人话|问候.{,3}全家|大爷.{,7}资格")
+incrt_lang_skip_pat = re.compile(r"狗粮|[热遛狗]狗|宠物狗|眼泪")
 guide_upgrade_pat = re.compile(r"邮.{,3}[政局]|123[104]5|消.{,5}协|市民热线|监管部门|媒体|报道|举报|曝光|第三方.{,5}投诉|(?:其他|别的).{,2}(?:渠道|地方|方式).{,3}投诉|升级|第三方")
-guide_upgrade_skip_pat = re.compile(r"不是.{,5}(?:我|圆通)|[您你][^可]{,3}[这快递][^可]{,3}邮政的|(?:我|这边).{,3}[给帮][你您]|[给帮][你您].{,3}(?:升级|投诉)")
-customer_be_threatened_pat = re.compile(r"恐吓.{,3}我|威胁.{,3}我|[搞弄].{,3}我|[要叫让说].{,3}晚上.{,3}[不别].{,3}[出门]|[揍打骂抱摸]我|自杀|强[奸暴]|偷窥|调戏")
+guide_upgrade_skip_pat = re.compile(r"不是.{,5}(?:我|圆通)|[您你][^可]{,3}[这快递][^可]{,3}邮政的|(?:我|这边).{,3}[给帮][你您]|[给帮][你您].{,3}(?:升级|投诉)|不需?[用要]|没必要|[别不].{,2}打|已经|工单|核实|接到|尾号|要求|尽快|处理|"
+                                    r"[有又].{,7}(?:反馈|投诉|邮[管局政])|投诉[过了]|因为|邮政.{,3}(?:单[号子]|快[递件])|协商|他|发件人|耐心|等待")
+customer_be_threatened_pat = re.compile(r"恐吓.{,3}我|威胁.{,3}我|[搞弄]死?我|[要叫让说].{,3}晚上.{,3}[不别].{,3}[出门]|[揍打骂抱摸]我|自杀|强[奸暴]|偷窥|调戏")
+customer_be_threatened_skip_pat = re.compile(r"打我.{,3}(?:手机|电话|号码|[这那哪]个)")
 upgrade_intention_pat = re.compile(r"邮.{,3}[政局]|123[104]5|315|消.{,5}协|市民热线|监管部门|媒体|报道|举报|曝光|第三方.{,5}投诉|(?:其他|别的).{,2}(?:渠道|地方|方式).{,3}投诉|"
                                    r"新闻|记者|报社|栏目组|微博|朋友圈|起诉|升级|管理部门|报[案警]|法院")
-customer_praise_pat = re.compile(r"(?:我|怎么|方[式法]|途径)[^不]{,3}表扬你|给你?.{,3}(?:好评|赞)|(?:我|怎么|方[式法]|途径)[^不]{,3}好评|表扬你|好评")
-response_untimely_pat = re.compile(r"[不别].{,3}静音|在.{,5}吗|有没有.{,3}听|能不能.{,3}听|听.{,5}了[吗没么嘛]|[能有]听.{,6}[吧么嘛吗]|[问跟]你{,3}[呢说话]|人.{,3}呢|[说讲].{,2}[话呀啊]|不[说讲].{,2}话|[怎什么啥咋].{,3}不.{,2}[说讲话答]|"
-                                   r"回[话答复]|客服.{,3}[呢在哪]|[有没].{,2}人.{,3}[吗么嘛不吧]|在.{,3}[啥什吗么嘛不吧]|在不在")
-response_untimely_skip_pat = re.compile(r"听.{,3}[到见清楚]|你们|他|快递|业务员|客服|[网站签收派送转]|登记|反馈|其他|上报")
+customer_praise_pat = re.compile(r"(?:我|怎么|方[式法]|途径)[^不]{,3}表扬你|[给你].{,3}(?:好评|赞)|(?:我|怎么|方[式法]|途径)[^不]{,3}好评|表扬.{,2}你")
+response_untimely_pat = re.compile(r"[不别].{,3}静音|在[吗么嘛不吧]|有没有.{,3}听|能不能.{,3}听|听.{,5}了[吗没么嘛]|[能有]听.{,6}[吧么嘛吗]|[问跟]你{,3}[呢说话]|人.{,3}呢|[说讲].{,2}话.{,2}[呀啊吗么嘛]|[说讲][呀啊吗么嘛]|不[说讲].{,2}话|[怎什么啥咋].{,3}不.{,2}[说讲话答]|"
+                                   r"回[答复][呀啊我]|请回[答复]|回[答复]一?下|[说讲回][话答]$|客服.{,3}[呢在哪]|[有没].{,2}人.{,3}[吗么嘛不吧]|在干[嘛啥什]|在不在")
+response_untimely_skip_pat = re.compile(r"听.{,3}[到见清楚]|你们|他|快递|业务员|客服|[网站签收派送转]|登记|反馈|其他|上报|没回|怎么[说办]|之内|一会|刚才|我回|给我")
 interrupt_speech_pat = re.compile(r"(?:不要|别).{,2}[说讲插抢].{,2}[话嘴]|(?:不要|别).{,2}打断|[插抢]我.{,2}话|你.{,2}[插抢]话|我.{,2}没.{,2}[说讲]完|能.{,2}[让听]我.{,2}[说讲].{,2}[吗么嘛]|[让听]我.{,3}[说讲]|[你我]说还是.{,2}[你我]说|"
                                   r"能不能.{,5}[听]|我.{,5}[说讲]完.{,2}了[吗么嘛]|闭嘴")
 interrupt_speech_skip_pat = re.compile(r"听.{,3}[到见清楚]|你们|他|快递|业务员|客服|[网站签收派送转]|登记|反馈|其他|上报")
@@ -179,7 +182,7 @@ class WdgjIO(InputChannel):
                 if collector.messages and collector.messages[-1].get('last_message'):
                     last_message = collector.messages[-1].get('last_message')
                     # 客服意图
-                    if last_message['intent_name'] == 'incorrect_language' and not incrt_lang_pat.search(last_message['text']):
+                    if last_message['intent_name'] == 'incorrect_language' and (not incrt_lang_pat.search(last_message['text']) or incrt_lang_skip_pat.search(last_message['text'])):
                         logger.info(f"incorrect_lang_skip: {request.json}")
                         last_message['intent_name'] = 'incorrect_lang_skip'
                     if last_message['intent_name'] == 'guide_upgrade_intention' and (not guide_upgrade_pat.search(last_message['text']) or guide_upgrade_skip_pat.search(last_message['text'])):
@@ -198,7 +201,7 @@ class WdgjIO(InputChannel):
                     if last_message['intent_name'] == 'perfunctory_attitude' and (not perfunctory_attitude_pat.search(last_message['text']) or perfunctory_attitude_skip_pat.search(last_message['text'])):
                         logger.info(f"perfunctory_attitude_skip: {request.json}")
                         last_message['intent_name'] = 'perfunctory_attitude_skip'
-                    if last_message['intent_name'] == 'customer_be_threatened' and not customer_be_threatened_pat.search(last_message['text']):
+                    if last_message['intent_name'] == 'customer_be_threatened' and (not customer_be_threatened_pat.search(last_message['text']) or customer_be_threatened_skip_pat.search(last_message['text'])):
                         logger.info(f"customer_be_threatened_skip: {request.json}")
                         last_message['intent_name'] = 'customer_be_threatened_skip'
                     if last_message['intent_name'] == 'upgrade_intention' and not upgrade_intention_pat.search(last_message['text']):
