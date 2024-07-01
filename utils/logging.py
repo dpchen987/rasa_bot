@@ -69,7 +69,7 @@ LOGGING = {
     },
     'loggers': {  # 日志器
         'rasa_logger': {  # 定义了一个名为logger的日志器
-            'handlers': ['console'],  # ['console', 'file']可以同时向终端与文件中输出日志
+            # 'handlers': ['console'],  # ['console', 'file']可以同时向终端与文件中输出日志
             'propagate': True,  # 是否继续传递日志信息
             'level': 'DEBUG',  # 日志器接收的最低日志级别
         },
