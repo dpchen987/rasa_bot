@@ -154,7 +154,7 @@ class ValidatePredefinedSlots(ValidationAction):
                     elif evt['event']=='user' and not evt['text'].startswith('语言模型'):
                         check_num += 1
                         expose_abnormal_mat0 = expose_abnormal_pat0.search(evt['text'])
-                        if expose_abnormal_mat0 and not expose_abnormal_pat0_skip.search(message_text):
+                        if expose_abnormal_mat0 and not expose_abnormal_pat0_skip.search(evt['text']):
                             return {'slot_expose_abnormal': f"客户：{expose_abnormal_mat0.group()} 客服：{yes_mat.group()}"}
                     if check_num >= 3: break
 
