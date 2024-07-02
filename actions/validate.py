@@ -39,8 +39,8 @@ expose_abnormal_pat1 = re.compile(r"[网站]点[^没不哪什么,，个]{,5}异�
 expose_abnormal_pat0_skip = re.compile(r"没|不|哪|签收|派送|帮|反馈|还|其他|上报|可以了|异常.{,3}问题|专门|正在|处理|专员|下工单|如果|假如|的话|考核|商家|的问题|之前|报备|备案|搬迁|恢复|正常了|单号|结束|之前|时[间候]|解释|对接|核实|情况|后续|跟进|安排|大概|菜鸟|驿站|操作|提示")
 expose_abnormal_pat1_skip = re.compile(r"没|不|哪|签收|派送|帮|反馈|还|其他|上报|可以了|异常.{,3}问题|专门|正在|处理|专员|下工单|如果|假如|的话|考核|商家|的问题|之前|报备|备案|搬迁|恢复|正常了|单号|结束|之前|时[间候]|解释|对接|核实|情况|后续|跟进|安排|大概|菜鸟|驿站|操作|提示|[是对][吧么吗嘛]|？")
 # thanks_pat = re.compile(r"[谢感]谢|谢[了啦]")
-thanks_pat = re.compile(r"(?<![能])(?:服务|态度)[^能不哪]{,3}(?:好|热情)(?![吗不个一点])|你[^没]{,3}耐心|[多感谢]谢你[^没]{,3}耐心|(?:服务|态度|你|客服).{,3}不错|对你[^不]{,3}满意|你[^得要不]{,3}[挺真很蛮][是的]?负责")
-thanks_skip_pat = re.compile(r"你们|他|快递员|业务员")
+thanks_pat = re.compile(r"你[^能没不哪什么，]{,3}(?:服务|态度)[^能不哪要差，]{,3}(?:[很真挺蛮]好|热情|不错)(?![吗不个一点])|你[^能没要不哪什么，]{,3}耐心|[多感谢]谢你[^能没要不哪什么，]{,3}耐心|你.?[挺真很蛮].?不错|对你[^不能没哪什么，]{,3}满意|你[^得要能没不哪什么，]{,3}[挺真很蛮][是的]?负责")
+thanks_skip_pat = re.compile(r"你们|他|快递员|业务员|什么||？|哪个|过分|你说|是不是|人家|别人|其他|[是对好][吧么吗嘛]|如果|假如|的话")
 yes_pat = re.compile(r"对的?$|是的$")
 # 对机器人识别的槽位进行验证(比如运单号、电话等槽位)
 class ValidatePredefinedSlots(ValidationAction):
@@ -168,7 +168,7 @@ class ValidatePredefinedSlots(ValidationAction):
         slot_thanks = tracker.get_slot('slot_thanks')
         if not slot_thanks:
             message_text = tracker.latest_message['text']
-            if not message_text.startswith('语言模型'):
+            if not message_text.startswith('语言模型') and len(message_text) < 16:
                 thanks_mat = thanks_pat.search(message_text)
                 if thanks_mat and not thanks_skip_pat.search(message_text):
                     return {'slot_thanks': thanks_mat.group()}
